@@ -126,13 +126,7 @@ class _EditLahanBodyState extends State<EditLahanBody> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const TambahPatokan()),
-                      );
-                    },
+                    onPressed: () {},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       side: const BorderSide(color: Colors.red),

@@ -1,4 +1,6 @@
-import 'package:dipetakan/features/authentication/screens/resetpassword/reset_password.dart';
+import 'package:dipetakan/features/navigation/screens/bantuan.dart';
+import 'package:dipetakan/features/navigation/screens/profilesaya/profilsaya.dart';
+import 'package:dipetakan/features/navigation/screens/ubahpassword.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -33,7 +35,13 @@ class SideBar extends StatelessWidget {
             leading: const Icon(Iconsax.user),
             title: Text(DTexts.profile,
                 style: Theme.of(context).textTheme.bodyLarge),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ProfilSayaScreen()),
+              );
+            },
           ),
 
           //Ubah Password
@@ -44,17 +52,25 @@ class SideBar extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const ResetPassScreen()),
+                MaterialPageRoute(builder: (context) => const UbahPassword()),
               );
             },
           ),
+
+          //Bantuan
           ListTile(
             leading: const Icon(Iconsax.message_question),
             title: Text(DTexts.bantuan,
                 style: Theme.of(context).textTheme.bodyLarge),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const BantuanScreen()),
+              );
+            },
           ),
+
+          //Keluar
           ListTile(
             leading: const Icon(Iconsax.logout),
             title: Text(DTexts.signOut,

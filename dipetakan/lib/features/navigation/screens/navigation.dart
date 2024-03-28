@@ -1,4 +1,4 @@
-import 'package:dipetakan/common/widgets/sidebar.dart';
+import 'package:dipetakan/features/navigation/screens/sidebar.dart';
 import 'package:dipetakan/features/lahansaya/screens/lahan_saya.dart';
 import 'package:dipetakan/features/petalahan/screens/peta_lahan.dart';
 import 'package:dipetakan/features/tambahlahan/screens/tambahlahan.dart';
