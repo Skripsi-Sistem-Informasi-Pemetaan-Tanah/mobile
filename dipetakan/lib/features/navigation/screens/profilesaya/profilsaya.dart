@@ -1,4 +1,8 @@
-import 'package:dipetakan/features/navigation/screens/profilesaya/edit_profil.dart';
+// import 'package:dipetakan/features/navigation/screens/profilesaya/edit_profil.dart';
+import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/edit_email.dart';
+import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/edit_nama.dart';
+import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/edit_notelp.dart';
+import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/edit_username.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/widgets/circular_image.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
@@ -52,17 +56,39 @@ class _ProfilSayaScreenState extends State<ProfilSayaScreen> {
             InformasiAkun(
                 title: DTexts.namalengkap,
                 value: DTexts.accountName,
-                onPressed: () {}),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const EditNamaScreen()));
+                }),
             InformasiAkun(
                 title: DTexts.username,
                 value: 'asriaziziyah',
-                onPressed: () {}),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const EditUsernameScreen()));
+                }),
             InformasiAkun(
                 title: DTexts.email,
                 value: 'asriaziziyah123@gmail.com',
-                onPressed: () {}),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const EditEmailScreen()));
+                }),
             InformasiAkun(
-                title: DTexts.phoneNo, value: '089612080576', onPressed: () {}),
+                title: DTexts.phoneNo,
+                value: '089612080576',
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const EditNotelpScreen()));
+                }),
 
             const SizedBox(height: DSizes.spaceBtwSections),
           ]),

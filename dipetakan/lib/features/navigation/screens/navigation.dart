@@ -1,3 +1,4 @@
+import 'package:dipetakan/features/navigation/screens/notification.dart';
 import 'package:dipetakan/features/navigation/screens/sidebar.dart';
 import 'package:dipetakan/features/lahansaya/screens/lahan_saya.dart';
 import 'package:dipetakan/features/petalahan/screens/peta_lahan.dart';
@@ -9,8 +10,15 @@ import 'package:get/get.dart';
 // import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 
-class NavigationMenu extends StatelessWidget {
+class NavigationMenu extends StatefulWidget {
   const NavigationMenu({super.key});
+
+  @override
+  State<NavigationMenu> createState() => _NavigationMenuState();
+}
+
+class _NavigationMenuState extends State<NavigationMenu> {
+  int counter = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +37,52 @@ class NavigationMenu extends StatelessWidget {
               fontFamily: 'Inter',
               fontStyle: FontStyle.normal),
         ),
+        actions: <Widget>[
+          Stack(
+            children: <Widget>[
+              Align(
+                child: IconButton(
+                  icon: const Icon(Icons.notifications, color: Colors.white),
+                  onPressed: () {
+                    setState(() {
+                      counter = 0;
+                    });
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NotificationScreen()),
+                    );
+                  },
+                ),
+              ),
+              counter != 0
+                  ? Positioned(
+                      right: 11,
+                      top: 11,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 94, 90, 89),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 14,
+                          minHeight: 14,
+                        ),
+                        child: Text(
+                          '$counter',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )
+                  : Container()
+            ],
+          )
+        ],
       ),
       drawer: const SideBar(),
       body: Obx(() => controller.screens[controller.selectedIndex.value]),

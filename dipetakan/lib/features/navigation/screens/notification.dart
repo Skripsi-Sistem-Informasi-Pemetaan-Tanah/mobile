@@ -2,14 +2,14 @@ import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
-class BantuanScreen extends StatefulWidget {
-  const BantuanScreen({super.key});
+class NotificationScreen extends StatefulWidget {
+  const NotificationScreen({super.key});
 
   @override
-  State<BantuanScreen> createState() => _BantuanScreenState();
+  State<NotificationScreen> createState() => _NotificationScreenState();
 }
 
-class _BantuanScreenState extends State<BantuanScreen> {
+class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +18,7 @@ class _BantuanScreenState extends State<BantuanScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: DColors.primary,
         title: const Text(
-          'Bantuan',
+          'Notifikasi',
           style: TextStyle(
               color: Colors.white,
               fontFamily: 'Inter',
