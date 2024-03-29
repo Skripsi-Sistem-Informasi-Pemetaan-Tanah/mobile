@@ -51,5 +51,10 @@
 	<string>Upload image from camera for screen background</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Post videos to profile</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<key>UIBackgroundModes</key>
+	<string>location</string>
 </dict>
 </plist>

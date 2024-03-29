@@ -1,10 +1,13 @@
-// import 'dart:async';
+import 'dart:async';
 
 import 'package:dipetakan/features/lahansaya/screens/widgets/search_bar.dart';
+import 'package:dipetakan/features/petalahan/screens/deskripsi_lahan_lain.dart';
 // import 'package:dipetakan/features/petalahan/screens/widgets/maps.dart';
 // import 'package:dipetakan/features/petalahan/screens/widgets/maps_copy.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
 class PetaLahanScreen extends StatefulWidget {
   const PetaLahanScreen({super.key});
@@ -14,18 +17,166 @@ class PetaLahanScreen extends StatefulWidget {
 }
 
 class _PetaLahanScreenState extends State<PetaLahanScreen> {
-  static const LatLng _pGooglePlex = LatLng(37.4223, -122.0848);
+  final Completer<GoogleMapController> _controller = Completer();
+  BitmapDescriptor markerbitmap = BitmapDescriptor.defaultMarker;
+
+  LatLng initialLocation = const LatLng(-6.885786, 109.681040);
+  LocationData? currentLocation;
+
+  List<LatLng> polygonPoint = const [
+    LatLng(-6.885293, 109.680546),
+    LatLng(-6.885351, 109.680754),
+    LatLng(-6.885668, 109.680717),
+    LatLng(-6.885664, 109.680526),
+  ];
+
+  // List<LatLng> polygonPoint [
+  //   LatLng(37.4223, -122.0848),
+  //   LatLng(37.4223, -122.0848),
+  //   LatLng(37.4223, -122.0848),
+  //   LatLng(37.4223, -122.0848),
+  //   LatLng(37.4223, -122.0848),
+  // ];
+
+  // static const LatLng _pGooglePlex = LatLng(37.4223, -122.0848);
+
+  @override
+  void initState() {
+    getCurrentLocation();
+    // _getUserLocation();
+    addCustomMarker();
+    super.initState();
+  }
+
+  Future<void> addCustomMarker() async {
+    BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(), 'assets/images/location_icon.png')
+        .then((markerIcon) {
+      setState(() {
+        markerbitmap = markerIcon;
+      });
+    });
+  }
+
+  // late LatLng lastLocation;
+  // late LatLng initialLocation = lastLocation;
+
+  // void _getUserLocation() async {
+  //   var position = await GeolocatorPlatform.instance.getCurrentPosition(
+  //       locationSettings:
+  //           const LocationSettings(accuracy: LocationAccuracy.high));
+
+  //   setState(() {
+  //     currentLocation = LatLng(position.latitude, position.longitude);
+  //   });
+  // }
+
+  void getCurrentLocation() {
+    Location location = Location();
+
+    location.getLocation().then((location) {
+      currentLocation = location;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Stack(children: <Widget>[
+    return Scaffold(
+        body:
+            //currentLocation == null
+            //     ? const Center(child: Text("Loading"))
+            // :
+            Stack(children: <Widget>[
+      // FutureBuilder(
+      //   future: addCustomMarker(),
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.done) {
+      //       return GoogleMap(
+      //         mapType: MapType.satellite,
+      //         initialCameraPosition:
+      //             CameraPosition(target: initialLocation, zoom: 15),
+      //         onMapCreated: (controller) {
+      //           _controller.complete(controller);
+      //         },
+      //         markers: {
+      //           Marker(
+      //             markerId: const MarkerId("1"),
+      //             position: initialLocation,
+      //             icon: markerbitmap,
+      //           )
+      //         },
+      //       );
+      //     } else {
+      //       return Center(child: CircularProgressIndicator());
+      //     }
+      //   },
+      // ),
+      if (currentLocation == null)
+        const Center(child: Text("Loading"))
+      else
         GoogleMap(
-            mapType: MapType.satellite,
-            initialCameraPosition:
-                CameraPosition(target: _pGooglePlex, zoom: 15)),
-        Positioned(child: CustomSearchBar()),
-      ]),
-    );
+          mapType: MapType.satellite,
+          initialCameraPosition: CameraPosition(
+              target: LatLng(
+                  currentLocation!.latitude!, currentLocation!.longitude!),
+              zoom: 20),
+          onMapCreated: (controller) {
+            _controller.complete(controller);
+          },
+          markers: markerbitmap != null
+              ? {
+                  Marker(
+                    markerId: const MarkerId("1"),
+                    position: LatLng(currentLocation!.latitude!,
+                        currentLocation!.longitude!),
+                    // icon: markerbitmap,
+                    // infoWindow:
+                  )
+                }
+              : Set<Marker>(),
+          circles: {
+            Circle(
+                circleId: const CircleId("1"),
+                center: LatLng(
+                    currentLocation!.latitude!, currentLocation!.longitude!),
+                radius: 25,
+                strokeWidth: 2,
+                strokeColor: Colors.yellow,
+                fillColor: Colors.yellow.withOpacity(0.2)),
+          },
+          polygons: {
+            Polygon(
+              polygonId: const PolygonId("1"),
+              points: polygonPoint,
+              strokeWidth: 2,
+              strokeColor: Colors.yellow,
+              fillColor: Colors.yellow.withOpacity(0.2),
+              consumeTapEvents: true,
+              onTap: () async {
+                await showDialog<void>(
+                    context: context,
+                    builder: (context) => const AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(
+                              20.0,
+                            ),
+                          ),
+                        ),
+                        contentPadding: EdgeInsets.only(
+                          top: 0,
+                        ),
+                        content: DeskripsiLahanLain()));
+              },
+            )
+          },
+          zoomControlsEnabled: true,
+          myLocationEnabled: true,
+          myLocationButtonEnabled: false,
+          compassEnabled: true,
+        ),
+      const Positioned(child: CustomSearchBar()),
+    ]));
   }
 }
 
