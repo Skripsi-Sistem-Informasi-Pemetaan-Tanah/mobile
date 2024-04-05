@@ -1,0 +1,48 @@
+{
+    "lahan": [
+    {
+      "nama_lahan": "Farm A",
+      "jenis_lahan": "Pertanian",
+      "deskripsi_lahan": "Lahan untuk budidaya sayuran",
+      "patokan": [
+        {
+          "foto_patokan": "http://example.com/farm_a_1.jpg",
+          "koordinat_patokan": "-6.8856708061271386, 109.6805258834484"
+        },
+        {
+          "foto_patokan": "http://example.com/farm_a_2.jpg",
+          "koordinat_patokan": "-6.885672004845654, 109.68062127020522"
+        },
+        {
+          "foto_patokan": "http://example.com/farm_a_3.jpg",
+          "koordinat_patokan": "-6.885941716435715, 109.68063092962365"
+        }
+      ],
+      "status_verifikasi": 80
+    },
+    {
+      "nama_lahan": "Villa B",
+      "jenis_lahan": "Perumahan",
+      "deskripsi_lahan": "Lahan untuk pembangunan perumahan",
+      "patokan": [
+        {
+          "foto_patokan": "http://example.com/villa_b_1.jpg",
+          "koordinat_patokan": "-6.885293, 109.680546"
+        },
+        {
+          "foto_patokan": "http://example.com/villa_b_2.jpg",
+          "koordinat_patokan": "-6.885351, 109.680754"
+        },
+        {
+          "foto_patokan": "http://example.com/villa_b_3.jpg",
+          "koordinat_patokan": "-6.885668, 109.680717"
+        },
+        {
+          "foto_patokan": "http://example.com/villa_b_4.jpg",
+          "koordinat_patokan": "-6.885664, 109.680526"
+        }
+      ],
+      "status_verifikasi": 100
+    }
+  ]
+}

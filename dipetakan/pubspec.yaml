@@ -82,6 +82,7 @@ flutter:
   - assets/icons/
   - assets/images/
   - assets/logos/
+  - assets/sampledata/
 
   # Local Fonts
   fonts :

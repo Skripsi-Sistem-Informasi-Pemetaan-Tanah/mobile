@@ -1,13 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dipetakan/features/lahansaya/screens/widgets/search_bar.dart';
 import 'package:dipetakan/features/petalahan/screens/deskripsi_lahan_lain.dart';
-// import 'package:dipetakan/features/petalahan/screens/widgets/maps.dart';
-// import 'package:dipetakan/features/petalahan/screens/widgets/maps_copy.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:http/http.dart' as http;
 
 class PetaLahanScreen extends StatefulWidget {
   const PetaLahanScreen({super.key});
@@ -22,6 +21,7 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
 
   LatLng initialLocation = const LatLng(-6.885786, 109.681040);
   LocationData? currentLocation;
+  Location location = Location();
 
   List<LatLng> polygonPoint = const [
     LatLng(-6.885293, 109.680546),
@@ -30,22 +30,46 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
     LatLng(-6.885664, 109.680526),
   ];
 
-  // List<LatLng> polygonPoint [
-  //   LatLng(37.4223, -122.0848),
-  //   LatLng(37.4223, -122.0848),
-  //   LatLng(37.4223, -122.0848),
-  //   LatLng(37.4223, -122.0848),
-  //   LatLng(37.4223, -122.0848),
-  // ];
-
-  // static const LatLng _pGooglePlex = LatLng(37.4223, -122.0848);
+  List<dynamic> lahanData = [];
 
   @override
   void initState() {
     getCurrentLocation();
-    // _getUserLocation();
+    fetchData();
     addCustomMarker();
     super.initState();
+  }
+
+  void getCurrentLocation() async {
+    try {
+      final LocationData locationData = await location.getLocation();
+      setState(() {
+        currentLocation = locationData;
+      });
+    } catch (error) {
+      print("Error getting location: $error");
+    }
+  }
+
+  // Future<void> fetchData() async {
+  //   final response = await http.get(Uri.parse('assets/sampledata/lahan.json'));
+
+  //   if (response.statusCode == 200) {
+  //     final jsonData = json.decode(response.body);
+  //     setState(() {
+  //       lahanData = jsonData['lahan'];
+  //     });
+  //   } else {
+  //     throw Exception('Failed to load data');
+  //   }
+  // }
+
+  Future<void> fetchData() async {
+    String data = await DefaultAssetBundle.of(context)
+        .loadString('assets/sampledata/lahan.json');
+    setState(() {
+      lahanData = json.decode(data)['lahan'];
+    });
   }
 
   Future<void> addCustomMarker() async {
@@ -58,25 +82,30 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
     });
   }
 
-  // late LatLng lastLocation;
-  // late LatLng initialLocation = lastLocation;
+  Set<Polygon> _buildPolygons() {
+    Set<Polygon> polygons = {};
 
-  // void _getUserLocation() async {
-  //   var position = await GeolocatorPlatform.instance.getCurrentPosition(
-  //       locationSettings:
-  //           const LocationSettings(accuracy: LocationAccuracy.high));
+    for (var lahan in lahanData) {
+      List<LatLng> polygonPoints = [];
 
-  //   setState(() {
-  //     currentLocation = LatLng(position.latitude, position.longitude);
-  //   });
-  // }
+      for (var patokan in lahan['patokan']) {
+        var coordinates = patokan['koordinat_patokan']
+            .split(',')
+            .map((coord) => double.parse(coord.trim()))
+            .toList();
+        polygonPoints.add(LatLng(coordinates[0], coordinates[1]));
+      }
 
-  void getCurrentLocation() {
-    Location location = Location();
+      polygons.add(Polygon(
+        polygonId: PolygonId(lahan['nama_lahan']),
+        points: polygonPoints,
+        strokeColor: Colors.yellow,
+        strokeWidth: 2,
+        fillColor: Colors.yellow.withOpacity(0.2),
+      ));
+    }
 
-    location.getLocation().then((location) {
-      currentLocation = location;
-    });
+    return polygons;
   }
 
   @override
@@ -123,6 +152,7 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
           onMapCreated: (controller) {
             _controller.complete(controller);
           },
+          // ignore: unnecessary_null_comparison
           markers: markerbitmap != null
               ? {
                   Marker(
@@ -144,35 +174,36 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
                 strokeColor: Colors.yellow,
                 fillColor: Colors.yellow.withOpacity(0.2)),
           },
-          polygons: {
-            Polygon(
-              polygonId: const PolygonId("1"),
-              points: polygonPoint,
-              strokeWidth: 2,
-              strokeColor: Colors.yellow,
-              fillColor: Colors.yellow.withOpacity(0.2),
-              consumeTapEvents: true,
-              onTap: () async {
-                await showDialog<void>(
-                    context: context,
-                    builder: (context) => const AlertDialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(
-                              20.0,
-                            ),
-                          ),
-                        ),
-                        contentPadding: EdgeInsets.only(
-                          top: 0,
-                        ),
-                        content: DeskripsiLahanLain()));
-              },
-            )
-          },
+          polygons: _buildPolygons(),
+          // {
+          //   Polygon(
+          //     polygonId: const PolygonId("1"),
+          //     points: polygonPoint,
+          //     strokeWidth: 2,
+          //     strokeColor: Colors.yellow,
+          //     fillColor: Colors.yellow.withOpacity(0.2),
+          //     consumeTapEvents: true,
+          //     onTap: () async {
+          //       await showDialog<void>(
+          //           context: context,
+          //           builder: (context) => const AlertDialog(
+          //               shape: RoundedRectangleBorder(
+          //                 borderRadius: BorderRadius.all(
+          //                   Radius.circular(
+          //                     20.0,
+          //                   ),
+          //                 ),
+          //               ),
+          //               contentPadding: EdgeInsets.only(
+          //                 top: 0,
+          //               ),
+          //               content: DeskripsiLahanLain()));
+          //     },
+          //   )
+          // },
           zoomControlsEnabled: true,
           myLocationEnabled: true,
-          myLocationButtonEnabled: false,
+          myLocationButtonEnabled: true,
           compassEnabled: true,
         ),
       const Positioned(child: CustomSearchBar()),
