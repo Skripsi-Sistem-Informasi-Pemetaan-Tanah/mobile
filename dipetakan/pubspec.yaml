@@ -64,6 +64,9 @@ dependencies:
   geocoding: ^3.0.0
   location: ^5.0.0
 
+  #Firebase
+  firebase_core: ^2.27.0
+
 
 
 dev_dependencies:

@@ -25,7 +25,7 @@ class _ProfilSayaScreenState extends State<ProfilSayaScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: DColors.primary,
         title: const Text(
-          'Ubah Password',
+          'Profile Saya',
           style: TextStyle(
               color: Colors.white,
               fontFamily: 'Inter',

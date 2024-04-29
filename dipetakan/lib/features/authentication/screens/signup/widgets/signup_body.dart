@@ -1,9 +1,12 @@
+import 'package:dipetakan/features/authentication/controllers/signup/signup_controller.dart';
 import 'package:dipetakan/features/authentication/screens/signup/account_created.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:dipetakan/util/helpers/helper_functions.dart';
+import 'package:dipetakan/util/validators/validation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class DSignupBody extends StatefulWidget {
@@ -31,13 +34,18 @@ class _DSignupBodyState extends State<DSignupBody> {
   @override
   Widget build(BuildContext context) {
     final dark = DHelperFunctions.isDarkMode(context);
+    final controller = Get.put(SignupController());
     return Form(
+      key: controller.signupFormKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: DSizes.spaceBtwSections),
         child: Column(
           children: [
             //Nama Lengkap
             TextFormField(
+              controller: controller.namaLengkap,
+              validator: (value) =>
+                  TValidator.validateEmptyText('Nama lengkap', value),
               decoration: const InputDecoration(
                   prefixIcon: Icon(Iconsax.user),
                   labelText: DTexts.namalengkap),
@@ -46,6 +54,9 @@ class _DSignupBodyState extends State<DSignupBody> {
 
             //Username
             TextFormField(
+              controller: controller.username,
+              validator: (value) =>
+                  TValidator.validateEmptyText('Username', value),
               decoration: const InputDecoration(
                   prefixIcon: Icon(Iconsax.user_edit),
                   labelText: DTexts.username),
@@ -54,6 +65,8 @@ class _DSignupBodyState extends State<DSignupBody> {
 
             //Email
             TextFormField(
+              controller: controller.email,
+              validator: (value) => TValidator.validateEmail(value),
               decoration: const InputDecoration(
                   prefixIcon: Icon(Iconsax.direct_right),
                   labelText: DTexts.email),
@@ -62,6 +75,8 @@ class _DSignupBodyState extends State<DSignupBody> {
 
             //No Telepon
             TextFormField(
+              controller: controller.phoneNo,
+              validator: (value) => TValidator.validatePhoneNumber(value),
               decoration: const InputDecoration(
                   prefixIcon: Icon(Iconsax.call), labelText: DTexts.phoneNo),
             ),
@@ -69,6 +84,8 @@ class _DSignupBodyState extends State<DSignupBody> {
 
             //Password
             TextFormField(
+              controller: controller.password,
+              validator: (value) => TValidator.validatePassword(value),
               obscureText: _passwordInVisible,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Iconsax.password_check),
@@ -140,13 +157,7 @@ class _DSignupBodyState extends State<DSignupBody> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AccountCreatedScreen()),
-                    );
-                  },
+                  onPressed: () => controller.signup(),
                   child: const Text(DTexts.createAccount)),
             ),
             const SizedBox(height: DSizes.spaceBtwItems),

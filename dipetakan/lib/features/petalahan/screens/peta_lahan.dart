@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dipetakan/features/lahansaya/screens/widgets/search_bar.dart';
-import 'package:dipetakan/features/petalahan/screens/deskripsi_lahan_lain.dart';
+import 'package:dipetakan/features/petalahan/screens/widgets/infolahan_bottomsheet.dart';
+// import 'package:dipetakan/features/petalahan/screens/deskripsi_lahan_lain.dart';
+import 'package:dipetakan/util/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 
 class PetaLahanScreen extends StatefulWidget {
   const PetaLahanScreen({super.key});
@@ -47,6 +49,7 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
         currentLocation = locationData;
       });
     } catch (error) {
+      // ignore: avoid_print
       print("Error getting location: $error");
     }
   }
@@ -102,6 +105,17 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
         strokeColor: Colors.yellow,
         strokeWidth: 2,
         fillColor: Colors.yellow.withOpacity(0.2),
+        consumeTapEvents: true,
+        onTap: () async {
+          await showModalBottomSheet<dynamic>(
+              // isScrollControlled: true,
+              backgroundColor: Colors.white,
+              // barrierColor: Colors.white,
+              context: context,
+              builder: (context) => SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.28,
+                  child: const InfoLahanBottomSheet()));
+        },
       ));
     }
 
@@ -111,103 +125,114 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: DColors.primary,
+          title: const Text(
+            'Peta Lahan',
+            style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Inter',
+                fontStyle: FontStyle.normal),
+          ),
+        ),
         body:
             //currentLocation == null
             //     ? const Center(child: Text("Loading"))
             // :
             Stack(children: <Widget>[
-      // FutureBuilder(
-      //   future: addCustomMarker(),
-      //   builder: (context, snapshot) {
-      //     if (snapshot.connectionState == ConnectionState.done) {
-      //       return GoogleMap(
-      //         mapType: MapType.satellite,
-      //         initialCameraPosition:
-      //             CameraPosition(target: initialLocation, zoom: 15),
-      //         onMapCreated: (controller) {
-      //           _controller.complete(controller);
-      //         },
-      //         markers: {
-      //           Marker(
-      //             markerId: const MarkerId("1"),
-      //             position: initialLocation,
-      //             icon: markerbitmap,
-      //           )
-      //         },
-      //       );
-      //     } else {
-      //       return Center(child: CircularProgressIndicator());
-      //     }
-      //   },
-      // ),
-      if (currentLocation == null)
-        const Center(child: Text("Loading"))
-      else
-        GoogleMap(
-          mapType: MapType.satellite,
-          initialCameraPosition: CameraPosition(
-              target: LatLng(
-                  currentLocation!.latitude!, currentLocation!.longitude!),
-              zoom: 20),
-          onMapCreated: (controller) {
-            _controller.complete(controller);
-          },
-          // ignore: unnecessary_null_comparison
-          markers: markerbitmap != null
-              ? {
-                  Marker(
-                    markerId: const MarkerId("1"),
-                    position: LatLng(currentLocation!.latitude!,
+          // FutureBuilder(
+          //   future: addCustomMarker(),
+          //   builder: (context, snapshot) {
+          //     if (snapshot.connectionState == ConnectionState.done) {
+          //       return GoogleMap(
+          //         mapType: MapType.satellite,
+          //         initialCameraPosition:
+          //             CameraPosition(target: initialLocation, zoom: 15),
+          //         onMapCreated: (controller) {
+          //           _controller.complete(controller);
+          //         },
+          //         markers: {
+          //           Marker(
+          //             markerId: const MarkerId("1"),
+          //             position: initialLocation,
+          //             icon: markerbitmap,
+          //           )
+          //         },
+          //       );
+          //     } else {
+          //       return Center(child: CircularProgressIndicator());
+          //     }
+          //   },
+          // ),
+          if (currentLocation == null)
+            const Center(child: Text("Loading"))
+          else
+            GoogleMap(
+              mapType: MapType.satellite,
+              initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                      currentLocation!.latitude!, currentLocation!.longitude!),
+                  zoom: 20),
+              onMapCreated: (controller) {
+                _controller.complete(controller);
+              },
+              // ignore: unnecessary_null_comparison
+              markers: markerbitmap != null
+                  ? {
+                      Marker(
+                        markerId: const MarkerId("1"),
+                        position: LatLng(currentLocation!.latitude!,
+                            currentLocation!.longitude!),
+                        // icon: markerbitmap,
+                        // infoWindow:
+                      )
+                    }
+                  : <Marker>{},
+              circles: {
+                Circle(
+                    circleId: const CircleId("1"),
+                    center: LatLng(currentLocation!.latitude!,
                         currentLocation!.longitude!),
-                    // icon: markerbitmap,
-                    // infoWindow:
-                  )
-                }
-              : Set<Marker>(),
-          circles: {
-            Circle(
-                circleId: const CircleId("1"),
-                center: LatLng(
-                    currentLocation!.latitude!, currentLocation!.longitude!),
-                radius: 25,
-                strokeWidth: 2,
-                strokeColor: Colors.yellow,
-                fillColor: Colors.yellow.withOpacity(0.2)),
-          },
-          polygons: _buildPolygons(),
-          // {
-          //   Polygon(
-          //     polygonId: const PolygonId("1"),
-          //     points: polygonPoint,
-          //     strokeWidth: 2,
-          //     strokeColor: Colors.yellow,
-          //     fillColor: Colors.yellow.withOpacity(0.2),
-          //     consumeTapEvents: true,
-          //     onTap: () async {
-          //       await showDialog<void>(
-          //           context: context,
-          //           builder: (context) => const AlertDialog(
-          //               shape: RoundedRectangleBorder(
-          //                 borderRadius: BorderRadius.all(
-          //                   Radius.circular(
-          //                     20.0,
-          //                   ),
-          //                 ),
-          //               ),
-          //               contentPadding: EdgeInsets.only(
-          //                 top: 0,
-          //               ),
-          //               content: DeskripsiLahanLain()));
-          //     },
-          //   )
-          // },
-          zoomControlsEnabled: true,
-          myLocationEnabled: true,
-          myLocationButtonEnabled: true,
-          compassEnabled: true,
-        ),
-      const Positioned(child: CustomSearchBar()),
-    ]));
+                    radius: 25,
+                    strokeWidth: 2,
+                    strokeColor: Colors.yellow,
+                    fillColor: Colors.yellow.withOpacity(0.2)),
+              },
+              polygons: _buildPolygons(),
+              // {
+              //   Polygon(
+              //     polygonId: const PolygonId("1"),
+              //     points: polygonPoint,
+              //     strokeWidth: 2,
+              //     strokeColor: Colors.yellow,
+              //     fillColor: Colors.yellow.withOpacity(0.2),
+              //     consumeTapEvents: true,
+              //     onTap: () async {
+              //       await showDialog<void>(
+              //           context: context,
+              //           builder: (context) => const AlertDialog(
+              //               shape: RoundedRectangleBorder(
+              //                 borderRadius: BorderRadius.all(
+              //                   Radius.circular(
+              //                     20.0,
+              //                   ),
+              //                 ),
+              //               ),
+              //               contentPadding: EdgeInsets.only(
+              //                 top: 0,
+              //               ),
+              //               content: DeskripsiLahanLain()));
+              //     },
+              //   )
+              // },
+              zoomControlsEnabled: true,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              compassEnabled: true,
+            ),
+          const Positioned(child: CustomSearchBar()),
+        ]));
   }
 }
 

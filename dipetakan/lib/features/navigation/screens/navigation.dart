@@ -1,8 +1,10 @@
+import 'package:dipetakan/features/navigation/screens/akunsaya.dart';
+import 'package:dipetakan/features/navigation/screens/menu.dart';
 import 'package:dipetakan/features/navigation/screens/notification.dart';
-import 'package:dipetakan/features/navigation/screens/sidebar.dart';
-import 'package:dipetakan/features/lahansaya/screens/lahan_saya.dart';
-import 'package:dipetakan/features/petalahan/screens/peta_lahan.dart';
-import 'package:dipetakan/features/tambahlahan/screens/tambahlahan.dart';
+// import 'package:dipetakan/features/navigation/screens/sidebar.dart';
+// import 'package:dipetakan/features/lahansaya/screens/lahan_saya.dart';
+// import 'package:dipetakan/features/petalahan/screens/peta_lahan.dart';
+// import 'package:dipetakan/features/tambahlahan/screens/tambahlahan.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +31,9 @@ class _NavigationMenuState extends State<NavigationMenu> {
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: DColors.primary,
-        centerTitle: true,
+        // centerTitle: true,
+        leading: null,
+        automaticallyImplyLeading: false,
         title: const Text(
           'DIPETAKAN',
           style: TextStyle(
@@ -84,24 +88,24 @@ class _NavigationMenuState extends State<NavigationMenu> {
           )
         ],
       ),
-      drawer: const SideBar(),
+      // drawer: const SideBar(),
       body: Obx(() => controller.screens[controller.selectedIndex.value]),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Visibility(
-        visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const TambahLahan()),
-            );
-          },
-          backgroundColor: DColors.primary,
-          foregroundColor: Colors.white,
-          shape: const CircleBorder(),
-          child: const Icon(Iconsax.add),
-        ),
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: Visibility(
+      //   visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
+      //   child: FloatingActionButton(
+      //     onPressed: () {
+      //       Navigator.push(
+      //         context,
+      //         MaterialPageRoute(builder: (context) => const TambahLahan()),
+      //       );
+      //     },
+      //     backgroundColor: DColors.primary,
+      //     foregroundColor: Colors.white,
+      //     shape: const CircleBorder(),
+      //     child: const Icon(Iconsax.add),
+      //   ),
+      // ),
       bottomNavigationBar: Obx(
         () => NavigationBar(
             height: 80,
@@ -115,10 +119,9 @@ class _NavigationMenuState extends State<NavigationMenu> {
                 ? DColors.white.withOpacity(0.1)
                 : DColors.black.withOpacity(0.1),
             destinations: const [
+              NavigationDestination(icon: Icon(Iconsax.home), label: 'Home'),
               NavigationDestination(
-                  icon: Icon(Iconsax.map), label: 'Peta Lahan'),
-              NavigationDestination(
-                  icon: Icon(Iconsax.layer), label: 'Lahan Saya'),
+                  icon: Icon(Iconsax.user), label: 'Akun Saya'),
             ]),
       ),
     );
@@ -128,5 +131,5 @@ class _NavigationMenuState extends State<NavigationMenu> {
 class NavigationController extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
 
-  final screens = [const PetaLahanScreen(), const LahanSayaScreen()];
+  final screens = [MenuScreen(), const AkunSaya()];
 }

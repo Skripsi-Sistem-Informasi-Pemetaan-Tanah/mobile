@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "552756935986",
+    "project_id": "dipetakan-57d6b",
+    "storage_bucket": "dipetakan-57d6b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:552756935986:android:864eb3b626d41d1f8f2b2b",
+        "android_client_info": {
+          "package_name": "com.example.dipetakan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "552756935986-jd3njcecbuv6326rq662i30t2r39i697.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dipetakan",
+            "certificate_hash": "8e154a78db426452a77f92d496a914f791f49ba0"
+          }
+        },
+        {
+          "client_id": "552756935986-t0l81s1f2f9kqu2gmna07bm92efh9upk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD61IYwMTfdyXWK3Kd3z66NHI5RAz-ZF-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "552756935986-t0l81s1f2f9kqu2gmna07bm92efh9upk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "552756935986-nl9am7g47l94aseqp1uglbdpkdjflggn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.dipetakan"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

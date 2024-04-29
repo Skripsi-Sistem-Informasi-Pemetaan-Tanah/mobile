@@ -8,9 +8,20 @@ class LahanSayaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: DColors.secondary,
-      body: SingleChildScrollView(
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: DColors.primary,
+        title: const Text(
+          'Lahan Saya',
+          style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Inter',
+              fontStyle: FontStyle.normal),
+        ),
+      ),
+      body: const SingleChildScrollView(
         child: Column(children: [
           CustomSearchBar(),
           ListLahan(),
