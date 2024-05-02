@@ -2,11 +2,16 @@ import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 
-class DForgetPassHeader extends StatelessWidget {
+class DForgetPassHeader extends StatefulWidget {
   const DForgetPassHeader({
     super.key,
   });
 
+  @override
+  State<DForgetPassHeader> createState() => _DForgetPassHeaderState();
+}
+
+class _DForgetPassHeaderState extends State<DForgetPassHeader> {
   @override
   Widget build(BuildContext context) {
     return Align(

@@ -1,5 +1,8 @@
 import 'package:dipetakan/util/constants/colors.dart';
+import 'package:dipetakan/util/constants/image_strings.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
+import 'package:dipetakan/util/constants/text_strings.dart';
+import 'package:dipetakan/util/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 
 class BantuanScreen extends StatefulWidget {
@@ -25,10 +28,19 @@ class _BantuanScreenState extends State<BantuanScreen> {
               fontStyle: FontStyle.normal),
         ),
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(DSizes.defaultSpace),
-          child: Column(children: <Widget>[]),
+          padding: const EdgeInsets.all(DSizes.defaultSpace),
+          child: Column(children: <Widget>[
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  onPressed: () => DFullScreenLoader.openLoadingDialog(
+                      'We are processing your information',
+                      TImages.docerAnimation),
+                  child: const Text(DTexts.tContinue)),
+            ),
+          ]),
         ),
       ),
     );

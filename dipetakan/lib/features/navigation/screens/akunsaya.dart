@@ -1,4 +1,5 @@
-import 'package:dipetakan/features/authentication/screens/login/login.dart';
+import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
+// import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/features/navigation/screens/bantuan.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/profilsaya.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/widgets/circular_image.dart';
@@ -123,14 +124,8 @@ class AkunSaya extends StatelessWidget {
                           child: SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LoginScreen()),
-                                  );
-                                },
+                                onPressed: () =>
+                                    AuthenticationRepository.instance.logout(),
                                 child: const Text(DTexts.signOut)),
                           ),
                         ),

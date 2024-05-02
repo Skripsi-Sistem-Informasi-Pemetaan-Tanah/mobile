@@ -1,3 +1,4 @@
+import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
@@ -46,14 +47,9 @@ class AccountCreatedScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginScreen()),
-                        );
-                      },
-                      child: const Text(DTexts.signIn)),
+                      onPressed: () =>
+                          AuthenticationRepository.instance.screenRedirect(),
+                      child: const Text(DTexts.tContinue)),
                 ),
               ],
             )),

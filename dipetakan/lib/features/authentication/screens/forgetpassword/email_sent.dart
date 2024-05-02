@@ -1,13 +1,16 @@
-import 'package:dipetakan/features/authentication/screens/resetpassword/reset_password.dart';
+import 'package:dipetakan/features/authentication/controllers/forget_password/forget_password_controller.dart';
 import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 // import 'package:get/get.dart';
 
 class EmailSentScreen extends StatelessWidget {
-  const EmailSentScreen({super.key});
+  const EmailSentScreen({super.key, required this.email});
+
+  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,10 @@ class EmailSentScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineMedium,
                     textAlign: TextAlign.center),
                 const SizedBox(height: DSizes.spaceBtwItems),
+                Text(email,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center),
+                const SizedBox(height: DSizes.spaceBtwItems),
                 Text(DTexts.changeYourPasswordSubTitle,
                     style: Theme.of(context).textTheme.labelMedium,
                     textAlign: TextAlign.center),
@@ -47,20 +54,16 @@ class EmailSentScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ResetPassScreen()),
-                        );
-                      },
+                      onPressed: () => Get.offAll(() => const LoginScreen()),
                       child: const Text(DTexts.done)),
                 ),
                 const SizedBox(height: DSizes.spaceBtwItems),
                 SizedBox(
                   width: double.infinity,
                   child: TextButton(
-                      onPressed: () {}, child: const Text(DTexts.resendEmail)),
+                      onPressed: () => ForgetPasswordController.instance
+                          .resendPasswordResetEmail(email),
+                      child: const Text(DTexts.resendEmail)),
                 ),
               ],
             )),

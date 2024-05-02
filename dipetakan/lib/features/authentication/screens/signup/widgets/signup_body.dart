@@ -1,5 +1,5 @@
 import 'package:dipetakan/features/authentication/controllers/signup/signup_controller.dart';
-import 'package:dipetakan/features/authentication/screens/signup/account_created.dart';
+import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
@@ -7,6 +7,7 @@ import 'package:dipetakan/util/helpers/helper_functions.dart';
 import 'package:dipetakan/util/validators/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 
 class DSignupBody extends StatefulWidget {
@@ -20,15 +21,15 @@ class DSignupBody extends StatefulWidget {
 
 class _DSignupBodyState extends State<DSignupBody> {
   // ignore: prefer_typing_uninitialized_variables
-  var _passwordInVisible;
+  // var _passwordInVisible;
   // ignore: prefer_typing_uninitialized_variables
-  var isChecked;
+  // var isChecked;
 
   @override
   void initState() {
     super.initState();
-    _passwordInVisible = true;
-    isChecked = false;
+    // _passwordInVisible = true;
+    // isChecked = false;
   }
 
   @override
@@ -83,25 +84,21 @@ class _DSignupBodyState extends State<DSignupBody> {
             const SizedBox(height: DSizes.spaceBtwInputFields),
 
             //Password
-            TextFormField(
-              controller: controller.password,
-              validator: (value) => TValidator.validatePassword(value),
-              obscureText: _passwordInVisible,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.password_check),
-                labelText: DTexts.password,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _passwordInVisible
-                        ? Icons.visibility_off
-                        : Icons.visibility,
+            Obx(
+              () => TextFormField(
+                controller: controller.password,
+                validator: (value) => TValidator.validatePassword(value),
+                obscureText: controller.hidePassword.value,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Iconsax.password_check),
+                  labelText: DTexts.password,
+                  suffixIcon: IconButton(
+                    onPressed: () => controller.hidePassword.value =
+                        !controller.hidePassword.value,
+                    icon: Icon(controller.hidePassword.value
+                        ? Iconsax.eye_slash
+                        : Iconsax.eye),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _passwordInVisible =
-                          !_passwordInVisible; //change boolean value
-                    });
-                  },
                 ),
               ),
             ),
@@ -113,13 +110,11 @@ class _DSignupBodyState extends State<DSignupBody> {
                 SizedBox(
                   width: 24,
                   height: 24,
-                  child: Checkbox(
-                    value: isChecked,
-                    onChanged: (value) {
-                      setState(() {
-                        isChecked = value;
-                      });
-                    },
+                  child: Obx(
+                    () => Checkbox(
+                        value: controller.privacyPolicy.value,
+                        onChanged: (value) => controller.privacyPolicy.value =
+                            !controller.privacyPolicy.value),
                   ),
                 ),
                 const SizedBox(width: DSizes.spaceBtwItems),
@@ -159,6 +154,15 @@ class _DSignupBodyState extends State<DSignupBody> {
               child: ElevatedButton(
                   onPressed: () => controller.signup(),
                   child: const Text(DTexts.createAccount)),
+            ),
+            const SizedBox(height: DSizes.spaceBtwItems),
+
+            //Sign up Button
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                  onPressed: () => Get.offAll(() => const LoginScreen()),
+                  child: const Text('Sudah Punya Akun? Login')),
             ),
             const SizedBox(height: DSizes.spaceBtwItems),
           ],

@@ -1,9 +1,14 @@
+import 'package:dipetakan/features/authentication/controllers/login/login_controller.dart';
 import 'package:dipetakan/features/authentication/screens/forgetpassword/forget_password.dart';
 import 'package:dipetakan/features/authentication/screens/signup/signup.dart';
-import 'package:dipetakan/features/navigation/screens/navigation.dart';
+// import 'package:dipetakan/features/navigation/screens/navigation.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
+import 'package:dipetakan/util/validators/validation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+// ignore: unnecessary_import
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:iconsax/iconsax.dart';
 
 class DLoginBody extends StatefulWidget {
@@ -16,27 +21,34 @@ class DLoginBody extends StatefulWidget {
 }
 
 class _DLoginBodyState extends State<DLoginBody> {
+  final controller = Get.put(LoginController());
+  GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   // ignore: prefer_typing_uninitialized_variables
-  var _passwordInVisible;
+  // var _passwordInVisible;
   // ignore: prefer_typing_uninitialized_variables
-  var isChecked;
+  // var isChecked;
 
-  @override
-  void initState() {
-    super.initState();
-    _passwordInVisible = true;
-    isChecked = false;
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // _passwordInVisible = true;
+  //   // isChecked = false;
+  // }
 
   @override
   Widget build(BuildContext context) {
+    // final controller = Get.put(LoginController());
+
     return Form(
+      key: controller.loginFormKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: DSizes.spaceBtwSections),
         child: Column(
           children: [
             //Email
             TextFormField(
+              controller: controller.email,
+              validator: (value) => TValidator.validateEmail(value),
               decoration: const InputDecoration(
                   prefixIcon: Icon(Iconsax.direct_right),
                   labelText: DTexts.email),
@@ -44,23 +56,22 @@ class _DLoginBodyState extends State<DLoginBody> {
             const SizedBox(height: DSizes.spaceBtwInputFields),
 
             //Password
-            TextFormField(
-              obscureText: _passwordInVisible,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.password_check),
-                labelText: DTexts.password,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _passwordInVisible
-                        ? Icons.visibility_off
-                        : Icons.visibility,
+            Obx(
+              () => TextFormField(
+                controller: controller.password,
+                validator: (value) =>
+                    TValidator.validateEmptyText('Password', value),
+                obscureText: controller.hidePassword.value,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Iconsax.password_check),
+                  labelText: DTexts.password,
+                  suffixIcon: IconButton(
+                    onPressed: () => controller.hidePassword.value =
+                        !controller.hidePassword.value,
+                    icon: Icon(controller.hidePassword.value
+                        ? Iconsax.eye_slash
+                        : Iconsax.eye),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _passwordInVisible =
-                          !_passwordInVisible; //change boolean value
-                    });
-                  },
                 ),
               ),
             ),
@@ -73,13 +84,11 @@ class _DLoginBodyState extends State<DLoginBody> {
                 //Remember Me
                 Row(
                   children: [
-                    Checkbox(
-                      value: isChecked,
-                      onChanged: (value) {
-                        setState(() {
-                          isChecked = value;
-                        });
-                      },
+                    Obx(
+                      () => Checkbox(
+                          value: controller.rememberMe.value,
+                          onChanged: (value) => controller.rememberMe.value =
+                              !controller.rememberMe.value),
                     ),
                     const Text(DTexts.rememberMe),
                   ],
@@ -87,13 +96,7 @@ class _DLoginBodyState extends State<DLoginBody> {
 
                 //Forget Password
                 TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ForgetPassScreen()),
-                      );
-                    },
+                    onPressed: () => Get.off(() => const ForgetPassScreen()),
                     child: const Text(DTexts.forgetPassword)),
               ],
             ),
@@ -103,13 +106,7 @@ class _DLoginBodyState extends State<DLoginBody> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const NavigationMenu()),
-                    );
-                  },
+                  onPressed: () => controller.emailAndPasswordSignIn(),
                   child: const Text(DTexts.signIn)),
             ),
             const SizedBox(height: DSizes.spaceBtwItems),
