@@ -4,8 +4,8 @@ import 'package:dipetakan/util/formatters/formatter.dart';
 class UserModel {
   final String id;
   String fullName;
-  final String username;
-  final String email;
+  String username;
+  String email;
   String phoneNo;
   String profilePicture;
 
@@ -53,8 +53,7 @@ class UserModel {
         profilePicture: data['FotoProfil'] ?? '',
       );
     } else {
-      // Handle the case where document.data() is null, maybe throw an exception or return null
-      throw Exception('Document data is null');
+      return UserModel.empty();
     }
   }
 }

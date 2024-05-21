@@ -1,8 +1,10 @@
-import 'package:dipetakan/features/navigation/screens/profilesaya/profilsaya.dart';
+import 'package:dipetakan/features/navigation/controllers/update_phoneno_controller.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
+import 'package:dipetakan/util/validators/validation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class EditNotelpScreen extends StatefulWidget {
@@ -15,6 +17,7 @@ class EditNotelpScreen extends StatefulWidget {
 class _EditNotelpScreenState extends State<EditNotelpScreen> {
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(UpdatePhoneNoController());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -33,9 +36,14 @@ class _EditNotelpScreenState extends State<EditNotelpScreen> {
           padding: const EdgeInsets.all(DSizes.defaultSpace),
           child: Column(children: <Widget>[
             //Edit No telepon
-            TextFormField(
-              decoration: const InputDecoration(
-                  prefixIcon: Icon(Iconsax.call), labelText: DTexts.phoneNo),
+            Form(
+              key: controller.updatephoneNoFormKey,
+              child: TextFormField(
+                controller: controller.phoneNo,
+                validator: ((value) => TValidator.validatePhoneNumber(value)),
+                decoration: const InputDecoration(
+                    prefixIcon: Icon(Iconsax.call), labelText: DTexts.phoneNo),
+              ),
             ),
 
             const SizedBox(height: DSizes.spaceBtwSections),
@@ -44,13 +52,7 @@ class _EditNotelpScreenState extends State<EditNotelpScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ProfilSayaScreen()),
-                    );
-                  },
+                  onPressed: () => controller.updatephoneNo(),
                   child: const Text('Ubah')),
             ),
             const SizedBox(height: DSizes.spaceBtwItems),

@@ -1,6 +1,6 @@
 /// Exception class for handling various platform-related errors.
 class TPlatformException implements Exception {
-  final String code;
+  String code;
 
   TPlatformException(this.code);
 
@@ -34,7 +34,12 @@ class TPlatformException implements Exception {
         return 'Invalid verification ID. Please request a new verification code.';
       case 'quota-exceeded':
         return 'Quota exceeded. Please try again later.';
-    // Add more cases as needed...
+      case 'PlatformException(ERROR_INVALID_CREDENTIAL, The supplied auth credential is incorrect, malformed or has expired., {}, null)':
+        return 'Invalid login credentials. Please double-check your information.';
+      // ignore: unreachable_switch_case
+      case 'PlatformException(ERROR_INVALID_CREDENTIAL, The supplied auth credential is incorrect, malformed or has expired., {}, null)':
+        return 'Invalid login credentials. Please double-check your information.';
+      // Add more cases as needed...
       default:
         return 'An unexpected platform error occurred. Please try again.';
     }

@@ -1,8 +1,10 @@
-import 'package:dipetakan/features/navigation/screens/profilesaya/profilsaya.dart';
+import 'package:dipetakan/features/navigation/controllers/update_name_controller.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
+import 'package:dipetakan/util/validators/validation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class EditNamaScreen extends StatefulWidget {
@@ -15,6 +17,7 @@ class EditNamaScreen extends StatefulWidget {
 class _EditNamaScreenState extends State<EditNamaScreen> {
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(UpdateNameController());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -33,10 +36,16 @@ class _EditNamaScreenState extends State<EditNamaScreen> {
           padding: const EdgeInsets.all(DSizes.defaultSpace),
           child: Column(children: <Widget>[
             //Edit nama
-            TextFormField(
-              decoration: const InputDecoration(
-                  prefixIcon: Icon(Iconsax.user),
-                  labelText: DTexts.namalengkap),
+            Form(
+              key: controller.updateUserFullnameFormKey,
+              child: TextFormField(
+                controller: controller.fullName,
+                validator: ((value) =>
+                    TValidator.validateEmptyText('Nama Lengkap', value)),
+                decoration: const InputDecoration(
+                    prefixIcon: Icon(Iconsax.user),
+                    labelText: DTexts.namalengkap),
+              ),
             ),
 
             const SizedBox(height: DSizes.spaceBtwSections),
@@ -45,13 +54,7 @@ class _EditNamaScreenState extends State<EditNamaScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ProfilSayaScreen()),
-                    );
-                  },
+                  onPressed: () => controller.updateUserFullname(),
                   child: const Text('Ubah')),
             ),
             const SizedBox(height: DSizes.spaceBtwItems),

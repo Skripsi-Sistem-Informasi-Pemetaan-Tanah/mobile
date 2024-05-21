@@ -1,13 +1,17 @@
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
+import 'package:dipetakan/features/navigation/controllers/user_controller.dart';
 // import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/features/navigation/screens/bantuan.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/profilsaya.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/widgets/circular_image.dart';
 import 'package:dipetakan/features/navigation/screens/ubahpassword.dart';
+import 'package:dipetakan/features/navigation/screens/widgets/shimmer.dart';
 import 'package:dipetakan/util/constants/colors.dart';
+import 'package:dipetakan/util/constants/image_strings.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class AkunSaya extends StatelessWidget {
@@ -15,6 +19,8 @@ class AkunSaya extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = UserController.instance;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -30,18 +36,28 @@ class AkunSaya extends StatelessWidget {
                       top: 8.0, left: 24.0, right: 24.0, bottom: 24.0),
                   child: Row(
                     children: [
-                      const DCircularImages(
-                          image: 'assets/images/user.png',
-                          width: 80,
-                          height: 80,
-                          padding: 0),
+                      Obx(() {
+                        final networkImage =
+                            controller.user.value.profilePicture;
+                        final image = networkImage.isNotEmpty
+                            ? networkImage
+                            : TImages.user;
+                        return controller.imageUploading.value
+                            ? const DShimmerEfffect(width: 80, height: 80)
+                            : DCircularImages(
+                                image: image,
+                                width: 80,
+                                height: 80,
+                                // padding: 0.0,
+                                isNetworkImage: networkImage.isNotEmpty);
+                      }),
                       const SizedBox(width: DSizes.md),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Asri Aziziyah',
+                            controller.user.value.fullName,
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineSmall
@@ -53,7 +69,7 @@ class AkunSaya extends StatelessWidget {
                           ),
                           const SizedBox(height: DSizes.xs),
                           Text(
-                            'asriaziziyah123@gmail.com',
+                            controller.user.value.email,
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color: Colors

@@ -18,10 +18,26 @@ class LoginController extends GetxController {
   final password = TextEditingController();
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
 
+  // @override
+  // void onInit() {
+  //   email.text = localStorage.read('REMEMBER_ME_EMAIL');
+  //   password.text = localStorage.read('REMEMBER_ME_PASSWORD');
+  //   super.onInit();
+  // }
+
   @override
   void onInit() {
-    email.text = localStorage.read('REMEMBER_ME_EMAIL');
-    password.text = localStorage.read('REMEMBER_ME_PASSWORD');
+    String? rememberedEmail = localStorage.read('REMEMBER_ME_EMAIL');
+    String? rememberedPassword = localStorage.read('REMEMBER_ME_PASSWORD');
+
+    if (rememberedEmail != null) {
+      email.text = rememberedEmail;
+    }
+
+    if (rememberedPassword != null) {
+      password.text = rememberedPassword;
+    }
+
     super.onInit();
   }
 

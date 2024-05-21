@@ -157,7 +157,7 @@ class _DSignupBodyState extends State<DSignupBody> {
             ),
             const SizedBox(height: DSizes.spaceBtwItems),
 
-            //Sign up Button
+            //Sign in Button
             SizedBox(
               width: double.infinity,
               child: TextButton(

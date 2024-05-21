@@ -1,10 +1,13 @@
 import 'package:dipetakan/features/lahansaya/screens/lahan_saya.dart';
+import 'package:dipetakan/features/navigation/controllers/user_controller.dart';
 import 'package:dipetakan/features/navigation/screens/bantuan.dart';
+import 'package:dipetakan/features/navigation/screens/widgets/shimmer.dart';
 import 'package:dipetakan/features/petalahan/screens/peta_lahan.dart';
 import 'package:dipetakan/features/tambahlahan/screens/tambahlahan.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 // ignore: must_be_immutable
 class MenuScreen extends StatelessWidget {
@@ -25,7 +28,7 @@ class MenuScreen extends StatelessWidget {
   ];
 
   List screen = [
-    const PetaLahanScreen(),
+    PetaLahanScreen(),
     const TambahLahan(),
     const LahanSayaScreen(),
     const BantuanScreen(),
@@ -33,6 +36,8 @@ class MenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(UserController());
+
     return Scaffold(
       backgroundColor: DColors.secondary,
       body: SingleChildScrollView(
@@ -43,7 +48,7 @@ class MenuScreen extends StatelessWidget {
               Container(
                 color: DColors.primary,
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.10,
+                height: MediaQuery.of(context).size.height * 0.14,
                 child: Padding(
                   padding: const EdgeInsets.only(
                       top: 8.0, left: 24.0, right: 24.0, bottom: 24.0),
@@ -51,36 +56,42 @@ class MenuScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Hai, ',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(
-                                    color:
-                                        Colors.white, // Set the color to white
-                                    fontWeight: FontWeight
-                                        .normal, // Set the font weight to normal
-                                  ),
+                      Obx(() {
+                        if (controller.profileLoading.value) {
+                          return const DShimmerEfffect(width: 80, height: 15);
+                        } else {
+                          return RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Hai, ',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall
+                                      ?.copyWith(
+                                        color: Colors
+                                            .white, // Set the color to white
+                                        fontWeight: FontWeight
+                                            .normal, // Set the font weight to normal
+                                      ),
+                                ),
+                                TextSpan(
+                                  text: controller.user.value.fullName,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall
+                                      ?.copyWith(
+                                        color: Colors
+                                            .white, // Set the color to white
+                                        fontWeight: FontWeight
+                                            .bold, // Set the font weight to bold
+                                      ),
+                                ),
+                              ],
                             ),
-                            TextSpan(
-                              text: 'Asri Aziziyah',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(
-                                    color:
-                                        Colors.white, // Set the color to white
-                                    fontWeight: FontWeight
-                                        .bold, // Set the font weight to bold
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
+                          );
+                        }
+                      }),
                       const SizedBox(height: DSizes.xs),
                       Text(
                         'Siap untuk memetakan atau melihat peta lahan?',

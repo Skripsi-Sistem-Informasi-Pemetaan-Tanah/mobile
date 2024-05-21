@@ -27,8 +27,10 @@ class CarouselSlide extends StatelessWidget {
                   viewportFraction: 1,
                   onPageChanged: (index, _) =>
                       controller.updatePageIndicator(index)),
-              items:
-                  photos.map((url) => DRoundedImage(imageUrl: url)).toList()),
+              items: photos
+                  .map((url) =>
+                      DRoundedImage(imageUrl: url, isNetworkimage: true))
+                  .toList()),
           const SizedBox(height: DSizes.spaceBtwItems),
           Center(
             child: Obx(
@@ -65,7 +67,7 @@ class DRoundedImage extends StatelessWidget {
     this.backgroundColor = DColors.white,
     this.fit = BoxFit.cover,
     this.padding,
-    this.isNetworkimage = false,
+    this.isNetworkimage = true,
     this.onPressed,
     this.borderRadius = 0,
     required this.imageUrl,

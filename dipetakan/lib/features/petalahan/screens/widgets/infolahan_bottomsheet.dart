@@ -1,13 +1,23 @@
-import 'package:dipetakan/features/petalahan/screens/deskripsi_lahan_lain.dart';
+import 'package:dipetakan/features/lahansaya/controllers/lahansaya_controller.dart';
+import 'package:dipetakan/features/lahansaya/screens/deskripsi_lahan.dart';
+import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
-import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class InfoLahanBottomSheet extends StatelessWidget {
-  const InfoLahanBottomSheet({super.key});
+class InfoLahanBottomSheet extends StatefulWidget {
+  final LahanModel lahan;
+  const InfoLahanBottomSheet({super.key, required this.lahan});
 
   @override
+  State<InfoLahanBottomSheet> createState() => _InfoLahanBottomSheetState();
+}
+
+class _InfoLahanBottomSheetState extends State<InfoLahanBottomSheet> {
+  @override
   Widget build(BuildContext context) {
+    final controller = Get.put(LahanSayaController());
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Column(
@@ -21,16 +31,16 @@ class InfoLahanBottomSheet extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(DTexts.namaPemilikLahan,
+                  Text(controller.user.value.fullName,
                       style: Theme.of(context).textTheme.bodyLarge),
                   const SizedBox(height: DSizes.xs),
-                  Text(DTexts.namaLahan,
+                  Text(widget.lahan.namaLahan,
                       style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: DSizes.md),
-                  Text(DTexts.statusverifikasi,
+                  Text(widget.lahan.statusverifikasi,
                       style: Theme.of(context).textTheme.bodyMedium),
                   const SizedBox(height: DSizes.xs),
-                  Text(DTexts.jenisLahan,
+                  Text(widget.lahan.jenisLahan,
                       style: Theme.of(context).textTheme.bodyMedium),
                   const SizedBox(height: DSizes.spaceBtwSections),
                   SizedBox(
@@ -41,7 +51,7 @@ class InfoLahanBottomSheet extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    const DeskripsiLahanLain()),
+                                    DeskripsiLahan(lahan: widget.lahan)),
                           );
                         },
                         child: const Text('Lihat Detail')),

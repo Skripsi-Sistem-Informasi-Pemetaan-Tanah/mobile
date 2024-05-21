@@ -1,13 +1,18 @@
 // import 'package:dipetakan/features/navigation/screens/profilesaya/edit_profil.dart';
+import 'package:dipetakan/features/navigation/controllers/user_controller.dart';
+import 'package:dipetakan/features/navigation/screens/navigation.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/edit_email.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/edit_nama.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/edit_notelp.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/edit_username.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/widgets/circular_image.dart';
+import 'package:dipetakan/features/navigation/screens/widgets/shimmer.dart';
 import 'package:dipetakan/util/constants/colors.dart';
+import 'package:dipetakan/util/constants/image_strings.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProfilSayaScreen extends StatefulWidget {
   const ProfilSayaScreen({super.key});
@@ -19,11 +24,17 @@ class ProfilSayaScreen extends StatefulWidget {
 class _ProfilSayaScreenState extends State<ProfilSayaScreen> {
   @override
   Widget build(BuildContext context) {
+    final controller = UserController.instance;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: DColors.primary,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Get.to(() => const NavigationMenu()),
+        ),
         title: const Text(
           'Profile Saya',
           style: TextStyle(
@@ -41,10 +52,21 @@ class _ProfilSayaScreenState extends State<ProfilSayaScreen> {
               width: double.infinity,
               child: Column(
                 children: [
-                  const DCircularImages(
-                      image: 'assets/images/user.png', width: 100, height: 100),
+                  Obx(() {
+                    final networkImage = controller.user.value.profilePicture;
+                    final image =
+                        networkImage.isNotEmpty ? networkImage : TImages.user;
+                    return controller.imageUploading.value
+                        ? const DShimmerEfffect(width: 100, height: 100)
+                        : DCircularImages(
+                            image: image,
+                            width: 100,
+                            height: 100,
+                            isNetworkImage: networkImage.isNotEmpty);
+                  }),
                   TextButton(
-                      onPressed: () {}, child: const Text('Ubah Foto Profil'))
+                      onPressed: () => controller.uploadUserProfilePicture(),
+                      child: const Text('Ubah Foto Profil'))
                 ],
               ),
             ),
@@ -55,40 +77,20 @@ class _ProfilSayaScreenState extends State<ProfilSayaScreen> {
             //Informasi Akun
             InformasiAkun(
                 title: DTexts.namalengkap,
-                value: DTexts.accountName,
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const EditNamaScreen()));
-                }),
+                value: controller.user.value.fullName,
+                onPressed: () => Get.to(() => const EditNamaScreen())),
             InformasiAkun(
                 title: DTexts.username,
-                value: 'asriaziziyah',
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const EditUsernameScreen()));
-                }),
+                value: controller.user.value.username,
+                onPressed: () => Get.to(() => const EditUsernameScreen())),
             InformasiAkun(
                 title: DTexts.email,
-                value: 'asriaziziyah123@gmail.com',
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const EditEmailScreen()));
-                }),
+                value: controller.user.value.email,
+                onPressed: () => Get.to(() => const EditEmailScreen())),
             InformasiAkun(
                 title: DTexts.phoneNo,
-                value: '089612080576',
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const EditNotelpScreen()));
-                }),
+                value: controller.user.value.phoneNo,
+                onPressed: () => Get.to(() => const EditNotelpScreen())),
 
             const SizedBox(height: DSizes.spaceBtwSections),
           ]),
@@ -97,7 +99,7 @@ class _ProfilSayaScreenState extends State<ProfilSayaScreen> {
       floatingActionButton: Padding(
           padding: const EdgeInsets.all(DSizes.defaultSpace),
           child: TextButton(
-              onPressed: () {},
+              onPressed: () => controller.deleteAccountWarningPopup(),
               child: const Text('Hapus Akun',
                   style: TextStyle(
                       fontSize: 15,

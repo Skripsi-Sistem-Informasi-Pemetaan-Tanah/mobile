@@ -22,18 +22,6 @@ class DLoginBody extends StatefulWidget {
 
 class _DLoginBodyState extends State<DLoginBody> {
   final controller = Get.put(LoginController());
-  GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
-  // ignore: prefer_typing_uninitialized_variables
-  // var _passwordInVisible;
-  // ignore: prefer_typing_uninitialized_variables
-  // var isChecked;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // _passwordInVisible = true;
-  //   // isChecked = false;
-  // }
 
   @override
   Widget build(BuildContext context) {

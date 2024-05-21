@@ -45,6 +45,7 @@ dependencies:
   iconsax: ^0.0.8
   cupertino_icons: ^1.0.6
   getwidget: ^4.0.0
+  shimmer: ^3.0.0
 
   # State Management
   get: ^4.6.6
@@ -68,8 +69,10 @@ dependencies:
 
   #Firebase
   firebase_core: ^2.27.0
-  firebase_auth: ^4.19.4
+  firebase_auth: ^4.14.0
   cloud_firestore: ^4.17.2
+  firebase_storage: ^11.7.5
+  cached_network_image: ^3.3.1
 
 
 
