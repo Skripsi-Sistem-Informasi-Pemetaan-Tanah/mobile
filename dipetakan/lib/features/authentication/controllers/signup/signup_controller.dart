@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/data/repositories/authentication/user_repository.dart';
 import 'package:dipetakan/features/authentication/models/user_model.dart';
 import 'package:dipetakan/features/authentication/screens/signup/email_verification.dart';
+import 'package:dipetakan/util/constants/api_constants.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
 import 'package:dipetakan/util/popups/full_screen_loader.dart';
 import 'package:dipetakan/util/popups/loaders.dart';
@@ -9,6 +12,7 @@ import 'package:dipetakan/util/popups/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dipetakan/util/helpers/network_manager.dart';
+import 'package:http/http.dart' as http;
 
 class SignupController extends GetxController {
   static SignupController get instance => Get.find();
@@ -37,6 +41,27 @@ class SignupController extends GetxController {
         DFullScreenLoader.stopLoading();
         return;
       }
+
+      // Check server and database connection
+      final url = Uri.parse('$baseUrl/checkDatabaseConnection');
+      final http.Response response = await http.get(url);
+      if (response.statusCode != 200 ||
+          json.decode(response.body)['connected'] != true) {
+        DLoaders.errorSnackBar(
+            title: 'Oh Snap!', message: 'Server or Database is not connected');
+        DFullScreenLoader.stopLoading();
+        return;
+      }
+
+      // // Check if the server hosting the database is reachable
+      // final serverUrl = Uri.parse(baseUrl);
+      // final serverResponse = await http.head(serverUrl);
+      // if (serverResponse.statusCode != 200) {
+      //   DLoaders.errorSnackBar(
+      //       title: 'Oh Snap!', message: 'Server tidak terkoneksi');
+      //   DFullScreenLoader.stopLoading();
+      //   return;
+      // }
 
       //Form validation
       if (!signupFormKey.currentState!.validate()) {

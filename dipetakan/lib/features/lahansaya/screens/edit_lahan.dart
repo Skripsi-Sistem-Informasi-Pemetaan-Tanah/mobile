@@ -1,10 +1,15 @@
 import 'package:dipetakan/features/lahansaya/screens/widgets/edit_lahan_body.dart';
+import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
+import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class EditLahan extends StatefulWidget {
-  const EditLahan({super.key});
+  final LahanModel lahan;
+
+  const EditLahan({super.key, required this.lahan});
 
   @override
   State<EditLahan> createState() => _EditLahanState();
@@ -25,17 +30,24 @@ class _EditLahanState extends State<EditLahan> {
               fontFamily: 'Inter',
               fontStyle: FontStyle.normal),
         ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Get.delete<TambahLahanController>(); // Dispose the controller
+            Get.back(); // Navigate back
+          },
+        ),
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             left: DSizes.defaultSpace,
             right: DSizes.defaultSpace,
             bottom: DSizes.defaultSpace,
           ),
           child: Column(children: <Widget>[
-            EditLahanBody(),
-            // SubmitLahan(),
+            EditLahanBody(lahan: widget.lahan),
+            // SubmitLahan()
           ]),
         ),
       ),

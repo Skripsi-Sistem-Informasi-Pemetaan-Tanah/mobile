@@ -1,5 +1,6 @@
 import 'package:dipetakan/features/authentication/screens/forgetpassword/widgets/forgetpass_body.dart';
 import 'package:dipetakan/features/authentication/screens/forgetpassword/widgets/forgetpass_header.dart';
+import 'package:dipetakan/features/authentication/screens/login/login.dart';
 // import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 // import 'package:dipetakan/util/helpers/helper_functions.dart';
@@ -19,8 +20,14 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
 
     return Scaffold(
       appBar: AppBar(
-          leading:
-              IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back))),
+          leading: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              },
+              icon: const Icon(Icons.arrow_back))),
       body: const SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(

@@ -1,5 +1,6 @@
-import 'package:dipetakan/features/lahansaya/controllers/lahansaya_controller.dart';
+import 'package:dipetakan/features/authentication/models/user_model.dart';
 import 'package:dipetakan/features/lahansaya/screens/deskripsi_lahan.dart';
+import 'package:dipetakan/features/petalahan/controllers/infolahan_controller.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +17,27 @@ class InfoLahanBottomSheet extends StatefulWidget {
 class _InfoLahanBottomSheetState extends State<InfoLahanBottomSheet> {
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(LahanSayaController());
+    final controller = Get.put(InfoLahanController());
+
+    // Sort the verifikasi list by verifiedAt in descending order
+    widget.lahan.verifikasi
+        .sort((a, b) => b.verifiedAt.compareTo(a.verifiedAt));
+
+    // Get the newest statusverifikasi
+    String newestStatusVerifikasi = widget.lahan.verifikasi.isNotEmpty
+        ? widget.lahan.verifikasi.first.statusverifikasi
+        : 'No verification status';
+
+    // Find the user who owns this lahan
+    final user = controller.userList.firstWhere(
+        (user) => user.id == widget.lahan.userId,
+        orElse: () => UserModel.empty());
 
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Column(
         children: [
-          //Informasi Lahan
+          // Informasi Lahan
           Padding(
             padding:
                 const EdgeInsets.only(bottom: 10.0, left: 24.0, right: 24.0),
@@ -31,13 +46,13 @@ class _InfoLahanBottomSheetState extends State<InfoLahanBottomSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(controller.user.value.fullName,
+                  Text(user.fullName,
                       style: Theme.of(context).textTheme.bodyLarge),
                   const SizedBox(height: DSizes.xs),
                   Text(widget.lahan.namaLahan,
                       style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: DSizes.md),
-                  Text(widget.lahan.statusverifikasi,
+                  Text('Status Verifikasi : $newestStatusVerifikasi',
                       style: Theme.of(context).textTheme.bodyMedium),
                   const SizedBox(height: DSizes.xs),
                   Text(widget.lahan.jenisLahan,
@@ -61,9 +76,9 @@ class _InfoLahanBottomSheetState extends State<InfoLahanBottomSheet> {
             ),
           )
 
-          //Nama Pemilik Lahan
+          // Nama Pemilik Lahan
 
-          //Nama Lahan
+          // Nama Lahan
 
           //
         ],

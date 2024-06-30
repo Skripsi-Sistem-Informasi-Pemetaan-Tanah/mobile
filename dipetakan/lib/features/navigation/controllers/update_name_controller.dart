@@ -1,5 +1,6 @@
 import 'package:dipetakan/data/repositories/authentication/user_repository.dart';
 import 'package:dipetakan/features/navigation/controllers/user_controller.dart';
+// import 'package:dipetakan/features/navigation/controllers/user_controller_postgres.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/profilsaya.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
 import 'package:dipetakan/util/helpers/network_manager.dart';
@@ -48,7 +49,7 @@ class UpdateNameController extends GetxController {
       }
 
       ///Update user's fullname in the Firebase Firestore
-      Map<String, dynamic> name = {'NamaLengkap': fullName.text.trim()};
+      Map<String, dynamic> name = {'nama_lengkap': fullName.text.trim()};
       await userRepository.updateSingleField(name);
 
       userController.user.value.fullName = fullName.text.trim();

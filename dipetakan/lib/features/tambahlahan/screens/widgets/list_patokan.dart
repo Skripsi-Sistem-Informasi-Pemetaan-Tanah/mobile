@@ -25,7 +25,7 @@ class _ListPatokanState extends State<ListPatokan> {
     return Obx(() {
       double listHeight = controller.patokanList.length * 80.0;
       return SizedBox(
-        height: listHeight + 60.0,
+        height: listHeight + 80.0,
         child: ListView.builder(
           scrollDirection: Axis.vertical,
           itemCount: controller.patokanList.length + 1,

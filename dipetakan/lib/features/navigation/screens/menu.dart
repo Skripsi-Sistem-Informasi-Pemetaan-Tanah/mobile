@@ -1,8 +1,12 @@
+// import 'package:dipetakan/data/repositories/tambahlahan/lahan_repository.dart';
 import 'package:dipetakan/features/lahansaya/screens/lahan_saya.dart';
 import 'package:dipetakan/features/navigation/controllers/user_controller.dart';
+// import 'package:dipetakan/features/navigation/controllers/user_controller_postgres.dart';
 import 'package:dipetakan/features/navigation/screens/bantuan.dart';
 import 'package:dipetakan/features/navigation/screens/widgets/shimmer.dart';
+import 'package:dipetakan/features/petalahan/controllers/petalahan_controller.dart';
 import 'package:dipetakan/features/petalahan/screens/peta_lahan.dart';
+import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
 import 'package:dipetakan/features/tambahlahan/screens/tambahlahan.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
@@ -131,11 +135,15 @@ class MenuScreen extends StatelessWidget {
                         itemBuilder: ((context, index) {
                           return InkWell(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => screen[index]),
-                              );
+                              if (screen[index] == const TambahLahan()) {
+                                Get.delete<TambahLahanController>();
+                                // Dispose of TambahLahanController only when navigating to TambahLahanScreen
+                              }
+                              if (screen[index] == PetaLahanScreen()) {
+                                Get.delete<PetaLahanController>();
+                                // Dispose of PetaLahanController only when navigating to PetaLahanScreen
+                              }
+                              Get.to(screen[index]);
                             },
                             child: Container(
                               margin: const EdgeInsets.symmetric(

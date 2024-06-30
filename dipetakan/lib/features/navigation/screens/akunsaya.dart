@@ -1,5 +1,8 @@
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
+// import 'package:dipetakan/features/authentication/controllers/signup/signup_controller.dart';
+// import 'package:dipetakan/features/authentication/controllers/signup/signup_controller_postgres.dart';
 import 'package:dipetakan/features/navigation/controllers/user_controller.dart';
+// import 'package:dipetakan/features/navigation/controllers/user_controller_postgres.dart';
 // import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/features/navigation/screens/bantuan.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/profilsaya.dart';
@@ -20,6 +23,7 @@ class AkunSaya extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = UserController.instance;
+    // final controller = Get.put(UserController());
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -142,6 +146,7 @@ class AkunSaya extends StatelessWidget {
                             child: ElevatedButton(
                                 onPressed: () =>
                                     AuthenticationRepository.instance.logout(),
+                                // SignupController.instance.logout(),
                                 child: const Text(DTexts.signOut)),
                           ),
                         ),

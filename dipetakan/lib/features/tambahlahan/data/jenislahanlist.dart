@@ -6,7 +6,6 @@ List<JenisLahanDataModel> jenisLahanList = [
   JenisLahanDataModel('Ladang'),
   JenisLahanDataModel('Perkebunan'),
   JenisLahanDataModel('Hortikultura'),
-  JenisLahanDataModel('Ladang'),
   JenisLahanDataModel('Perikanan'),
   JenisLahanDataModel('Peternakan'),
   JenisLahanDataModel('Hutan'),

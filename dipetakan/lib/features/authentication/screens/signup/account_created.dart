@@ -1,3 +1,4 @@
+// import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
@@ -49,7 +50,14 @@ class AccountCreatedScreen extends StatelessWidget {
                   child: ElevatedButton(
                       onPressed: () =>
                           AuthenticationRepository.instance.screenRedirect(),
-                      child: const Text(DTexts.tContinue)),
+                      //     {
+                      //   Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => const LoginScreen()),
+                      //   );
+                      // },
+                      child: const Text('Continue')),
                 ),
               ],
             )),

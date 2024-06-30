@@ -1,4 +1,5 @@
 import 'package:dipetakan/features/authentication/controllers/signup/signup_controller.dart';
+// import 'package:dipetakan/features/authentication/controllers/signup/signup_controller_postgres.dart';
 import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
@@ -125,7 +126,7 @@ class _DSignupBodyState extends State<DSignupBody> {
                         style: Theme.of(context).textTheme.bodySmall),
                     TextSpan(
                         text: DTexts.privacyPolicy,
-                        style: Theme.of(context).textTheme.bodyMedium!.apply(
+                        style: Theme.of(context).textTheme.bodySmall!.apply(
                               color: dark ? DColors.white : DColors.primary,
                               decoration: TextDecoration.underline,
                               decorationColor:
@@ -136,7 +137,7 @@ class _DSignupBodyState extends State<DSignupBody> {
                         style: Theme.of(context).textTheme.bodySmall),
                     TextSpan(
                         text: DTexts.termsOfUse,
-                        style: Theme.of(context).textTheme.bodyMedium!.apply(
+                        style: Theme.of(context).textTheme.bodySmall!.apply(
                               color: dark ? DColors.white : DColors.primary,
                               decoration: TextDecoration.underline,
                               decorationColor:

@@ -1,5 +1,6 @@
 // import 'package:dipetakan/features/navigation/screens/profilesaya/edit_profil.dart';
 import 'package:dipetakan/features/navigation/controllers/user_controller.dart';
+// import 'package:dipetakan/features/navigation/controllers/user_controller_postgres.dart';
 import 'package:dipetakan/features/navigation/screens/navigation.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/edit_email.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/edit_nama.dart';
@@ -24,7 +25,8 @@ class ProfilSayaScreen extends StatefulWidget {
 class _ProfilSayaScreenState extends State<ProfilSayaScreen> {
   @override
   Widget build(BuildContext context) {
-    final controller = UserController.instance;
+    // final controller = UserController.instance;
+    final controller = Get.put(UserController());
 
     return Scaffold(
       backgroundColor: Colors.white,

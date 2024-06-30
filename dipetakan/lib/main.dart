@@ -21,6 +21,11 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   ).then((FirebaseApp value) => Get.put(AuthenticationRepository()));
 
+  // //   // Initialize Firebase App Check
+  // await FirebaseAppCheck.instance.activate(
+  //   androidProvider: AndroidProvider.playIntegrity,
+  // );
+
   await _getGeoLocationPosition();
 
   runApp(const App());

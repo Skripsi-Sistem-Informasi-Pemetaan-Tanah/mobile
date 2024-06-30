@@ -19,7 +19,7 @@ class UserController extends GetxController {
   final profileLoading = false.obs;
   Rx<UserModel> user = UserModel.empty().obs;
 
-  final hidePassword = false.obs;
+  final hidePassword = true.obs;
   final imageUploading = false.obs;
   final verifyEmail = TextEditingController();
   final verifyPassword = TextEditingController();
@@ -92,14 +92,42 @@ class UserController extends GetxController {
     );
   }
 
-  void deleteUserAccount() async {
-    DFullScreenLoader.openLoadingDialog('Processing', TImages.docerAnimation);
+  // void deleteUserAccount() async {
+  //   DFullScreenLoader.openLoadingDialog('Processing', TImages.docerAnimation);
 
-    final auth = AuthenticationRepository.instance;
-    final provider = auth.authUser!.providerData.map((e) => e.providerId).first;
-    if (provider.isNotEmpty) {
+  //   final auth = AuthenticationRepository.instance;
+  //   final provider = auth.authUser!.providerData.map((e) => e.providerId).first;
+  //   if (provider.isNotEmpty) {
+  //     DFullScreenLoader.stopLoading();
+  //     Get.to(() => const ReAuthUserScreen());
+  //   }
+  // }
+
+  void deleteUserAccount() async {
+    try {
+      // Start loading
+      DFullScreenLoader.openLoadingDialog('Processing', TImages.docerAnimation);
+
+      final auth = AuthenticationRepository.instance;
+      final provider =
+          auth.authUser?.providerData.map((e) => e.providerId).first ?? '';
+
+      if (provider.isNotEmpty) {
+        // If provider data exists, re-authenticate
+        DFullScreenLoader.stopLoading();
+        Get.to(() => const ReAuthUserScreen());
+      } else {
+        // Directly delete the account if no provider data
+        await AuthenticationRepository.instance.deleteAccount();
+        await AuthenticationRepository.instance.logout();
+        DFullScreenLoader.stopLoading();
+        Get.offAll(() => const LoginScreen());
+      }
+    } catch (e) {
+      // Remove loader
       DFullScreenLoader.stopLoading();
-      Get.to(() => const ReAuthUserScreen());
+      // Show some generic error to the user
+      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     }
   }
 

@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/data/repositories/tambahlahan/lahan_repository.dart';
 import 'package:dipetakan/features/navigation/screens/navigation.dart';
 import 'package:dipetakan/features/tambahlahan/models/jenislahanmodel.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
+import 'package:dipetakan/util/constants/api_constants.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
 import 'package:dipetakan/util/helpers/network_manager.dart';
 import 'package:dipetakan/util/popups/full_screen_loader.dart';
@@ -11,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class TambahLahanController extends GetxController {
   static TambahLahanController get instance => Get.find();
@@ -25,6 +30,7 @@ class TambahLahanController extends GetxController {
   Rx<LahanModel> lahan = LahanModel.empty().obs;
 
   var patokanList = <PatokanModel>[].obs;
+  var verifikasiList = <VerifikasiModel>[].obs;
   var strLatLong = 'Belum mendapatkan Lat dan Long'.obs;
   var loading = false.obs;
 
@@ -122,8 +128,26 @@ class TambahLahanController extends GetxController {
       }
     } catch (e) {
       loading.value = false;
-      Get.snackbar('Oh Snap!', e.toString(),
-          snackPosition: SnackPosition.BOTTOM);
+      DLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
+    }
+  }
+
+  Future<void> editPatokan(BuildContext context, int index) async {
+    try {
+      loading.value = true;
+      final pickedFile =
+          await imagePicker.pickImage(source: ImageSource.camera);
+      loading.value = false;
+
+      if (pickedFile != null) {
+        patokanList[index] = PatokanModel(
+            localPath: pickedFile.path,
+            fotoPatokan: '',
+            coordinates: patokanList[index].coordinates);
+      }
+    } catch (e) {
+      loading.value = false;
+      DLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
     }
   }
 
@@ -199,6 +223,18 @@ class TambahLahanController extends GetxController {
         DFullScreenLoader.stopLoading();
         return;
       }
+
+      // Check server and database connection
+      final serverurl = Uri.parse('$baseUrl/checkConnectionDatabase');
+      final http.Response serverresponse = await http.get(serverurl);
+      if (serverresponse.statusCode != 200 ||
+          json.decode(serverresponse.body)['connected'] != true) {
+        DLoaders.errorSnackBar(
+            title: 'Oh Snap!', message: 'Server or Database is not connected');
+        DFullScreenLoader.stopLoading();
+        return;
+      }
+
       //Form validation
       if (!tambahLahanFormKey.currentState!.validate()) {
         //remove loader
@@ -235,20 +271,67 @@ class TambahLahanController extends GetxController {
       // Upload images and update patokan list
       await uploadPatokanImages();
 
+      // Initialize verifikasiList with default values
+      verifikasiList.add(
+        VerifikasiModel(
+          comentar: '',
+          statusverifikasi: 'belum tervalidasi',
+          progress: 0,
+          verifiedAt: Timestamp.now(),
+        ),
+      );
+
+      final userId = AuthenticationRepository.instance.authUser?.uid;
+      if (userId == null) {
+        throw 'User not authenticated';
+      }
+
       final lahan = LahanModel(
         id: lahanId,
+        userId: userId,
         namaLahan: namaLahan,
         jenisLahan: jenisLahan,
         deskripsiLahan: deskripsiLahan,
         patokan: patokanList,
-        statusverifikasi: 'Pending',
-        progress: 0,
+        verifikasi: verifikasiList,
+        // statusverifikasi: 'Pending',
+        // progress: 0,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
       );
 
       // Save the document using the generated ID
       await newDocRef.set(lahan.toJson());
+
+      // Prepare the data to be sent to the server
+      // Map<String, dynamic> dataToSend = {
+      //   'user_id': userId,
+      //   ...lahan
+      //       .toJsonPostgres(), // Use the toJsonPostgres method to format the data
+      // };
+
+      // Send data to Node.js server to save to PostgreSQL
+      // const String baseUrl = 'http://192.168.1.18:3000';
+      var url = Uri.parse('$baseUrl/saveLahan');
+      var response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(lahan.toJsonPostgres()),
+      );
+
+      if (response.statusCode != 200) {
+        // ignore: avoid_print
+        print('Failed to save lahan details: ${response.body}');
+        DLoaders.errorSnackBar(
+            title: 'Oh Snap!',
+            message: '${response.statusCode} + ${response.body}');
+        // throw Exception('Failed to fetch user details');
+        // throw 'Failed to save lahan record to PostgreSQL';
+        DFullScreenLoader.stopLoading();
+        return;
+      }
 
       lahanRepository.saveLahanRecord(lahan);
 
@@ -265,7 +348,7 @@ class TambahLahanController extends GetxController {
       patokanList.clear();
 
       //Move to
-      Get.to(() => const NavigationMenu());
+      Get.offAll(() => const NavigationMenu());
     } catch (e) {
       //remove loader
       DFullScreenLoader.stopLoading();
@@ -275,17 +358,93 @@ class TambahLahanController extends GetxController {
     }
   }
 
-  // Function to fetch lahan details
-  Future<void> fetchLahanRecord(String id) async {
+  // Function to update only the Foto Patokan
+  void updateFotoPatokan(LahanModel existingLahan) async {
     try {
-      profileLoading.value = true;
-      final lahan = await lahanRepository.fetchLahanDetails(id);
-      this.lahan(lahan);
-      profileLoading.value = false;
+      //Start loading
+      DFullScreenLoader.openLoadingDialog(
+          'We are processing your information', TImages.docerAnimation);
+
+      //Check Internet Connectivity
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        //remove loader
+        DFullScreenLoader.stopLoading();
+        return;
+      }
+
+      // Check server and database connection
+      final serverurl = Uri.parse('$baseUrl/checkDatabaseConnection');
+      final http.Response serverresponse = await http.get(serverurl);
+      if (serverresponse.statusCode != 200 ||
+          json.decode(serverresponse.body)['connected'] != true) {
+        DLoaders.errorSnackBar(
+            title: 'Oh Snap!', message: 'Server or Database is not connected');
+        DFullScreenLoader.stopLoading();
+        return;
+      }
+
+      // Upload images and update patokan list
+      await uploadPatokanImages();
+
+      // Send updated patokan to Node.js server to update PostgreSQL
+      var url = Uri.parse('$baseUrl/updateFotoPatokan');
+      var response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'map_id': existingLahan.id,
+          'koordinat': patokanList.map((patokan) => patokan.toJson()).toList(),
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        DLoaders.errorSnackBar(
+            title: 'Oh Snap!',
+            message: '${response.statusCode} + ${response.body}');
+        DFullScreenLoader.stopLoading();
+        return;
+      }
+
+      // Update the patokan in Firestore
+      await FirebaseFirestore.instance
+          .collection('Lahan')
+          .doc(existingLahan.id)
+          .update({
+        'koordinat': patokanList.map((patokan) => patokan.toJson()).toList(),
+        'updated_at': Timestamp.now(),
+      });
+
+      // Show success message
+      DLoaders.successSnackBar(
+        title: 'Success',
+        message: 'Foto patokan has been updated successfully.',
+      );
+
+      // Clear patokan list
+      patokanList.clear();
+
+      // Navigate back
+      Get.offAll(() => const NavigationMenu());
     } catch (e) {
-      lahan(LahanModel.empty());
-    } finally {
-      profileLoading.value = false;
+      DFullScreenLoader.stopLoading();
+      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     }
   }
+
+  // // Function to fetch lahan details
+  // Future<void> fetchLahanRecord(String id) async {
+  //   try {
+  //     profileLoading.value = true;
+  //     final lahan = await lahanRepository.fetchLahanDetails(id);
+  //     this.lahan(lahan);
+  //     profileLoading.value = false;
+  //   } catch (e) {
+  //     lahan(LahanModel.empty());
+  //   } finally {
+  //     profileLoading.value = false;
+  //   }
+  // }
 }

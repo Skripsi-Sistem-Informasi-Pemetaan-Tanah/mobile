@@ -1,5 +1,6 @@
 import 'package:dipetakan/data/repositories/authentication/user_repository.dart';
 import 'package:dipetakan/features/navigation/controllers/user_controller.dart';
+// import 'package:dipetakan/features/navigation/controllers/user_controller_postgres.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/profilsaya.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
 import 'package:dipetakan/util/helpers/network_manager.dart';
@@ -48,7 +49,7 @@ class UpdateUsernameController extends GetxController {
       }
 
       ///Update user's username in the Firebase Firestore
-      Map<String, dynamic> userName = {'Username': username.text.trim()};
+      Map<String, dynamic> userName = {'username': username.text.trim()};
       await userRepository.updateSingleField(userName);
 
       userController.user.value.username = username.text.trim();

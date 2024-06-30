@@ -16,6 +16,7 @@ class TambahLahanBody extends StatefulWidget {
 }
 
 class _TambahLahanBodyState extends State<TambahLahanBody> {
+  final TambahLahanController controller = Get.put(TambahLahanController());
   // JenisLahanDataModel? _jenislahanChoose;
 
   // void _onDropDownItemSelected(JenisLahanDataModel? newSelectedJenisLahan) {
@@ -28,7 +29,7 @@ class _TambahLahanBodyState extends State<TambahLahanBody> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(TambahLahanController());
+    // final controller = Get.put(TambahLahanController());
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: DSizes.spaceBtwSections),
