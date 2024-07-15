@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class LahanModel {
   String id;
   String userId;
+  String namaPemilik;
   String namaLahan;
   String jenisLahan;
   String deskripsiLahan;
@@ -16,6 +17,7 @@ class LahanModel {
   LahanModel({
     required this.id,
     required this.userId,
+    required this.namaPemilik,
     required this.namaLahan,
     required this.jenisLahan,
     required this.deskripsiLahan,
@@ -40,6 +42,7 @@ class LahanModel {
   static LahanModel empty() => LahanModel(
       id: '',
       userId: '',
+      namaPemilik: '',
       namaLahan: '',
       jenisLahan: '',
       deskripsiLahan: '',
@@ -51,6 +54,7 @@ class LahanModel {
     return {
       'map_id': id,
       'user_id': userId,
+      'nama_pemilik': namaPemilik,
       'nama_lahan': namaLahan,
       'deskripsi_lahan': deskripsiLahan,
       'jenis_lahan': jenisLahan,
@@ -71,6 +75,7 @@ class LahanModel {
     return {
       'map_id': id,
       'user_id': userId,
+      'nama_pemilik': namaPemilik,
       'nama_lahan': namaLahan,
       'deskripsi_lahan': deskripsiLahan,
       'jenis_lahan': jenisLahan,
@@ -82,6 +87,37 @@ class LahanModel {
       'created_at': createdAtIso8601,
       'updated_at': updatedAtIso8601,
     };
+  }
+
+  factory LahanModel.fromJson(Map<String, dynamic> json) {
+    final patokanList = (json['koordinat'] as List<dynamic>)
+        .map((patokanData) => PatokanModel.fromJson(patokanData))
+        .toList();
+
+    final verifikasiList = (json['verifikasi'] as List<dynamic>)
+        .map((verifikasiData) => VerifikasiModel.fromJson(verifikasiData))
+        .toList();
+
+    return LahanModel(
+      id: json['map_id'] ?? '',
+      userId: json['user_id'] ?? '',
+      namaPemilik: json['nama_pemilik'] ?? '',
+      namaLahan: json['nama_lahan'] ?? '',
+      deskripsiLahan: json['deskripsi_lahan'] ?? '',
+      jenisLahan: json['jenis_lahan'] ?? '',
+      patokan: patokanList,
+      verifikasi: verifikasiList,
+      createdAt: json['created_at'] != null
+          ? (json['created_at'] is String
+              ? Timestamp.fromDate(DateTime.parse(json['created_at']))
+              : json['created_at'])
+          : Timestamp.now(),
+      updatedAt: json['updated_at'] != null
+          ? (json['updated_at'] is String
+              ? Timestamp.fromDate(DateTime.parse(json['updated_at']))
+              : json['updated_at'])
+          : Timestamp.now(),
+    );
   }
 
   factory LahanModel.fromSnapshot(
@@ -99,6 +135,7 @@ class LahanModel {
       return LahanModel(
         id: data['map_id'] ?? '',
         userId: data['user_id'] ?? '',
+        namaPemilik: data['nama_pemilik'] ?? '',
         namaLahan: data['nama_lahan'] ?? '',
         deskripsiLahan: data['deskripsi_lahan'] ?? '',
         jenisLahan: data['jenis_lahan'] ?? '',
@@ -136,29 +173,29 @@ class PatokanModel {
   Map<String, dynamic> toJson() {
     return {
       'local_path': localPath,
-      'foto_patokan': fotoPatokan,
-      'coordinates': coordinates,
+      'image': fotoPatokan,
+      'koordinat': coordinates,
     };
   }
 
   factory PatokanModel.fromJson(Map<String, dynamic> json) {
     return PatokanModel(
       localPath: json['local_path'] ?? '',
-      fotoPatokan: json['foto_patokan'] ?? '',
-      coordinates: json['coordinates'] ?? '',
+      fotoPatokan: json['image'] ?? '',
+      coordinates: json['koordinat'] ?? '',
     );
   }
 }
 
 class VerifikasiModel {
   String comentar;
-  String statusverifikasi;
+  int statusverifikasi;
   int progress;
   Timestamp verifiedAt;
 
   VerifikasiModel({
     this.comentar = '',
-    this.statusverifikasi = 'belum tervalidasi', // Default value
+    this.statusverifikasi = 0, // Default value
     this.progress = 0, // Default value
     // required this.verifiedAt
     Timestamp? verifiedAt,

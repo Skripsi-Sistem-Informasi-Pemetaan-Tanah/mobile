@@ -1,7 +1,10 @@
 import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
+import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller_dua.dart';
 import 'package:dipetakan/features/tambahlahan/data/jenislahanlist.dart';
 import 'package:dipetakan/features/tambahlahan/models/jenislahanmodel.dart';
 import 'package:dipetakan/features/tambahlahan/screens/widgets/list_patokan.dart';
+import 'package:dipetakan/features/tambahlahan/screens/widgets/list_patokan_geolocator.dart';
+import 'package:dipetakan/features/tambahlahan/screens/widgets/pin_point.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:dipetakan/util/validators/validation.dart';
@@ -16,7 +19,9 @@ class TambahLahanBody extends StatefulWidget {
 }
 
 class _TambahLahanBodyState extends State<TambahLahanBody> {
-  final TambahLahanController controller = Get.put(TambahLahanController());
+  // final TambahLahanController controller = Get.put(TambahLahanController());
+  final TambahLahanControllerOld controller =
+      Get.put(TambahLahanControllerOld());
   // JenisLahanDataModel? _jenislahanChoose;
 
   // void _onDropDownItemSelected(JenisLahanDataModel? newSelectedJenisLahan) {
@@ -49,6 +54,8 @@ class _TambahLahanBodyState extends State<TambahLahanBody> {
                 //Nama Lahan
                 TextFormField(
                   controller: controller.namaLahanController,
+                  validator: (value) =>
+                      TValidator.validateEmptyText('Nama lahan', value),
                   decoration:
                       const InputDecoration(labelText: DTexts.namaLahan),
                 ),
@@ -109,6 +116,8 @@ class _TambahLahanBodyState extends State<TambahLahanBody> {
                             newSelectedJenisLahan;
                       },
                       value: selectedJenisLahan,
+                      validator: (value) =>
+                          TValidator.validateJenisLahan('Jenis Lahan', value),
                     );
                   },
                 ),
@@ -118,7 +127,7 @@ class _TambahLahanBodyState extends State<TambahLahanBody> {
                 TextFormField(
                   controller: controller.deskripsiLahanController,
                   validator: (value) =>
-                      TValidator.validateEmptyText('DeskripsiLahan', value),
+                      TValidator.validateEmptyText('Deskripsi Lahan', value),
                   decoration:
                       const InputDecoration(labelText: DTexts.deskripsiLahan),
                 ),
@@ -130,8 +139,33 @@ class _TambahLahanBodyState extends State<TambahLahanBody> {
                     style: Theme.of(context).textTheme.headlineSmall),
                 const SizedBox(height: DSizes.spaceBtwInputFields),
 
-                const ListPatokan(),
+                const SizedBox(height: 500, child: PinPoint()),
+
+                const SizedBox(height: DSizes.spaceBtwInputFields),
+
+                Obx(() {
+                  final patokanList = controller.patokanList;
+                  final availableHeight = MediaQuery.of(context).size.height;
+                  final listHeight =
+                      (patokanList.length * 80).clamp(0, availableHeight * 1);
+                  // availableHeight * 0.3 +
+                  //     (patokanList.length * 80).clamp(0, availableHeight * 0.5);
+
+                  return SizedBox(
+                    height: listHeight.toDouble(),
+                    child: ListPatokan(
+                      patokanList: patokanList,
+                    ),
+                  );
+                }),
+                // SizedBox(
+                //   height: 300, // Set a fixed height for ListPatokan
+                //   child: ListPatokan(
+                //     patokanList: controller.patokanList,
+                //   ),
+                // ),
                 // const ListPatokanOld(),
+                const ListPatokanGeo(),
 
                 const SizedBox(height: DSizes.spaceBtwInputFields),
 

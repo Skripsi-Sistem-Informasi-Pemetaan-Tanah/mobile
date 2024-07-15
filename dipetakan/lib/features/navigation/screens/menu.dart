@@ -32,7 +32,7 @@ class MenuScreen extends StatelessWidget {
   ];
 
   List screen = [
-    PetaLahanScreen(),
+    const PetaLahanScreen(),
     const TambahLahan(),
     const LahanSayaScreen(),
     const BantuanScreen(),
@@ -139,7 +139,7 @@ class MenuScreen extends StatelessWidget {
                                 Get.delete<TambahLahanController>();
                                 // Dispose of TambahLahanController only when navigating to TambahLahanScreen
                               }
-                              if (screen[index] == PetaLahanScreen()) {
+                              if (screen[index] == const PetaLahanScreen()) {
                                 Get.delete<PetaLahanController>();
                                 // Dispose of PetaLahanController only when navigating to PetaLahanScreen
                               }

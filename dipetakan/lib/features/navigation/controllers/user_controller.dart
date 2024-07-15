@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/data/repositories/authentication/user_repository.dart';
 import 'package:dipetakan/features/authentication/models/user_model.dart';
@@ -12,6 +14,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:dipetakan/util/constants/api_constants.dart';
+import 'package:http/http.dart' as http;
 
 class UserController extends GetxController {
   static UserController get instance => Get.find();
@@ -71,14 +75,14 @@ class UserController extends GetxController {
   }
 
   /// Delete Account Worning
-  void deleteAccountWarningPopup() {
+  void deleteAccountWarningPopup(UserModel user) {
     Get.defaultDialog(
       contentPadding: const EdgeInsets.all(DSizes.md),
       title: 'Delete Account',
       middleText:
           "Are you sure you want to delete your account permanently? This action is not reversible and all of your data will be removed permanently",
       confirm: ElevatedButton(
-        onPressed: () async => deleteUserAccount(),
+        onPressed: () async => deleteUserAccount(user),
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
             side: const BorderSide(color: Colors.red)),
@@ -103,7 +107,7 @@ class UserController extends GetxController {
   //   }
   // }
 
-  void deleteUserAccount() async {
+  void deleteUserAccount(UserModel user) async {
     try {
       // Start loading
       DFullScreenLoader.openLoadingDialog('Processing', TImages.docerAnimation);
@@ -111,14 +115,29 @@ class UserController extends GetxController {
       final auth = AuthenticationRepository.instance;
       final provider =
           auth.authUser?.providerData.map((e) => e.providerId).first ?? '';
+      final userId = AuthenticationRepository.instance.authUser?.uid;
 
       if (provider.isNotEmpty) {
         // If provider data exists, re-authenticate
         DFullScreenLoader.stopLoading();
         Get.to(() => const ReAuthUserScreen());
       } else {
+        var url = Uri.parse('$baseUrl/deleteUser/$userId');
+        var response = await http.delete(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(user.toJson()),
+        );
+
+        if (response.statusCode != 200) {
+          DLoaders.errorSnackBar(title: 'Oh Snap!', message: 'Gagal Menghapus');
+          DFullScreenLoader.stopLoading();
+          return;
+        }
         // Directly delete the account if no provider data
-        await AuthenticationRepository.instance.deleteAccount();
+        await AuthenticationRepository.instance.deleteAccount(user);
         await AuthenticationRepository.instance.logout();
         DFullScreenLoader.stopLoading();
         Get.offAll(() => const LoginScreen());
@@ -127,11 +146,12 @@ class UserController extends GetxController {
       // Remove loader
       DFullScreenLoader.stopLoading();
       // Show some generic error to the user
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      DLoaders.errorSnackBar(
+          title: 'Oh Snap!', message: 'Gagal Menghapus : $e');
     }
   }
 
-  Future<void> reAuthenticatedEmailAndPassword() async {
+  Future<void> reAuthenticatedEmailAndPassword(UserModel user) async {
     try {
       //Start loading
       DFullScreenLoader.openLoadingDialog(
@@ -145,6 +165,19 @@ class UserController extends GetxController {
         return;
       }
 
+      // Check server and database connection
+      final serverurl = Uri.parse('$baseUrl/checkConnectionDatabase');
+      final http.Response serverresponse = await http.get(serverurl);
+
+      if (serverresponse.statusCode != 200) {
+        DLoaders.errorSnackBar(
+          title: 'Oh Snap!',
+          message: 'Server or Database is not connected',
+        );
+        DFullScreenLoader.stopLoading();
+        return;
+      }
+
       //Form validation
       if (!reAuthFormKey.currentState!.validate()) {
         DFullScreenLoader.stopLoading();
@@ -154,7 +187,7 @@ class UserController extends GetxController {
       await AuthenticationRepository.instance.reAuthenticatedEmailandPassword(
           verifyEmail.text.trim(), verifyPassword.text.trim());
 
-      await AuthenticationRepository.instance.deleteAccount();
+      await AuthenticationRepository.instance.deleteAccount(user);
 
       //Remove loader
       DFullScreenLoader.stopLoading();

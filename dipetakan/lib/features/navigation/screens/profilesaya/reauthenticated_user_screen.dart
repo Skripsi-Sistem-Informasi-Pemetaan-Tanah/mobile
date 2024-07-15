@@ -79,7 +79,8 @@ class _ReAuthUserScreenState extends State<ReAuthUserScreen> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                  onPressed: () => controller.reAuthenticatedEmailAndPassword(),
+                  onPressed: () => controller
+                      .reAuthenticatedEmailAndPassword(controller.user.value),
                   child: const Text('Submit')),
             ),
             const SizedBox(height: DSizes.spaceBtwItems),

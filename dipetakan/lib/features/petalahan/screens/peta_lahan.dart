@@ -28,88 +28,98 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
   }
 
   List<String> selectedJenisLahan = [];
-  List<String> selectedStatusValidasi = [];
+  // List<int> selectedStatusValidasi = [];
 
-  void setFilters(List<String> jenisLahan, List<String> statusValidasi) {
+  void setFilters(List<String> jenisLahan, List<int> statusValidasi) {
     setState(() {
       selectedJenisLahan = jenisLahan;
-      selectedStatusValidasi = statusValidasi;
+      // selectedStatusValidasi = statusValidasi;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: const IconThemeData(color: Colors.white),
-          backgroundColor: DColors.primary,
-          title: const Text(
-            'Peta Lahan',
-            style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Inter',
-                fontStyle: FontStyle.normal),
-          ),
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: DColors.primary,
+        title: const Text(
+          'Peta Lahan',
+          style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Inter',
+              fontStyle: FontStyle.normal),
         ),
-        body: Obx(() {
-          if (controller.currentLocation.value == null) {
-            return const Center(child: Text("Loading"));
-          } else {
-            return Stack(children: <Widget>[
-              GoogleMap(
-                mapType: MapType.satellite,
-                initialCameraPosition: CameraPosition(
-                    target: LatLng(controller.currentLocation.value!.latitude!,
-                        controller.currentLocation.value!.longitude!),
-                    zoom: 20),
-                onMapCreated: (mapController) {
-                  if (!controller.mapController.isCompleted) {
-                    controller.mapController.complete(mapController);
-                  }
-                },
-                // ignore: unnecessary_null_comparison
-                markers: controller.markerbitmap.value != null
-                    ? {
-                        Marker(
-                          markerId: const MarkerId("1"),
-                          position: LatLng(
-                              controller.currentLocation.value!.latitude!,
-                              controller.currentLocation.value!.longitude!),
-                        )
-                      }
-                    : <Marker>{},
-                // circles: {
-                //   Circle(
-                //       circleId: const CircleId("1"),
-                //       center: LatLng(
-                //           controller.currentLocation.value!.latitude!,
-                //           controller.currentLocation.value!.longitude!),
-                //       radius: 25,
-                //       strokeWidth: 2,
-                //       strokeColor: Colors.yellow,
-                //       fillColor: Colors.yellow.withOpacity(0.2)),
+      ),
+      body: Obx(() {
+        if (controller.currentLocation.value == null) {
+          return const Center(child: Text("Loading"));
+        } else {
+          return Stack(children: <Widget>[
+            GoogleMap(
+              mapType: MapType.satellite,
+              initialCameraPosition: CameraPosition(
+                  target: LatLng(controller.currentLocation.value!.latitude!,
+                      controller.currentLocation.value!.longitude!),
+                  zoom: 20),
+              onMapCreated: (mapController) {
+                if (!controller.mapController.isCompleted) {
+                  controller.mapController.complete(mapController);
+                }
+              },
+              onTap: (LatLng position) {
+                // Handle tap event to add marker
+                controller.addPatokan(context, position);
+              },
+              // ignore: unnecessary_null_comparison
+              markers: controller.markers.toSet(),
+              // markers: controller.markerbitmap.value != null
+              //     ? {
+              //         Marker(
+              //           markerId: const MarkerId("1"),
+              //           position: LatLng(
+              //               controller.currentLocation.value!.latitude!,
+              //               controller.currentLocation.value!.longitude!),
+              //         )
+              //       }
+              //     : <Marker>{},
+              // circles: {
+              //   Circle(
+              //       circleId: const CircleId("1"),
+              //       center: LatLng(
+              //           controller.currentLocation.value!.latitude!,
+              //           controller.currentLocation.value!.longitude!),
+              //       radius: 25,
+              //       strokeWidth: 2,
+              //       strokeColor: Colors.yellow,
+              //       fillColor: Colors.yellow.withOpacity(0.2)),
+              // },
+              polygons: controller.buildPolygons(),
+              zoomControlsEnabled: true,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              compassEnabled: true,
+            ),
+            Positioned(
+              top: 1,
+              right: 50,
+              child: FilterButton(
+                size: 38,
+                onFilterChanged:
+                    // setFilters,
+                    controller.setFilters,
+                //   (jenisLahan, statusValidasi) {
+                // controller.setFilters(jenisLahan, statusValidasi);
                 // },
-                polygons: controller.buildPolygons(),
-                zoomControlsEnabled: true,
-                myLocationEnabled: true,
-                myLocationButtonEnabled: true,
-                compassEnabled: true,
               ),
-              Positioned(
-                top: 1,
-                right: 50,
-                child: FilterButton(
-                  size: 38,
-                  onFilterChanged:
-                      // setFilters,
-                      controller.setFilters,
-                  //   (jenisLahan, statusValidasi) {
-                  // controller.setFilters(jenisLahan, statusValidasi);
-                  // },
-                ),
-              ),
-            ]);
-          }
-        }));
+            ),
+          ]);
+        }
+      }),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () => controller.addPatokan(context, null),
+      //   child: Icon(Icons.add_location),
+      // ),
+    );
   }
 }

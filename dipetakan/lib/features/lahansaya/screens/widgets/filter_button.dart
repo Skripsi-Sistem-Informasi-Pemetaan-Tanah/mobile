@@ -3,7 +3,7 @@ import 'package:dipetakan/features/tambahlahan/data/jenislahanlist.dart';
 
 class FilterButton extends StatefulWidget {
   final double size;
-  final Function(List<String>, List<String>) onFilterChanged;
+  final Function(List<String>, List<int>) onFilterChanged;
 
   const FilterButton({
     super.key,
@@ -18,7 +18,13 @@ class FilterButton extends StatefulWidget {
 
 class _FilterButtonState extends State<FilterButton> {
   List<String> selectedJenisLahan = [];
-  List<String> selectedStatusValidasi = [];
+  List<int> selectedStatusValidasi = [];
+
+  final Map<int, String> statusValidasiMap = {
+    0: 'Belum Tervalidasi',
+    1: 'Dalam Progress',
+    2: 'Sudah Tervalidasi',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -98,30 +104,6 @@ class _FilterButtonState extends State<FilterButton> {
                         );
                       }).toList(),
                     ),
-                    // ...jenisLahanList.map((jenisLahan) {
-                    //   return
-                    //   Padding(
-                    //     padding: const EdgeInsets.all(0),
-                    //     child: CheckboxListTile(
-                    //       contentPadding: EdgeInsets.zero,
-                    //       controlAffinity: ListTileControlAffinity.leading,
-                    //       title: Text(jenisLahan.jenisLahan,
-                    //           style: Theme.of(context).textTheme.bodySmall),
-                    //       value: selectedJenisLahan
-                    //           .contains(jenisLahan.jenisLahan),
-                    //       onChanged: (bool? value) {
-                    //         setState(() {
-                    //           if (value == true) {
-                    //             selectedJenisLahan.add(jenisLahan.jenisLahan);
-                    //           } else {
-                    //             selectedJenisLahan
-                    //                 .remove(jenisLahan.jenisLahan);
-                    //           }
-                    //         });
-                    //       },
-                    //     ),
-                    //   );
-                    // }),
                     const SizedBox(height: 12),
                     Text('Status Validasi',
                         style: Theme.of(context).textTheme.headlineSmall),
@@ -129,112 +111,42 @@ class _FilterButtonState extends State<FilterButton> {
                     Wrap(
                       spacing: 10.0,
                       runSpacing: 10.0,
-                      children: [
-                        FilterChip(
+                      children: statusValidasiMap.entries.map((entry) {
+                        return FilterChip(
                           backgroundColor: Colors.white,
                           surfaceTintColor: Colors.white,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(50.0)),
                           label: Text(
-                            'Sudah Tervalidasi',
+                            entry.value,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
-                                  color: selectedStatusValidasi
-                                          .contains('sudah tervalidasi')
-                                      ? Colors.white
-                                      : Colors.black,
+                                  color:
+                                      selectedStatusValidasi.contains(entry.key)
+                                          ? Colors.white
+                                          : Colors.black,
                                 ),
                           ),
-                          selected: selectedStatusValidasi
-                              .contains('sudah tervalidasi'),
+                          selected: selectedStatusValidasi.contains(entry.key),
                           selectedColor: Colors.green,
                           onSelected: (bool selected) {
                             setState(() {
                               if (selected) {
-                                selectedStatusValidasi.add('sudah tervalidasi');
+                                selectedStatusValidasi.add(entry.key);
                               } else {
-                                selectedStatusValidasi
-                                    .remove('sudah tervalidasi');
+                                selectedStatusValidasi.remove(entry.key);
                               }
                             });
                           },
-                        ),
-                        FilterChip(
-                          backgroundColor: Colors.white,
-                          surfaceTintColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50.0)),
-                          label: Text(
-                            'Belum Tervalidasi',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: selectedStatusValidasi
-                                          .contains('belum tervalidasi')
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
-                          ),
-                          selected: selectedStatusValidasi
-                              .contains('belum tervalidasi'),
-                          selectedColor: Colors.green,
-                          onSelected: (bool selected) {
-                            setState(() {
-                              if (selected) {
-                                selectedStatusValidasi.add('belum tervalidasi');
-                              } else {
-                                selectedStatusValidasi
-                                    .remove('belum tervalidasi');
-                              }
-                            });
-                          },
-                        ),
-                      ],
+                        );
+                      }).toList(),
                     ),
-                    // CheckboxListTile(
-                    //   contentPadding: EdgeInsets.zero,
-                    //   controlAffinity: ListTileControlAffinity.leading,
-                    //   title: const Text('Sudah Tervalidasi'),
-                    //   value:
-                    //       selectedStatusValidasi.contains('sudah tervalidasi'),
-                    //   onChanged: (bool? value) {
-                    //     setState(() {
-                    //       if (value == true) {
-                    //         selectedStatusValidasi.add('sudah tervalidasi');
-                    //       } else {
-                    //         selectedStatusValidasi.remove('sudah tervalidasi');
-                    //       }
-                    //     });
-                    //   },
-                    // ),
-                    // CheckboxListTile(
-                    //   title: const Text('Belum Tervalidasi'),
-                    //   value:
-                    //       selectedStatusValidasi.contains('belum tervalidasi'),
-                    //   onChanged: (bool? value) {
-                    //     setState(() {
-                    //       if (value == true) {
-                    //         selectedStatusValidasi.add('belum tervalidasi');
-                    //       } else {
-                    //         selectedStatusValidasi.remove('belum tervalidasi');
-                    //       }
-                    //     });
-                    //   },
-                    // ),
                   ],
                 ),
               ),
               actions: [
-                // TextButton(
-                //   child: const Text('Cancel',
-                //       style: TextStyle(color: Colors.black)),
-                //   onPressed: () {
-                //     Navigator.of(context).pop();
-                //   },
-                // ),
                 SizedBox(
                   child: OutlinedButton(
                     onPressed: () {
@@ -259,15 +171,6 @@ class _FilterButtonState extends State<FilterButton> {
                     child: const Text('Terapkan'),
                   ),
                 ),
-                // TextButton(
-                //   child: const Text('Apply',
-                //       style: TextStyle(color: Colors.green)),
-                //   onPressed: () {
-                //     widget.onFilterChanged(
-                //         selectedJenisLahan, selectedStatusValidasi);
-                //     Navigator.of(context).pop();
-                //   },
-                // ),
               ],
             );
           },

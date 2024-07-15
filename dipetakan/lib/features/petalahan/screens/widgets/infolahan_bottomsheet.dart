@@ -24,9 +24,27 @@ class _InfoLahanBottomSheetState extends State<InfoLahanBottomSheet> {
         .sort((a, b) => b.verifiedAt.compareTo(a.verifiedAt));
 
     // Get the newest statusverifikasi
-    String newestStatusVerifikasi = widget.lahan.verifikasi.isNotEmpty
+    int newestStatusVerifikasi = widget.lahan.verifikasi.isNotEmpty
         ? widget.lahan.verifikasi.first.statusverifikasi
-        : 'No verification status';
+        : 3;
+
+    String statusVerifikasiText;
+    switch (newestStatusVerifikasi) {
+      case 0:
+        statusVerifikasiText = 'Belum tervalidasi';
+        break;
+      case 1:
+        statusVerifikasiText = 'Dalam progress';
+        break;
+      case 2:
+        statusVerifikasiText = 'Sudah tervalidasi';
+        break;
+      case 3:
+        statusVerifikasiText = 'Tidak ada status';
+        break;
+      default:
+        statusVerifikasiText = 'Tidak ada status';
+    }
 
     // Find the user who owns this lahan
     final user = controller.userList.firstWhere(
@@ -51,13 +69,13 @@ class _InfoLahanBottomSheetState extends State<InfoLahanBottomSheet> {
                   const SizedBox(height: DSizes.xs),
                   Text(widget.lahan.namaLahan,
                       style: Theme.of(context).textTheme.headlineMedium),
-                  const SizedBox(height: DSizes.md),
-                  Text('Status Verifikasi : $newestStatusVerifikasi',
+                  const SizedBox(height: DSizes.xs),
+                  Text('Status Verifikasi : $statusVerifikasiText',
                       style: Theme.of(context).textTheme.bodyMedium),
                   const SizedBox(height: DSizes.xs),
                   Text(widget.lahan.jenisLahan,
                       style: Theme.of(context).textTheme.bodyMedium),
-                  const SizedBox(height: DSizes.spaceBtwSections),
+                  const SizedBox(height: DSizes.spaceBtwInputFields),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(

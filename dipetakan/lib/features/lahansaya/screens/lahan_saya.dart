@@ -13,11 +13,11 @@ class LahanSayaScreen extends StatefulWidget {
 
 class _LahanSayaScreenState extends State<LahanSayaScreen> {
   List<String> selectedJenisLahan = [];
-  List<String> selectedStatusValidasi = [];
+  List<int> selectedStatusValidasi = [];
   String searchQuery = '';
   final TextEditingController searchController = TextEditingController();
 
-  void _updateFilters(List<String> jenisLahan, List<String> statusValidasi) {
+  void _updateFilters(List<String> jenisLahan, List<int> statusValidasi) {
     setState(() {
       selectedJenisLahan = jenisLahan;
       selectedStatusValidasi = statusValidasi;

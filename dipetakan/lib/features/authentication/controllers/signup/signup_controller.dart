@@ -26,6 +26,7 @@ class SignupController extends GetxController {
   final password = TextEditingController();
   final phoneNo = TextEditingController();
   GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
+  Rx<UserModel> user = UserModel.empty().obs;
 
   /// SIGNUP
   void signup() async {
@@ -43,22 +44,14 @@ class SignupController extends GetxController {
       }
 
       // Check server and database connection
-      final url = Uri.parse('$baseUrl/checkDatabaseConnection');
-      final http.Response response = await http.get(url);
-      if (response.statusCode != 200 ||
-          json.decode(response.body)['connected'] != true) {
-        DLoaders.errorSnackBar(
-            title: 'Oh Snap!', message: 'Server or Database is not connected');
-        DFullScreenLoader.stopLoading();
-        return;
-      }
+      // final serverurl = Uri.parse('$baseUrl/checkConnectionDatabase');
+      // final http.Response serverresponse = await http.get(serverurl);
 
-      // // Check if the server hosting the database is reachable
-      // final serverUrl = Uri.parse(baseUrl);
-      // final serverResponse = await http.head(serverUrl);
-      // if (serverResponse.statusCode != 200) {
+      // if (serverresponse.statusCode != 200) {
       //   DLoaders.errorSnackBar(
-      //       title: 'Oh Snap!', message: 'Server tidak terkoneksi');
+      //     title: 'Oh Snap!',
+      //     message: 'Server or Database is not connected',
+      //   );
       //   DFullScreenLoader.stopLoading();
       //   return;
       // }
@@ -91,6 +84,21 @@ class SignupController extends GetxController {
           email: email.text.trim(),
           phoneNo: phoneNo.text.trim(),
           profilePicture: '');
+
+      // var url = Uri.parse('$baseUrl/saveUser');
+      // var response = await http.post(
+      //   url,
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: jsonEncode(newUser.toJson()),
+      // );
+
+      // if (response.statusCode != 200) {
+      //   DLoaders.errorSnackBar(title: 'Oh Snap!', message: 'Gagal Menyimpan');
+      //   DFullScreenLoader.stopLoading();
+      //   return;
+      // }
 
       final userRepository = Get.put(UserRepository());
       userRepository.saveUserRecord(newUser);

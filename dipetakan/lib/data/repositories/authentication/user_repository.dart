@@ -9,8 +9,6 @@ import 'package:dipetakan/util/constants/api_constants.dart';
 import 'package:dipetakan/util/exceptions/firebase_exceptions.dart';
 import 'package:dipetakan/util/exceptions/format_exceptions.dart';
 import 'package:dipetakan/util/exceptions/platform_exceptions.dart';
-import 'package:dipetakan/util/popups/full_screen_loader.dart';
-import 'package:dipetakan/util/popups/loaders.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -27,19 +25,19 @@ class UserRepository extends GetxController {
   Future<void> saveUserRecord(UserModel user) async {
     try {
       // Send data to Node.js server to save to PostgreSQL
-      var url = Uri.parse('$baseUrl/saveUser');
-      var response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(user.toJson()),
-      );
+      // var url = Uri.parse('$baseUrl/saveUser');
+      // var response = await http.post(
+      //   url,
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: jsonEncode(user.toJson()),
+      // );
 
-      if (response.statusCode != 200) {
-        DLoaders.errorSnackBar(title: 'Oh Snap!', message: 'Gagal Menyimpan');
-        DFullScreenLoader.stopLoading();
-      }
+      // if (response.statusCode != 200) {
+      //   DLoaders.errorSnackBar(title: 'Oh Snap!', message: 'Gagal Menyimpan');
+      //   DFullScreenLoader.stopLoading();
+      // }
 
       await _db.collection("Users").doc(user.id).set(user.toJson());
     } on FirebaseException catch (e) {
@@ -203,21 +201,21 @@ class UserRepository extends GetxController {
           .update(json);
 
       // Send update to Node.js server
-      var url = Uri.parse('$baseUrl/updateField');
-      var response = await http.put(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'id': AuthenticationRepository.instance.authUser?.uid,
-          ...json,
-        }),
-      );
+      // var url = Uri.parse('$baseUrl/updateField');
+      // var response = await http.put(
+      //   url,
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: jsonEncode({
+      //     'id': AuthenticationRepository.instance.authUser?.uid,
+      //     ...json,
+      //   }),
+      // );
 
-      if (response.statusCode != 200) {
-        throw 'Failed to update user in PostgreSQL';
-      }
+      // if (response.statusCode != 200) {
+      //   throw 'Failed to update user in PostgreSQL';
+      // }
     } on FirebaseException catch (e) {
       throw TFirebaseException(e.code).message;
     } on FormatException catch (_) {
@@ -230,8 +228,24 @@ class UserRepository extends GetxController {
   }
 
   //Remove user data in firestore
-  Future<void> removeUserRecord(String userId) async {
+  Future<void> removeUserRecord(UserModel user, String userId) async {
     try {
+      // Send data to Node.js server to save to PostgreSQL
+      // var url = Uri.parse('$baseUrl/deleteUser/$userId');
+      // var response = await http.post(
+      //   url,
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: jsonEncode(user.toJson()),
+      // );
+
+      // if (response.statusCode != 200) {
+      //   DLoaders.errorSnackBar(title: 'Oh Snap!', message: 'Gagal Menghapus');
+      //   return;
+      //   // DFullScreenLoader.stopLoading();
+      // }
+
       await _db.collection("Users").doc(userId).delete();
 
       // // Send delete request to Node.js server

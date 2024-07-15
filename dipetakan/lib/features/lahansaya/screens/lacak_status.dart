@@ -33,6 +33,35 @@ class _LacakStatusScreenState extends State<LacakStatusScreen> {
     return formatter.format(dateTime);
   }
 
+  String getStatusText(int statusverifikasi) {
+    switch (statusverifikasi) {
+      case 0:
+        return 'Belum tervalidasi';
+      case 1:
+        return 'Dalam progress';
+      case 2:
+        return 'Sudah tervalidasi';
+      default:
+        return 'Tidak ada status';
+    }
+  }
+
+  Color getStatusColor(int statusverifikasi, bool isFirst) {
+    if (!isFirst) {
+      return Colors.grey;
+    }
+    switch (statusverifikasi) {
+      case 0:
+        return Colors.red;
+      case 1:
+        return Colors.orange;
+      case 2:
+        return Colors.green;
+      default:
+        return Colors.grey;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<InfoLahanController>();
@@ -86,28 +115,28 @@ class _LacakStatusScreenState extends State<LacakStatusScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Kontak Admin',
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    const SizedBox(height: DSizes.md),
-                    Text(
-                      'Nama Admin',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: DSizes.md),
-                    Text(
-                      'No Telepon Admin',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: DSizes.md),
-                    Text(
-                      'Email Admin',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: DSizes.md),
-                    const Divider(),
-                    const SizedBox(height: DSizes.md),
+                    // Text(
+                    //   'Kontak Admin',
+                    //   style: Theme.of(context).textTheme.headlineSmall,
+                    // ),
+                    // const SizedBox(height: DSizes.md),
+                    // Text(
+                    //   'Nama Admin',
+                    //   style: Theme.of(context).textTheme.bodySmall,
+                    // ),
+                    // const SizedBox(height: DSizes.md),
+                    // Text(
+                    //   'No Telepon Admin',
+                    //   style: Theme.of(context).textTheme.bodySmall,
+                    // ),
+                    // const SizedBox(height: DSizes.md),
+                    // Text(
+                    //   'Email Admin',
+                    //   style: Theme.of(context).textTheme.bodySmall,
+                    // ),
+                    // const SizedBox(height: DSizes.md),
+                    // const Divider(),
+                    // const SizedBox(height: DSizes.md),
                     Text(
                       'Status Ajuan',
                       style: Theme.of(context).textTheme.headlineSmall,
@@ -118,62 +147,31 @@ class _LacakStatusScreenState extends State<LacakStatusScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: lahan.verifikasi.length,
                       itemBuilder: (context, index) {
-                        final reversedIndex =
-                            lahan.verifikasi.length - 1 - index;
-                        final verifikasi = lahan.verifikasi[reversedIndex];
-                        // final verifikasi = lahan.verifikasi[index];
+                        // final reversedIndex =
+                        // lahan.verifikasi.length - 1 - index;
+                        final verifikasi = lahan.verifikasi[index];
                         final isFirst = index == 0;
                         final isLast = index == lahan.verifikasi.length - 1;
+                        final color = getStatusColor(
+                            verifikasi.statusverifikasi, isFirst);
 
                         return TimelineTile(
                           alignment: TimelineAlign.start,
                           isFirst: isFirst,
                           isLast: isLast,
-                          indicatorStyle: IndicatorStyle(
-                            width: 12,
-                            color: !isFirst
-                                ? Colors.grey
-                                : verifikasi.statusverifikasi
-                                            .trim()
-                                            .toLowerCase() ==
-                                        'sudah tervalidasi'
-                                    ? Colors.green
-                                    : Colors.red,
-                            // iconStyle: IconStyle(
-                            //   color: Colors.white,
-                            //   iconData: verifikasi.statusverifikasi ==
-                            //           'sudah tervalidasi'
-                            //       ? Icons.check
-                            //       : Icons.error,
-                            // ),
-                          ),
-                          beforeLineStyle: LineStyle(
-                            color: !isFirst
-                                ? Colors.grey
-                                : verifikasi.statusverifikasi
-                                            .trim()
-                                            .toLowerCase() ==
-                                        'sudah tervalidasi'
-                                    ? Colors.green
-                                    : Colors.red,
-                          ),
+                          indicatorStyle:
+                              IndicatorStyle(width: 12, color: color),
+                          beforeLineStyle: LineStyle(color: color),
                           endChild: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: ListTile(
                               title: Text(
-                                verifikasi.statusverifikasi,
+                                getStatusText(verifikasi.statusverifikasi),
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge
                                     ?.copyWith(
-                                      color: !isFirst
-                                          ? Colors.grey
-                                          : verifikasi.statusverifikasi
-                                                      .trim()
-                                                      .toLowerCase() ==
-                                                  'sudah tervalidasi'
-                                              ? Colors.green
-                                              : Colors.red,
+                                      color: color,
                                       fontWeight: FontWeight.w600,
                                     ),
                               ),
@@ -186,9 +184,7 @@ class _LacakStatusScreenState extends State<LacakStatusScreen> {
                                         .textTheme
                                         .bodySmall
                                         ?.copyWith(
-                                          color: !isFirst
-                                              ? Colors.grey
-                                              : Colors.grey,
+                                          color: Colors.grey,
                                           fontWeight: FontWeight.w300,
                                         ),
                                   ),
@@ -200,9 +196,7 @@ class _LacakStatusScreenState extends State<LacakStatusScreen> {
                                         .textTheme
                                         .bodyMedium
                                         ?.copyWith(
-                                          color: !isFirst
-                                              ? Colors.grey
-                                              : Colors.black,
+                                          color: Colors.black,
                                         ),
                                   ),
                                 ],

@@ -1,4 +1,5 @@
 import 'package:dipetakan/data/repositories/authentication/user_repository.dart';
+import 'package:dipetakan/features/authentication/models/user_model.dart';
 // import 'package:dipetakan/features/authentication/models/user_model.dart';
 import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/features/authentication/screens/signup/email_verification.dart';
@@ -259,9 +260,10 @@ class AuthenticationRepository extends GetxController {
   }
 
   //Delete account
-  Future<void> deleteAccount() async {
+  Future<void> deleteAccount(UserModel user) async {
     try {
-      await UserRepository.instance.removeUserRecord(_auth.currentUser!.uid);
+      await UserRepository.instance
+          .removeUserRecord(user, _auth.currentUser!.uid);
       await _auth.currentUser?.delete();
     } on FirebaseAuthException catch (e) {
       throw TFirebaseAuthException(e.code).message;

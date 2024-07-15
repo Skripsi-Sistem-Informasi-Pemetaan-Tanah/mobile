@@ -101,7 +101,8 @@ class _ProfilSayaScreenState extends State<ProfilSayaScreen> {
       floatingActionButton: Padding(
           padding: const EdgeInsets.all(DSizes.defaultSpace),
           child: TextButton(
-              onPressed: () => controller.deleteAccountWarningPopup(),
+              onPressed: () =>
+                  controller.deleteAccountWarningPopup(controller.user.value),
               child: const Text('Hapus Akun',
                   style: TextStyle(
                       fontSize: 15,

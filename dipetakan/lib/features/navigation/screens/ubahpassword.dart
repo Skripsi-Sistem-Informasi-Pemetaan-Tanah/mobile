@@ -1,8 +1,10 @@
-import 'package:dipetakan/features/authentication/screens/resetpassword/reset_success.dart';
+import 'package:dipetakan/features/authentication/controllers/forget_password/forget_password_controller.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
+import 'package:dipetakan/util/validators/validation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class UbahPassword extends StatefulWidget {
@@ -15,6 +17,7 @@ class UbahPassword extends StatefulWidget {
 class _UbahPasswordState extends State<UbahPassword> {
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ForgetPasswordController());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -36,40 +39,31 @@ class _UbahPasswordState extends State<UbahPassword> {
             right: DSizes.defaultSpace,
             bottom: DSizes.defaultSpace,
           ),
-          child: Column(children: <Widget>[
-            //New Password
-            TextFormField(
-              decoration: const InputDecoration(
-                  prefixIcon: Icon(Iconsax.password_check),
-                  labelText: DTexts.newPassword),
-            ),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text('Masukkan Ulang Email',
+                    style: Theme.of(context).textTheme.bodyMedium),
+                const SizedBox(height: DSizes.spaceBtwItems),
+                TextFormField(
+                  controller: controller.email,
+                  validator: TValidator.validateEmail,
+                  decoration: const InputDecoration(
+                      prefixIcon: Icon(Iconsax.direct_right),
+                      labelText: DTexts.email),
+                ),
 
-            const SizedBox(height: DSizes.spaceBtwInputFields),
+                const SizedBox(height: DSizes.spaceBtwSections),
 
-            //Confirm Pass
-            TextFormField(
-              decoration: const InputDecoration(
-                  prefixIcon: Icon(Iconsax.password_check),
-                  labelText: DTexts.confirmPassword),
-            ),
-
-            const SizedBox(height: DSizes.spaceBtwSections),
-
-            //Submit Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ResetPassSuccessScreen()),
-                    );
-                  },
-                  child: const Text(DTexts.submit)),
-            ),
-            const SizedBox(height: DSizes.spaceBtwItems),
-          ]),
+                //Submit Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      onPressed: () => controller.sendPasswordResetEmail(),
+                      child: const Text(DTexts.submit)),
+                ),
+              ]),
         ),
       ),
     );

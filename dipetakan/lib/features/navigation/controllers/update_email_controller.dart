@@ -7,12 +7,19 @@ import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/ema
 import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/update_email_verification.dart';
 // import 'package:dipetakan/features/navigation/screens/profilesaya/profilsaya.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
+import 'package:dipetakan/util/exceptions/firebase_auth_exceptions.dart';
+import 'package:dipetakan/util/exceptions/firebase_exceptions.dart';
+import 'package:dipetakan/util/exceptions/format_exceptions.dart';
+import 'package:dipetakan/util/exceptions/platform_exceptions.dart';
 import 'package:dipetakan/util/helpers/network_manager.dart';
 import 'package:dipetakan/util/popups/full_screen_loader.dart';
 import 'package:dipetakan/util/popups/loaders.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:dipetakan/util/constants/api_constants.dart';
+import 'package:http/http.dart' as http;
 
 class UpdateEmailController extends GetxController {
   static UpdateEmailController get instance => Get.find();
@@ -45,6 +52,19 @@ class UpdateEmailController extends GetxController {
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
         //remove loader
+        DFullScreenLoader.stopLoading();
+        return;
+      }
+
+      // Check server and database connection
+      final serverurl = Uri.parse('$baseUrl/checkConnectionDatabase');
+      final http.Response serverresponse = await http.get(serverurl);
+
+      if (serverresponse.statusCode != 200) {
+        DLoaders.errorSnackBar(
+          title: 'Oh Snap!',
+          message: 'Server or Database is not connected',
+        );
         DFullScreenLoader.stopLoading();
         return;
       }
@@ -91,7 +111,7 @@ class UpdateEmailController extends GetxController {
     try {
       await currentUser?.reload(); // Refresh the user data
       // ignore: unrelated_type_equality_checks
-      if (currentUser?.email == newEmail) {
+      if (currentUser?.email == newEmail.text.trim()) {
         // Check if the email has been changed to newEmail
         if (currentUser!.emailVerified) {
           Get.off(() => const EmailUpdatedScreen());
@@ -110,13 +130,28 @@ class UpdateEmailController extends GetxController {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-token-expired') {
-        Get.off(() => const EmailUpdatedScreen());
+        await AuthenticationRepository.instance.logout();
+        Get.off(() => const LoginScreen());
       } else {
-        DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+        throw TFirebaseAuthException(e.code).message;
+      }
+    } on FirebaseException catch (e) {
+      throw TFirebaseException(e.code);
+    } on FormatException catch (_) {
+      throw const TFormatException();
+    } on PlatformException catch (e) {
+      if (e.code == 'user-token-expired') {
+        await AuthenticationRepository.instance.logout();
+        Get.off(() => const LoginScreen());
+      } else {
+        throw TPlatformException(e.code).message;
       }
     } catch (e) {
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      throw 'Something went wrong, try again: $e';
+      // DLoaders.errorSnackBar(
+      //     title: 'Error', message: 'Something went wrong try again : $e');
     }
+    return null;
   }
 
   sendEmailVerification() async {

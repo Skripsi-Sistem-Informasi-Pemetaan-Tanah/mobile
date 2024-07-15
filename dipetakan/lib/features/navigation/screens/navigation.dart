@@ -1,15 +1,9 @@
 import 'package:dipetakan/features/navigation/screens/akunsaya.dart';
 import 'package:dipetakan/features/navigation/screens/menu.dart';
-import 'package:dipetakan/features/navigation/screens/notification.dart';
-// import 'package:dipetakan/features/navigation/screens/sidebar.dart';
-// import 'package:dipetakan/features/lahansaya/screens/lahan_saya.dart';
-// import 'package:dipetakan/features/petalahan/screens/peta_lahan.dart';
-// import 'package:dipetakan/features/tambahlahan/screens/tambahlahan.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 
 class NavigationMenu extends StatefulWidget {
@@ -34,6 +28,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
         // centerTitle: true,
         leading: null,
         automaticallyImplyLeading: false,
+        centerTitle: true,
         title: const Text(
           'DIPETAKAN',
           // textAlign: TextAlign.center,

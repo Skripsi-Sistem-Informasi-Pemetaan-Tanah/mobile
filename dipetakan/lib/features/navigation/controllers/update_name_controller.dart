@@ -8,6 +8,8 @@ import 'package:dipetakan/util/popups/full_screen_loader.dart';
 import 'package:dipetakan/util/popups/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:dipetakan/util/constants/api_constants.dart';
+import 'package:http/http.dart' as http;
 
 class UpdateNameController extends GetxController {
   static UpdateNameController get instance => Get.find();
@@ -37,6 +39,18 @@ class UpdateNameController extends GetxController {
       final isConnected = await NetworkManager.instance.isConnected();
       if (!isConnected) {
         //remove loader
+        DFullScreenLoader.stopLoading();
+        return;
+      }
+
+      final serverurl = Uri.parse('$baseUrl/checkConnectionDatabase');
+      final http.Response serverresponse = await http.get(serverurl);
+
+      if (serverresponse.statusCode != 200) {
+        DLoaders.errorSnackBar(
+          title: 'Oh Snap!',
+          message: 'Server or Database is not connected',
+        );
         DFullScreenLoader.stopLoading();
         return;
       }

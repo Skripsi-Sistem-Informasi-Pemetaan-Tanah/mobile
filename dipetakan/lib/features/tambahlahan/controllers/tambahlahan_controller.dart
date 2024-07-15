@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/data/repositories/tambahlahan/lahan_repository.dart';
+import 'package:dipetakan/features/authentication/models/user_model.dart';
 import 'package:dipetakan/features/navigation/screens/navigation.dart';
 import 'package:dipetakan/features/tambahlahan/models/jenislahanmodel.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
@@ -14,8 +17,11 @@ import 'package:dipetakan/util/popups/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:location/location.dart';
 
 class TambahLahanController extends GetxController {
   static TambahLahanController get instance => Get.find();
@@ -36,64 +42,85 @@ class TambahLahanController extends GetxController {
 
   final GlobalKey<FormState> tambahLahanFormKey = GlobalKey<FormState>();
 
+  final Completer<GoogleMapController> mapController = Completer();
+  final Location location = Location();
+  var currentLocation = Rxn<LocationData>();
+
+  final RxList<String> selectedJenisLahan = RxList([]);
+  final RxList<int> selectedStatusValidasi = RxList([]);
+  final RxList<LahanModel> lahanData = RxList([]);
+  var markerbitmap = BitmapDescriptor.defaultMarker.obs;
+  var markers = <Marker>{}.obs;
+  var filterTrigger = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
-    getGeoLocationPosition();
+    // getGeo
+    getCurrentLocation(); // Initialize current location retrieval
   }
 
-  Future<Position> getGeoLocationPosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+  // Future<Position> getGeoLocationPosition() async {
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      await Geolocator.openLocationSettings();
-      return Future.error('Location service Not Enabled');
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     await Geolocator.openLocationSettings();
+  //     return Future.error('Location service Not Enabled');
+  //   }
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       return Future.error('Location permission denied');
+  //     }
+  //   }
+  //   if (permission == LocationPermission.deniedForever) {
+  //     return Future.error(
+  //         'Location permission denied forever, we cannot access');
+  //   }
+  //   return await Geolocator.getCurrentPosition(
+  //     desiredAccuracy: LocationAccuracy.high,
+  //   );
+  // }
+
+  void getCurrentLocation() async {
+    try {
+      final LocationData locationData = await location.getLocation();
+      currentLocation.value = locationData;
+    } catch (error) {
+      DLoaders.errorSnackBar(
+          title: 'Error getting location', message: error.toString());
     }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permission denied');
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permission denied forever, we cannot access');
-    }
-    return await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
   }
 
-  Future<void> addPatokan(BuildContext context) async {
+  Future<void> addPatokan(BuildContext context, LatLng? tappedPosition) async {
     try {
       bool hasLandmarks = await _showLandmarkDialog(context);
-      loading.value = true;
-      Position position = await getGeoLocationPosition();
-      loading.value = false;
-      strLatLong.value = '${position.latitude}, ${position.longitude}';
+      LatLng? position = tappedPosition;
+      strLatLong.value = '${position?.latitude}, ${position?.longitude}';
 
       if (hasLandmarks) {
         final pickedFile =
             await imagePicker.pickImage(source: ImageSource.camera);
         if (pickedFile != null) {
-          // Upload the image to Firebase Storage and get the URL
-          // final imageUrl =
-          //     await lahanRepository.uploadImage('Patokan/Images/', pickedFile);
-          patokanList.add(
-            PatokanModel(
-                localPath: pickedFile.path,
-                fotoPatokan: '',
-                coordinates: strLatLong.value),
+          PatokanModel newPatokan = PatokanModel(
+            localPath: pickedFile.path,
+            fotoPatokan: '',
+            coordinates: strLatLong.value,
           );
+          patokanList.add(newPatokan);
+          addMarker(position!, pickedFile.path);
         }
       } else {
-        patokanList.add(
-          PatokanModel(
-              localPath: '', fotoPatokan: '', coordinates: strLatLong.value),
+        PatokanModel newPatokan = PatokanModel(
+          localPath: '',
+          fotoPatokan: '',
+          coordinates: strLatLong.value,
         );
+        patokanList.add(newPatokan);
+        addMarker(position!, '');
       }
     } catch (e) {
       loading.value = false;
@@ -102,34 +129,32 @@ class TambahLahanController extends GetxController {
     }
   }
 
-  Future<void> replacePatokan(BuildContext context, int index) async {
-    try {
-      bool hasLandmarks = await _showLandmarkDialog(context);
-      loading.value = true;
-      Position position = await getGeoLocationPosition();
-      loading.value = false;
-      strLatLong.value = '${position.latitude}, ${position.longitude}';
+  Future<bool> _showLandmarkDialog(BuildContext context) async {
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Apakah terdapat patokan?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text("Ya"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: const Text("Tidak"),
+            ),
+          ],
+        );
+      },
+    );
 
-      if (hasLandmarks) {
-        final pickedFile =
-            await imagePicker.pickImage(source: ImageSource.camera);
-        if (pickedFile != null) {
-          // Upload the image to Firebase Storage and get the URL
-          // final imageUrl =
-          //     await lahanRepository.uploadImage('Patokan/Images/', pickedFile);
-          patokanList[index] = PatokanModel(
-              localPath: pickedFile.path,
-              fotoPatokan: '',
-              coordinates: strLatLong.value);
-        }
-      } else {
-        patokanList[index] = PatokanModel(
-            localPath: '', fotoPatokan: '', coordinates: strLatLong.value);
-      }
-    } catch (e) {
-      loading.value = false;
-      DLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
-    }
+    return result ?? false;
   }
 
   Future<void> editPatokan(BuildContext context, int index) async {
@@ -151,41 +176,29 @@ class TambahLahanController extends GetxController {
     }
   }
 
-  Future<bool> _showLandmarkDialog(BuildContext context) async {
-    return await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Apakah terdapat patokan?"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true); // Yes, there are landmarks
-              },
-              child: const Text("Ya"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false); // No, there are no landmarks
-              },
-              child: const Text("Tidak"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Future<void> deletePatokan(int index) async {
     try {
       final patokan = patokanList[index];
+      final markerId = MarkerId(patokan.coordinates); // Capture the marker ID
+
       if (patokan.fotoPatokan.isNotEmpty) {
         await lahanRepository.deleteImage(patokan.fotoPatokan);
       }
+
       patokanList.removeAt(index);
+      removeMarker(markerId); // Pass the marker ID to removeMarker
     } catch (e) {
-      Get.snackbar('Oh Snap!', e.toString(),
-          snackPosition: SnackPosition.BOTTOM);
+      DLoaders.errorSnackBar(title: 'Error', message: '$e');
+    }
+  }
+
+  void removeMarker(MarkerId markerId) {
+    try {
+      markers.removeWhere((marker) => marker.markerId == markerId);
+    } catch (e) {
+      // Handle potential errors during marker removal, e.g., logging or displaying an error message
+      DLoaders.errorSnackBar(
+          title: 'Error', message: 'Error removing marker: $e');
     }
   }
 
@@ -209,6 +222,32 @@ class TambahLahanController extends GetxController {
     }
   }
 
+  void addMarker(LatLng position, String imagePath) {
+    Marker marker = Marker(
+      markerId: MarkerId('${position.latitude}, ${position.longitude}'),
+      position: position,
+      icon: markerbitmap.value,
+      onTap: () {
+        showDialog(
+          context: Get.context!,
+          builder: (context) {
+            return AlertDialog(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (imagePath.isNotEmpty) Image.file(File(imagePath)),
+                  Text('${position.latitude}, ${position.longitude}')
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    markers.add(marker);
+  }
+
   // Function to validate and save tambah lahan form
   void saveTambahLahanForm() async {
     try {
@@ -227,10 +266,12 @@ class TambahLahanController extends GetxController {
       // Check server and database connection
       final serverurl = Uri.parse('$baseUrl/checkConnectionDatabase');
       final http.Response serverresponse = await http.get(serverurl);
-      if (serverresponse.statusCode != 200 ||
-          json.decode(serverresponse.body)['connected'] != true) {
+
+      if (serverresponse.statusCode != 200) {
         DLoaders.errorSnackBar(
-            title: 'Oh Snap!', message: 'Server or Database is not connected');
+          title: 'Oh Snap!',
+          message: 'Server or Database is not connected',
+        );
         DFullScreenLoader.stopLoading();
         return;
       }
@@ -246,17 +287,48 @@ class TambahLahanController extends GetxController {
       final jenisLahan = jenisLahanNotifier.value?.jenisLahan ?? '';
       final deskripsiLahan = deskripsiLahanController.text.trim();
 
-      if (patokanList.isEmpty) {
+//minimal 3
+      if (patokanList.isEmpty || patokanList.length < 3) {
         DLoaders.warningSnackBar(
-          title: 'Add Patokan',
-          message: 'Please add at least one patokan for the lahan.',
+          title: 'Gagal Menyimpan',
+          message: 'Tambahkan minimal 3 patokan',
         );
+        DFullScreenLoader.stopLoading();
+        return;
+      }
+
+      final userId = AuthenticationRepository.instance.authUser?.uid;
+      if (userId == null) {
+        DLoaders.errorSnackBar(
+          title: 'Oh Tidak!',
+          message: 'Gagal menyimpan lahan, coba lagi',
+        );
+        DFullScreenLoader.stopLoading();
+        return;
+      }
+
+      // Fetch the current user's fullname
+      final userDoc = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userId)
+          .get();
+      final user = UserModel.fromSnapshot(userDoc);
+      final namaPemilik = user.fullName;
+
+      // Generate lahanId using current datetime in YYYYMMDDHHMMSS format
+      final lahanId = DateFormat('yyyyMMddHHmmss').format(DateTime.now());
+      if (lahanId.isEmpty) {
+        DLoaders.errorSnackBar(
+          title: 'Oh Tidak!',
+          message: 'Gagal menyimpan lahan, coba lagi',
+        );
+        DFullScreenLoader.stopLoading();
         return;
       }
 
       // Generate a unique ID for the new document
-      final newDocRef = FirebaseFirestore.instance.collection('Lahan').doc();
-      final lahanId = newDocRef.id;
+      // final newDocRef = FirebaseFirestore.instance.collection('Lahan').doc();
+      // final lahanId = newDocRef.id;
 
       // // Update patokanList with URLs
       // for (int i = 0; i < patokanList.length; i++) {
@@ -275,33 +347,27 @@ class TambahLahanController extends GetxController {
       verifikasiList.add(
         VerifikasiModel(
           comentar: '',
-          statusverifikasi: 'belum tervalidasi',
+          statusverifikasi: 0,
           progress: 0,
           verifiedAt: Timestamp.now(),
         ),
       );
 
-      final userId = AuthenticationRepository.instance.authUser?.uid;
-      if (userId == null) {
-        throw 'User not authenticated';
-      }
-
       final lahan = LahanModel(
         id: lahanId,
         userId: userId,
+        namaPemilik: namaPemilik,
         namaLahan: namaLahan,
         jenisLahan: jenisLahan,
         deskripsiLahan: deskripsiLahan,
         patokan: patokanList,
         verifikasi: verifikasiList,
-        // statusverifikasi: 'Pending',
-        // progress: 0,
         createdAt: Timestamp.now(),
         updatedAt: Timestamp.now(),
       );
 
       // Save the document using the generated ID
-      await newDocRef.set(lahan.toJson());
+      // await newDocRef.set(lahan.toJson());
 
       // Prepare the data to be sent to the server
       // Map<String, dynamic> dataToSend = {
@@ -333,7 +399,7 @@ class TambahLahanController extends GetxController {
         return;
       }
 
-      lahanRepository.saveLahanRecord(lahan);
+      // lahanRepository.saveLahanRecord(lahan);
 
       // Show success message
       DLoaders.successSnackBar(
@@ -374,12 +440,14 @@ class TambahLahanController extends GetxController {
       }
 
       // Check server and database connection
-      final serverurl = Uri.parse('$baseUrl/checkDatabaseConnection');
+      final serverurl = Uri.parse('$baseUrl/checkConnectionDatabase');
       final http.Response serverresponse = await http.get(serverurl);
-      if (serverresponse.statusCode != 200 ||
-          json.decode(serverresponse.body)['connected'] != true) {
+
+      if (serverresponse.statusCode != 200) {
         DLoaders.errorSnackBar(
-            title: 'Oh Snap!', message: 'Server or Database is not connected');
+          title: 'Oh Snap!',
+          message: 'Server or Database is not connected',
+        );
         DFullScreenLoader.stopLoading();
         return;
       }
@@ -434,17 +502,9 @@ class TambahLahanController extends GetxController {
     }
   }
 
-  // // Function to fetch lahan details
-  // Future<void> fetchLahanRecord(String id) async {
-  //   try {
-  //     profileLoading.value = true;
-  //     final lahan = await lahanRepository.fetchLahanDetails(id);
-  //     this.lahan(lahan);
-  //     profileLoading.value = false;
-  //   } catch (e) {
-  //     lahan(LahanModel.empty());
-  //   } finally {
-  //     profileLoading.value = false;
-  //   }
-  // }
+  void onClose() {
+    namaLahanController.dispose();
+    deskripsiLahanController.dispose();
+    super.onClose();
+  }
 }

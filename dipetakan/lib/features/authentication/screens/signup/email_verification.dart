@@ -18,14 +18,14 @@ class VerifyEmailScreen extends StatelessWidget {
     final controller = Get.put(VerifyEmailController());
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-              onPressed: () => AuthenticationRepository.instance.logout(),
-              icon: const Icon(CupertinoIcons.clear))
-        ],
-      ),
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: false,
+      //   actions: [
+      //     IconButton(
+      //         onPressed: () => AuthenticationRepository.instance.logout(),
+      //         icon: const Icon(CupertinoIcons.clear))
+      //   ],
+      // ),
       body: SingleChildScrollView(
         child: Padding(
             padding: const EdgeInsets.all(DSizes.defaultSpace),
