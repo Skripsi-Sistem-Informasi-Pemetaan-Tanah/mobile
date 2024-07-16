@@ -1,10 +1,10 @@
-import 'dart:convert';
+// import 'dart:convert';
 
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/data/repositories/authentication/user_repository.dart';
 import 'package:dipetakan/features/authentication/models/user_model.dart';
 import 'package:dipetakan/features/authentication/screens/signup/email_verification.dart';
-import 'package:dipetakan/util/constants/api_constants.dart';
+// import 'package:dipetakan/util/constants/api_constants.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
 import 'package:dipetakan/util/popups/full_screen_loader.dart';
 import 'package:dipetakan/util/popups/loaders.dart';
@@ -12,7 +12,7 @@ import 'package:dipetakan/util/popups/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dipetakan/util/helpers/network_manager.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 
 class SignupController extends GetxController {
   static SignupController get instance => Get.find();

@@ -28,14 +28,14 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
   }
 
   List<String> selectedJenisLahan = [];
-  // List<int> selectedStatusValidasi = [];
+  List<int> selectedStatusValidasi = [];
 
-  void setFilters(List<String> jenisLahan, List<int> statusValidasi) {
-    setState(() {
-      selectedJenisLahan = jenisLahan;
-      // selectedStatusValidasi = statusValidasi;
-    });
-  }
+  // void setFilters(List<String> jenisLahan, List<int> statusValidasi) {
+  //   setState(() {
+  //     selectedJenisLahan = jenisLahan;
+  //     selectedStatusValidasi = statusValidasi;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -67,10 +67,10 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
                   controller.mapController.complete(mapController);
                 }
               },
-              onTap: (LatLng position) {
-                // Handle tap event to add marker
-                controller.addPatokan(context, position);
-              },
+              // onTap: (LatLng position) {
+              //   // Handle tap event to add marker
+              //   controller.addPatokan(context, position);
+              // },
               // ignore: unnecessary_null_comparison
               markers: controller.markers.toSet(),
               // markers: controller.markerbitmap.value != null

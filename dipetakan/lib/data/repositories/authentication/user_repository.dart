@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/features/authentication/models/user_model.dart';
-import 'package:dipetakan/util/constants/api_constants.dart';
+// import 'package:dipetakan/util/constants/api_constants.dart';
 import 'package:dipetakan/util/exceptions/firebase_exceptions.dart';
 import 'package:dipetakan/util/exceptions/format_exceptions.dart';
 import 'package:dipetakan/util/exceptions/platform_exceptions.dart';
@@ -13,8 +13,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+// import 'package:http/http.dart' as http;
+// import 'dart:convert';
 
 class UserRepository extends GetxController {
   static UserRepository get instance => Get.find();

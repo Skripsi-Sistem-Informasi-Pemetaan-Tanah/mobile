@@ -1,4 +1,4 @@
-import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
+// import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
 import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller_dua.dart';
 import 'package:dipetakan/features/tambahlahan/data/jenislahanlist.dart';
 import 'package:dipetakan/features/tambahlahan/models/jenislahanmodel.dart';

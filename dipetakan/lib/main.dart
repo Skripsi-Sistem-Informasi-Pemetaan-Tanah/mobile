@@ -469,6 +469,7 @@ void getCurrentLocation() async {
 
   bool serviceEnabled;
   PermissionStatus permissionGranted;
+  // ignore: unused_local_variable
   LocationData locationData;
 
   // Check if location services are enabled

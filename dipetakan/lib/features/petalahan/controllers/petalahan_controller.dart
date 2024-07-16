@@ -22,7 +22,7 @@ class PetaLahanController extends GetxController {
   final lahanRepository = Get.put(LahanRepository());
   var currentLocation = Rxn<LocationData>();
   final RxList<String> selectedJenisLahan = RxList([]);
-  // final RxList<int> selectedStatusValidasi = RxList([]);
+  final RxList<int> selectedStatusValidasi = RxList([]);
   final RxList<LahanModel> lahanData = RxList([]);
   var markerbitmap = BitmapDescriptor.defaultMarker.obs;
   var patokanList = <PatokanModel>[].obs;
@@ -397,7 +397,7 @@ class PetaLahanController extends GetxController {
 
   void setFilters(List<String> jenisLahan, List<int> statusValidasi) {
     selectedJenisLahan.value = jenisLahan;
-    // selectedStatusValidasi.value = statusValidasi;
+    selectedStatusValidasi.value = statusValidasi;
     filterTrigger.value++;
     lahanData.refresh();
     // lahanData.update((val) => val); // Trigger rebuild
@@ -425,14 +425,14 @@ class PetaLahanController extends GetxController {
           continue;
         }
 
-        // if (selectedStatusValidasi.isNotEmpty) {
-        //   if (lahan.verifikasi.isEmpty) continue;
-        //   lahan.verifikasi.sort((a, b) => b.verifiedAt.compareTo(a.verifiedAt));
-        //   int newestStatusVerifikasi = lahan.verifikasi.first.statusverifikasi;
-        //   if (!selectedStatusValidasi.contains(newestStatusVerifikasi)) {
-        //     continue;
-        //   }
-        // }
+        if (selectedStatusValidasi.isNotEmpty) {
+          if (lahan.verifikasi.isEmpty) continue;
+          lahan.verifikasi.sort((a, b) => b.verifiedAt.compareTo(a.verifiedAt));
+          int newestStatusVerifikasi = lahan.verifikasi.first.statusverifikasi;
+          if (!selectedStatusValidasi.contains(newestStatusVerifikasi)) {
+            continue;
+          }
+        }
 
         List<LatLng> polygonPoints = [];
 

@@ -15,7 +15,7 @@ import 'package:dipetakan/util/helpers/network_manager.dart';
 import 'package:dipetakan/util/popups/full_screen_loader.dart';
 import 'package:dipetakan/util/popups/loaders.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -502,9 +502,9 @@ class TambahLahanController extends GetxController {
     }
   }
 
-  void onClose() {
-    namaLahanController.dispose();
-    deskripsiLahanController.dispose();
-    super.onClose();
-  }
+  // void onClose() {
+  //   namaLahanController.dispose();
+  //   deskripsiLahanController.dispose();
+  //   super.onClose();
+  // }
 }

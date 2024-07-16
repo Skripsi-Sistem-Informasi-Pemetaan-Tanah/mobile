@@ -64,6 +64,16 @@ class TambahLahanControllerOld extends GetxController {
     // getGeoLocationPosition();
   }
 
+  // void getCurrentLocation() async {
+  //   try {
+  //     final LocationData locationData = await location.getLocation();
+  //     currentLocation.value = locationData;
+  //   } catch (error) {
+  //     DLoaders.errorSnackBar(
+  //         title: 'Error getting location', message: error.toString());
+  //   }
+  // }
+
   void getCurrentLocation() async {
     try {
       final LocationData locationData = await location.getLocation();
@@ -71,6 +81,7 @@ class TambahLahanControllerOld extends GetxController {
     } catch (error) {
       DLoaders.errorSnackBar(
           title: 'Error getting location', message: error.toString());
+      // print("Error getting location: $error");
     }
   }
 
@@ -187,8 +198,8 @@ class TambahLahanControllerOld extends GetxController {
       // Show loading dialog with real-time coordinates list
       Get.dialog(
         Obx(() => AlertDialog(
-              title: Text('Collecting Coordinates...'),
-              content: Container(
+              title: const Text('Collecting Coordinates...'),
+              content: SizedBox(
                 width: double.maxFinite,
                 child: ListView.builder(
                   itemCount: coordinatesList.length,
@@ -208,7 +219,7 @@ class TambahLahanControllerOld extends GetxController {
                     loading.value = false;
                     Get.back();
                   },
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                 ),
               ],
             )),
