@@ -64,7 +64,7 @@ class _InfoLahanBottomSheetState extends State<InfoLahanBottomSheet> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(user.fullName,
+                  Text(widget.lahan.namaPemilik,
                       style: Theme.of(context).textTheme.bodyLarge),
                   const SizedBox(height: DSizes.xs),
                   Text(widget.lahan.namaLahan,

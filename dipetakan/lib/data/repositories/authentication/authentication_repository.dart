@@ -32,31 +32,58 @@ class AuthenticationRepository extends GetxController {
   @override
   void onReady() {
     FlutterNativeSplash.remove();
-    // screenRedirect();
+    screenRedirect();
   }
 
   //Function to show relevant screen
-  screenRedirect() async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      if (user.emailVerified) {
-        Get.offAll(() => const NavigationMenu());
-      } else {
-        Get.offAll(() => VerifyEmailScreen(email: _auth.currentUser?.email));
-      }
-    } else {
-      // Local Storage
-      if (kDebugMode) {
-        print('================== GET STORAGE ===============');
-        print(deviceStorage.read('IsFirstTime'));
-      }
-      deviceStorage.writeIfNull('IsFirstTime', true);
-      deviceStorage.read('IsFirstTime') != true
-          ? Get.offAll(() => const LoginScreen())
-          : Get.offAll(() => const LoginScreen());
-    }
-  }
+  // screenRedirect() async {
+  //   final user = _auth.currentUser;
+  //   if (user != null) {
+  //     if (user.emailVerified) {
+  //       Get.offAll(() => const NavigationMenu());
+  //     } else {
+  //       Get.offAll(() => VerifyEmailScreen(email: _auth.currentUser?.email));
+  //     }
+  //   } else {
+  //     // Local Storage
+  //     if (kDebugMode) {
+  //       print('================== GET STORAGE ===============');
+  //       print(deviceStorage.read('IsFirstTime'));
+  //     }
+  //     deviceStorage.writeIfNull('IsFirstTime', true);
+  //     deviceStorage.read('IsFirstTime') != true
+  //         ? Get.offAll(() => const LoginScreen())
+  //         : Get.offAll(() => const LoginScreen());
+  //   }
+  // }
 
+  void screenRedirect() async {
+    _auth.authStateChanges().listen((User? user) {
+      if (user != null) {
+        if (user.emailVerified) {
+          Get.offAll(() => const NavigationMenu());
+        } else {
+          Get.offAll(() => VerifyEmailScreen(email: user.email));
+        }
+      } else {
+        // Local Storage
+        if (kDebugMode) {
+          print('================== GET STORAGE ===============');
+          print(deviceStorage.read('IsFirstTime'));
+        }
+        deviceStorage.writeIfNull('IsFirstTime', true);
+        bool isFirstTime = deviceStorage.read('IsFirstTime') ?? true;
+        if (isFirstTime) {
+          deviceStorage.write('IsFirstTime', false);
+          // Navigate to some initial setup or welcome screen if needed
+          // Get.offAll(() => const WelcomeScreen());
+          Get.offAll(() => const LoginScreen());
+        } else {
+          Get.offAll(() => const LoginScreen());
+        }
+      }
+    });
+  }
   /*------------------------Email & Password Sign-in -------------------------*/
   // Future loginWithEmailAndPassword(String email, String password) async {
   //   try {
@@ -91,13 +118,13 @@ class AuthenticationRepository extends GetxController {
   // }
 
   ///Email Auth Login
-  Future<UserCredential?> loginWithEmailAndPassword(
-      String email, String password) async {
+  Future<User?> loginWithEmailAndPassword(String email, String password) async {
     try {
       // ignore: unused_local_variable
       User? user = (await _auth.signInWithEmailAndPassword(
               email: email, password: password))
           .user;
+      // return user != null ? _auth.currentUser : null;
     } on FirebaseAuthException catch (e) {
       // if (e.code == 'user-not-found' || e.code == 'wrong-password') {
       //   DLoaders.errorSnackBar(
