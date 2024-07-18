@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
+// import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
 import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller_dua.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
 import 'package:dipetakan/util/constants/colors.dart';

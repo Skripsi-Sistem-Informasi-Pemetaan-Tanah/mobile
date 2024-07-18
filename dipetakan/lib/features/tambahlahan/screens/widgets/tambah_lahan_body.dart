@@ -1,9 +1,9 @@
 // import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
-import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
+// import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
 import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller_dua.dart';
 import 'package:dipetakan/features/tambahlahan/data/jenislahanlist.dart';
 import 'package:dipetakan/features/tambahlahan/models/jenislahanmodel.dart';
-import 'package:dipetakan/features/tambahlahan/screens/widgets/list_patokan.dart';
+// import 'package:dipetakan/features/tambahlahan/screens/widgets/list_patokan.dart';
 import 'package:dipetakan/features/tambahlahan/screens/widgets/list_patokan_geolocator.dart';
 import 'package:dipetakan/features/tambahlahan/screens/widgets/pin_point.dart';
 import 'package:dipetakan/util/constants/sizes.dart';

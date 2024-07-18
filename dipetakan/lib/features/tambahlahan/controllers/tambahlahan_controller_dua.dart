@@ -26,7 +26,8 @@ import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 // import 'package:geolocator/geolocator.dart' as geolocator;
 // import 'package:location/location.dart' as location;
-import 'package:image/image.dart' as img;
+// import 'package:image/image.dart' as img;
+// ignore: depend_on_referenced_packages
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
@@ -537,7 +538,7 @@ class TambahLahanControllerOld extends GetxController {
 
           // Compress the image
           Directory tempDir = await getTemporaryDirectory();
-          String tempPath = '${tempDir.path}/temp_image_${i}.jpg';
+          String tempPath = '${tempDir.path}/temp_image_$i.jpg';
           XFile? compressedImageFile = await compressImage(imageFile, tempPath);
 
           if (compressedImageFile != null) {

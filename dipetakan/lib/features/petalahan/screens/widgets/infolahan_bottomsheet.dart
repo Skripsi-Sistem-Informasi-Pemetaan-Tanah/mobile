@@ -1,10 +1,10 @@
-import 'package:dipetakan/features/authentication/models/user_model.dart';
+// import 'package:dipetakan/features/authentication/models/user_model.dart';
 import 'package:dipetakan/features/lahansaya/screens/deskripsi_lahan.dart';
-import 'package:dipetakan/features/petalahan/controllers/infolahan_controller.dart';
+// import 'package:dipetakan/features/petalahan/controllers/infolahan_controller.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 
 class InfoLahanBottomSheet extends StatefulWidget {
   final LahanModel lahan;
@@ -17,7 +17,7 @@ class InfoLahanBottomSheet extends StatefulWidget {
 class _InfoLahanBottomSheetState extends State<InfoLahanBottomSheet> {
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(InfoLahanController());
+    // final controller = Get.put(InfoLahanController());
 
     // Sort the verifikasi list by verifiedAt in descending order
     widget.lahan.verifikasi
@@ -47,9 +47,9 @@ class _InfoLahanBottomSheetState extends State<InfoLahanBottomSheet> {
     }
 
     // Find the user who owns this lahan
-    final user = controller.userList.firstWhere(
-        (user) => user.id == widget.lahan.userId,
-        orElse: () => UserModel.empty());
+    // final user = controller.userList.firstWhere(
+    //     (user) => user.id == widget.lahan.userId,
+    //     orElse: () => UserModel.empty());
 
     return Scaffold(
       backgroundColor: Colors.transparent,
