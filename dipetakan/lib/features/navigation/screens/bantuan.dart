@@ -38,12 +38,12 @@ class _BantuanScreenState extends State<BantuanScreen> {
         child: Padding(
           padding: EdgeInsets.all(DSizes.defaultSpace),
           child: Column(children: <Widget>[
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                  onPressed: _fetchDataFromPostgresql,
-                  child: Text(DTexts.tContinue)),
-            ),
+            // SizedBox(
+            //   width: double.infinity,
+            //   child: ElevatedButton(
+            //       onPressed: _fetchDataFromPostgresql,
+            //       child: Text(DTexts.tContinue)),
+            // ),
           ]),
         ),
       ),

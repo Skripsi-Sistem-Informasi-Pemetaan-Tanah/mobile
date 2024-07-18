@@ -1,4 +1,5 @@
 // import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
+import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
 import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller_dua.dart';
 import 'package:dipetakan/features/tambahlahan/data/jenislahanlist.dart';
 import 'package:dipetakan/features/tambahlahan/models/jenislahanmodel.dart';
@@ -143,21 +144,21 @@ class _TambahLahanBodyState extends State<TambahLahanBody> {
 
                 const SizedBox(height: DSizes.spaceBtwInputFields),
 
-                Obx(() {
-                  final patokanList = controller.patokanList;
-                  final availableHeight = MediaQuery.of(context).size.height;
-                  final listHeight =
-                      (patokanList.length * 80).clamp(0, availableHeight * 1);
-                  // availableHeight * 0.3 +
-                  //     (patokanList.length * 80).clamp(0, availableHeight * 0.5);
+                // Obx(() {
+                //   final patokanList = controller.patokanList;
+                //   final availableHeight = MediaQuery.of(context).size.height;
+                //   final listHeight =
+                //       (patokanList.length * 80).clamp(0, availableHeight * 1);
+                //   // availableHeight * 0.3 +
+                //   //     (patokanList.length * 80).clamp(0, availableHeight * 0.5);
 
-                  return SizedBox(
-                    height: listHeight.toDouble(),
-                    child: ListPatokan(
-                      patokanList: patokanList,
-                    ),
-                  );
-                }),
+                //   return SizedBox(
+                //     height: listHeight.toDouble(),
+                //     child: ListPatokan(
+                //       patokanList: patokanList,
+                //     ),
+                //   );
+                // }),
                 // SizedBox(
                 //   height: 300, // Set a fixed height for ListPatokan
                 //   child: ListPatokan(
@@ -177,7 +178,7 @@ class _TambahLahanBodyState extends State<TambahLahanBody> {
                 //         Navigator.push(
                 //           context,
                 //           MaterialPageRoute(
-                //               builder: (context) => const TambahPatokan()),
+                //               builder: (context) => const PinPoint()),
                 //         );
                 //       },
                 //       child: const Text(DTexts.tambahPatokan)),

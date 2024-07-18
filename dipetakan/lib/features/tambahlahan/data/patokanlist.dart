@@ -1,3 +1,3 @@
-import 'package:dipetakan/features/tambahlahan/models/patokan.dart';
+// import 'package:dipetakan/features/tambahlahan/models/patokan.dart';
 
-List<Patokan> patokanList = [];
+// List<Patokan> patokanList = [];

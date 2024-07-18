@@ -3,7 +3,10 @@
 // import 'package:dipetakan/features/petalahan/controllers/petalahan_controller.dart';
 // import 'package:dipetakan/features/tambahlahan/controllers/pinpoint_controller.dart';
 // import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
+import 'package:dipetakan/features/petalahan/controllers/petalahan_controller.dart';
+import 'package:dipetakan/features/tambahlahan/controllers/pinpoint_controller.dart';
 import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller_dua.dart';
+import 'package:dipetakan/main.dart';
 // import 'package:dipetakan/features/petalahan/screens/widgets/infolahan_bottomsheet.dart';
 // import 'package:dipetakan/util/constants/colors.dart';
 import 'package:flutter/material.dart';
@@ -19,14 +22,16 @@ class PinPoint extends StatefulWidget {
 
 class _PinPointState extends State<PinPoint> {
   // final TambahLahanController controller = Get.put(TambahLahanController());
-  final TambahLahanControllerOld controller =
-      Get.put(TambahLahanControllerOld());
-  // final controller = Get.put(TambahLahanController());
+  // final controller = Get.find<TambahLahanControllerOld>();
+  final controller = Get.put(TambahLahanControllerOld());
+  // final controller = Get.put(PinPointController());
+  // final controller = Get.put(PetaLahanController());
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // getCurrentLocation();
+  // }
 
   @override
   Widget build(BuildContext context) {

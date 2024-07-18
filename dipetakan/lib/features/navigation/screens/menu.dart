@@ -6,8 +6,11 @@ import 'package:dipetakan/features/navigation/screens/bantuan.dart';
 import 'package:dipetakan/features/navigation/screens/widgets/shimmer.dart';
 import 'package:dipetakan/features/petalahan/controllers/petalahan_controller.dart';
 import 'package:dipetakan/features/petalahan/screens/peta_lahan.dart';
+import 'package:dipetakan/features/tambahlahan/controllers/pinpoint_controller.dart';
 import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
+import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller_dua.dart';
 import 'package:dipetakan/features/tambahlahan/screens/tambahlahan.dart';
+import 'package:dipetakan/features/tambahlahan/screens/widgets/pin_point.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +39,7 @@ class MenuScreen extends StatelessWidget {
     const TambahLahan(),
     const LahanSayaScreen(),
     const BantuanScreen(),
+    // const PinPoint(),
   ];
 
   @override
@@ -136,7 +140,8 @@ class MenuScreen extends StatelessWidget {
                           return InkWell(
                             onTap: () {
                               if (screen[index] == const TambahLahan()) {
-                                Get.delete<TambahLahanController>();
+                                Get.delete<TambahLahanControllerOld>();
+                                // Get.delete<PinPointController>();
                                 // Dispose of TambahLahanController only when navigating to TambahLahanScreen
                               }
                               if (screen[index] == const PetaLahanScreen()) {

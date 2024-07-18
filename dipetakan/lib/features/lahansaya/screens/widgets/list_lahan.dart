@@ -30,7 +30,8 @@ class ListLahan extends StatelessWidget {
         }
 
         if (snapshot.hasError) {
-          return const Center(child: Text('Failed to load lahan records'));
+          return Center(
+              child: Text('Failed to load lahan records : ${snapshot.error}'));
         }
 
         List<LahanModel> lahanList = snapshot.data ?? [];

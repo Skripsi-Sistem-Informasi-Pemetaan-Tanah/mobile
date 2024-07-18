@@ -1,5 +1,6 @@
 import 'package:dipetakan/features/lahansaya/screens/widgets/list_patokan_edit.dart';
 import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
+import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller_dua.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
@@ -15,7 +16,8 @@ class EditLahanBody extends StatefulWidget {
 }
 
 class _EditLahanBodyState extends State<EditLahanBody> {
-  final TambahLahanController controller = Get.put(TambahLahanController());
+  final TambahLahanControllerOld controller =
+      Get.put(TambahLahanControllerOld());
 
   @override
   void initState() {

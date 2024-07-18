@@ -205,7 +205,7 @@ class VerifikasiModel {
   Map<String, dynamic> toJson() {
     return {
       'komentar': comentar,
-      'status': statusverifikasi,
+      'new_status': statusverifikasi,
       'progress': progress,
       'updated_at': verifiedAt
     };
@@ -227,7 +227,7 @@ class VerifikasiModel {
     // Create a map with the appropriate data types and formats
     return {
       'komentar': comentar,
-      'status': statusverifikasi,
+      'new_status': statusverifikasi,
       'progress': progress,
       'updated_at': verifiedAtIso8601,
     };
@@ -236,7 +236,7 @@ class VerifikasiModel {
   factory VerifikasiModel.fromJson(Map<String, dynamic> json) {
     return VerifikasiModel(
       comentar: json['komentar'] ?? '',
-      statusverifikasi: json['status'] ?? '',
+      statusverifikasi: json['new_status'] ?? '',
       progress: json['progress'] ?? 0,
       verifiedAt: json['updated_at'] != null
           ? (json['updated_at'] is String

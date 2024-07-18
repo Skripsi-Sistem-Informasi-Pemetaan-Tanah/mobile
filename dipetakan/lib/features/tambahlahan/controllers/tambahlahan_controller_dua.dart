@@ -26,6 +26,9 @@ import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 // import 'package:geolocator/geolocator.dart' as geolocator;
 // import 'package:location/location.dart' as location;
+import 'package:image/image.dart' as img;
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class TambahLahanControllerOld extends GetxController {
   static TambahLahanControllerOld get instance => Get.find();
@@ -74,14 +77,27 @@ class TambahLahanControllerOld extends GetxController {
   //   }
   // }
 
+  // void getCurrentLocation() async {
+  //   try {
+  //     final LocationData locationData = await location.getLocation();
+  //     currentLocation.value = locationData;
+  //   } catch (error) {
+  //     DLoaders.errorSnackBar(
+  //         title: 'Error getting location', message: error.toString());
+  //     // print("Error getting location: $error");
+  //   }
+  // }
+
   void getCurrentLocation() async {
     try {
+      loading.value = true;
       final LocationData locationData = await location.getLocation();
       currentLocation.value = locationData;
+      loading.value = false;
     } catch (error) {
+      loading.value = false;
       DLoaders.errorSnackBar(
           title: 'Error getting location', message: error.toString());
-      // print("Error getting location: $error");
     }
   }
 
@@ -217,6 +233,7 @@ class TambahLahanControllerOld extends GetxController {
                   onPressed: () {
                     locationSubscription?.cancel();
                     loading.value = false;
+                    coordinatesList.clear();
                     Get.back();
                   },
                   child: const Text('Cancel'),
@@ -294,6 +311,7 @@ class TambahLahanControllerOld extends GetxController {
           //     context, hasLandmarks, LatLng(medianLat, medianLong));
 
           _addPatokanLogic(context, hasLandmarks, LatLng(meanLat, meanLong));
+          coordinatesList.clear();
         } else {
           DLoaders.errorSnackBar(
               title: 'Error', message: 'No location data available.');
@@ -305,6 +323,7 @@ class TambahLahanControllerOld extends GetxController {
       DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
       locationSubscription?.cancel();
       timer?.cancel();
+      coordinatesList.clear();
     }
   }
 
@@ -479,18 +498,65 @@ class TambahLahanControllerOld extends GetxController {
   //   }
   // }
 
+  // Future<void> uploadPatokanImages() async {
+  //   for (int i = 0; i < patokanList.length; i++) {
+  //     final patokan = patokanList[i];
+  //     if (patokan.localPath.isNotEmpty) {
+  //       try {
+  //         final imageUrl = await lahanRepository.uploadImage(
+  //             'Lahan/Patokan/', XFile(patokan.localPath));
+  //         patokanList[i] = PatokanModel(
+  //           localPath: patokan.localPath,
+  //           fotoPatokan: imageUrl,
+  //           coordinates: patokan.coordinates,
+  //         );
+  //       } catch (e) {
+  //         DLoaders.errorSnackBar(
+  //             title: 'Oh Snap!', message: 'Failed to upload image: $e');
+  //       }
+  //     }
+  //   }
+  // }
+
+  Future<XFile?> compressImage(File file, String targetPath) async {
+    var result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      targetPath,
+      quality: 85,
+    );
+    return result != null ? XFile(result.path) : null;
+  }
+
   Future<void> uploadPatokanImages() async {
     for (int i = 0; i < patokanList.length; i++) {
       final patokan = patokanList[i];
       if (patokan.localPath.isNotEmpty) {
         try {
-          final imageUrl = await lahanRepository.uploadImage(
-              'Lahan/Patokan/', XFile(patokan.localPath));
-          patokanList[i] = PatokanModel(
-            localPath: patokan.localPath,
-            fotoPatokan: imageUrl,
-            coordinates: patokan.coordinates,
-          );
+          // Read the image file
+          File imageFile = File(patokan.localPath);
+
+          // Compress the image
+          Directory tempDir = await getTemporaryDirectory();
+          String tempPath = '${tempDir.path}/temp_image_${i}.jpg';
+          XFile? compressedImageFile = await compressImage(imageFile, tempPath);
+
+          if (compressedImageFile != null) {
+            // Upload the compressed image
+            final imageUrl = await lahanRepository.uploadImage(
+                'Lahan/Patokan/', compressedImageFile);
+
+            // Update the patokanList with the new image URL
+            patokanList[i] = PatokanModel(
+              localPath: patokan.localPath,
+              fotoPatokan: imageUrl,
+              coordinates: patokan.coordinates,
+            );
+
+            // Delete the temporary file
+            File(compressedImageFile.path).deleteSync();
+          } else {
+            throw Exception("Image compression failed");
+          }
         } catch (e) {
           DLoaders.errorSnackBar(
               title: 'Oh Snap!', message: 'Failed to upload image: $e');
@@ -498,6 +564,49 @@ class TambahLahanControllerOld extends GetxController {
       }
     }
   }
+
+// Future<XFile?> compressImage(File file, String targetPath) async {
+//   var result = await FlutterImageCompress.compressAndGetFile(
+//     file.absolute.path,
+//     targetPath,
+//     quality: 85,
+//   );
+//   return result;
+// }
+
+// Future<void> uploadPatokanImages() async {
+//   for (int i = 0; i < patokanList.length; i++) {
+//     final patokan = patokanList[i];
+//     if (patokan.localPath.isNotEmpty) {
+//       try {
+//         // Read the image file
+//         File imageFile = File(patokan.localPath);
+
+//         // Compress the image
+//         Directory tempDir = await getTemporaryDirectory();
+//         String tempPath = '${tempDir.path}/temp_image_${i}.jpg';
+//         XFile? compressedImageFile = await compressImage(imageFile, tempPath);
+
+//         // Upload the compressed image
+//         final imageUrl = await lahanRepository.uploadImage(
+//             'Lahan/Patokan/', XFile(compressedImageFile!.path));
+
+//         // Update the patokanList with the new image URL
+//         patokanList[i] = PatokanModel(
+//           localPath: patokan.localPath,
+//           fotoPatokan: imageUrl,
+//           coordinates: patokan.coordinates,
+//         );
+
+//         // Delete the temporary file
+//         compressedImageFile.deleteSync();
+//       } catch (e) {
+//         DLoaders.errorSnackBar(
+//             title: 'Oh Snap!', message: 'Failed to upload image: $e');
+//       }
+//     }
+//   }
+// }
 
   void removeMarkerFromPinPoint(int index) async {}
 

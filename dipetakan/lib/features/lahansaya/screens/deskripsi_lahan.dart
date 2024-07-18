@@ -221,7 +221,9 @@ class _DeskripsiLahanState extends State<DeskripsiLahan> {
   Widget build(BuildContext context) {
     final controller = Get.put(InfoLahanController());
     // Get the newest progressVerifikasi
-    int newestProgressVerifikasi = widget.lahan.verifikasi.first.progress;
+    int newestProgressVerifikasi = widget.lahan.verifikasi.isNotEmpty
+        ? widget.lahan.verifikasi.first.progress
+        : 0;
     final authRepository = Get.find<AuthenticationRepository>();
     final String currentUserId = authRepository.authUser?.uid ?? '';
 

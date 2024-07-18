@@ -45,6 +45,7 @@ dependencies:
   timeline_tile: ^2.0.0
   easy_stepper: ^0.8.5
   baseflow_plugin_template: ^2.1.2
+  flutter_image_compress: ^2.3.0
 
   # Icons & UI
   iconsax: ^0.0.8
