@@ -6,12 +6,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/data/repositories/tambahlahan/lahan_repository.dart';
 import 'package:dipetakan/features/authentication/models/user_model.dart';
+import 'package:dipetakan/features/lahansaya/screens/peta_titik_validasi.dart';
 import 'package:dipetakan/features/navigation/screens/navigation.dart';
 // import 'package:dipetakan/features/tambahlahan/controllers/pinpoint_controller.dart';
 import 'package:dipetakan/features/tambahlahan/models/jenislahanmodel.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
 import 'package:dipetakan/util/constants/api_constants.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
+import 'package:dipetakan/util/constants/sizes.dart';
+import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:dipetakan/util/helpers/network_manager.dart';
 import 'package:dipetakan/util/popups/full_screen_loader.dart';
 import 'package:dipetakan/util/popups/loaders.dart';
@@ -198,7 +201,7 @@ class TambahLahanControllerOld extends GetxController {
   //     // )
   //   } catch (e) {
   //     loading.value = false;
-  //     Get.snackbar('Oh Snap!', e.toString(),
+  //     Get.snackbar('Oh Tidak!', e.toString(),
   //         snackPosition: SnackPosition.BOTTOM);
   //   }
   // }
@@ -213,20 +216,49 @@ class TambahLahanControllerOld extends GetxController {
       loading.value = true;
 
       // Show loading dialog with real-time coordinates list
+      // Get.dialog(
+      //   Obx(() => AlertDialog(
+      //         title: const Text('Mendapatkan Koordinat'),
+      //         content: SizedBox(
+      //           width: double.maxFinite,
+      //           child: ListView.builder(
+      //             itemCount: coordinatesList.length,
+      //             itemBuilder: (context, index) {
+      //               LatLng coordinate = coordinatesList[index];
+      //               return ListTile(
+      //                 title: Text(
+      //                     '${coordinate.latitude}, ${coordinate.longitude}'),
+      //               );
+      //             },
+      //           ),
+      //         ),
+      //         actions: [
+      //           TextButton(
+      //             onPressed: () {
+      //               locationSubscription?.cancel();
+      //               loading.value = false;
+      //               coordinatesList.clear();
+      //               Get.back();
+      //             },
+      //             child: const Text('Cancel'),
+      //           ),
+      //         ],
+      //       )),
+      //   barrierDismissible: false,
+      // );
       Get.dialog(
-        Obx(() => AlertDialog(
-              title: const Text('Collecting Coordinates...'),
+        StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              backgroundColor: Colors.white,
+              surfaceTintColor: Colors.white,
+              title: Text('Mendapatkan Koordinat',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                  textAlign: TextAlign.center),
               content: SizedBox(
-                width: double.maxFinite,
-                child: ListView.builder(
-                  itemCount: coordinatesList.length,
-                  itemBuilder: (context, index) {
-                    LatLng coordinate = coordinatesList[index];
-                    return ListTile(
-                      title: Text(
-                          '${coordinate.latitude}, ${coordinate.longitude}'),
-                    );
-                  },
+                height: MediaQuery.of(context).size.height / 14,
+                child: const Center(
+                  child: CircularProgressIndicator(color: Colors.black),
                 ),
               ),
               actions: [
@@ -237,12 +269,39 @@ class TambahLahanControllerOld extends GetxController {
                     coordinatesList.clear();
                     Get.back();
                   },
-                  child: const Text('Cancel'),
+                  child: Text(DTexts.cancel,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: Colors.red)),
                 ),
               ],
-            )),
-        barrierDismissible: false,
+            );
+          },
+        ),
       );
+      // Get.dialog(
+      //   Obx(() => AlertDialog(
+      //         backgroundColor: Colors.white,
+      //         surfaceTintColor: Colors.white,
+      //         title: const Text('Mendapatkan Koordinat'),
+      //         content: const Center(
+      //           child: CircularProgressIndicator(),
+      //         ),
+      //         actions: [
+      //           TextButton(
+      //             onPressed: () {
+      //               locationSubscription?.cancel();
+      //               loading.value = false;
+      //               coordinatesList.clear();
+      //               Get.back();
+      //             },
+      //             child: const Text('Cancel'),
+      //           ),
+      //         ],
+      //       )),
+      //   barrierDismissible: false,
+      // );
 
       Location location = Location();
 
@@ -321,7 +380,7 @@ class TambahLahanControllerOld extends GetxController {
     } catch (e) {
       loading.value = false;
       Get.back();
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
       locationSubscription?.cancel();
       timer?.cancel();
       coordinatesList.clear();
@@ -338,6 +397,11 @@ class TambahLahanControllerOld extends GetxController {
           localPath: pickedFile.path,
           fotoPatokan: '',
           coordinates: strLatLong.value,
+          coordVerif: '',
+          coordStatus: 0,
+          coordPercent: 0,
+          coordComment: '',
+          coordCommentUser: '',
         );
         patokanList.add(newPatokan);
         addMarker(position, pickedFile.path);
@@ -348,6 +412,11 @@ class TambahLahanControllerOld extends GetxController {
         localPath: '',
         fotoPatokan: '',
         coordinates: strLatLong.value,
+        coordVerif: '',
+        coordStatus: 0,
+        coordPercent: 0,
+        coordComment: '',
+        coordCommentUser: '',
       );
       patokanList.add(newPatokan);
       addMarker(position, '');
@@ -365,6 +434,8 @@ class TambahLahanControllerOld extends GetxController {
           context: Get.context!,
           builder: (context) {
             return AlertDialog(
+              backgroundColor: Colors.white,
+              surfaceTintColor: Colors.white,
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -408,36 +479,47 @@ class TambahLahanControllerOld extends GetxController {
     }
   }
 
-  Future<void> replacePatokan(BuildContext context, int index) async {
-    try {
-      bool hasLandmarks = await _showLandmarkDialog(context);
-      loading.value = true;
-      // Position position = await getGeoLocationPosition();
-      LocationData? position = currentLocation.value;
-      loading.value = false;
-      strLatLong.value = '${position?.latitude}, ${position?.longitude}';
+  // Future<void> replacePatokan(BuildContext context, int index) async {
+  //   try {
+  //     bool hasLandmarks = await _showLandmarkDialog(context);
+  //     loading.value = true;
+  //     // Position position = await getGeoLocationPosition();
+  //     LocationData? position = currentLocation.value;
+  //     loading.value = false;
+  //     strLatLong.value = '${position?.latitude}, ${position?.longitude}';
 
-      if (hasLandmarks) {
-        final pickedFile =
-            await imagePicker.pickImage(source: ImageSource.camera);
-        if (pickedFile != null) {
-          // Upload the image to Firebase Storage and get the URL
-          // final imageUrl =
-          //     await lahanRepository.uploadImage('Patokan/Images/', pickedFile);
-          patokanList[index] = PatokanModel(
-              localPath: pickedFile.path,
-              fotoPatokan: '',
-              coordinates: strLatLong.value);
-        }
-      } else {
-        patokanList[index] = PatokanModel(
-            localPath: '', fotoPatokan: '', coordinates: strLatLong.value);
-      }
-    } catch (e) {
-      loading.value = false;
-      DLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
-    }
-  }
+  //     if (hasLandmarks) {
+  //       final pickedFile =
+  //           await imagePicker.pickImage(source: ImageSource.camera);
+  //       if (pickedFile != null) {
+  //         // Upload the image to Firebase Storage and get the URL
+  //         // final imageUrl =
+  //         //     await lahanRepository.uploadImage('Patokan/Images/', pickedFile);
+  //         patokanList[index] = PatokanModel(
+  //             localPath: pickedFile.path,
+  //             fotoPatokan: '',
+  //             coordinates: strLatLong.value,
+  //             coordVerif: '',
+  //             coordStatus: 0,
+  //             coordPercent: 0,
+  //             coordComment: '');
+  //       }
+  //     } else {
+  //       patokanList[index] = PatokanModel(
+  //         localPath: '',
+  //         fotoPatokan: '',
+  //         coordinates: strLatLong.value,
+  //         coordVerif: '',
+  //         coordStatus: 0,
+  //         coordPercent: 0,
+  //         coordComment: '',
+  //       );
+  //     }
+  //   } catch (e) {
+  //     loading.value = false;
+  //     DLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
+  //   }
+  // }
 
   Future<void> editPatokan(BuildContext context, int index) async {
     try {
@@ -448,9 +530,61 @@ class TambahLahanControllerOld extends GetxController {
 
       if (pickedFile != null) {
         patokanList[index] = PatokanModel(
-            localPath: pickedFile.path,
-            fotoPatokan: '',
-            coordinates: patokanList[index].coordinates);
+          localPath: pickedFile.path,
+          fotoPatokan: '',
+          coordinates: patokanList[index].coordinates,
+          coordVerif: '',
+          coordStatus: 0,
+          coordPercent: 0,
+          coordComment: '',
+          coordCommentUser: '',
+        );
+      }
+    } catch (e) {
+      loading.value = false;
+      DLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
+    }
+  }
+
+  Future<void> replaceFotoPatokan(BuildContext context, int index) async {
+    try {
+      loading.value = true;
+      final pickedFile =
+          await imagePicker.pickImage(source: ImageSource.camera);
+      loading.value = false;
+
+      if (pickedFile != null) {
+        // Read the image file
+        // String localPath = pickedFile.path;
+        // File imageFile = File(localPath);
+
+        // // Compress the image
+        // Directory tempDir = await getTemporaryDirectory();
+        // String tempPath = '${tempDir.path}/$localPath.jpg';
+        // XFile? compressedImageFile = await compressImage(imageFile, tempPath);
+        // final imageUrl = await lahanRepository.uploadImage(
+        //     'Lahan/Patokan/', compressedImageFile!);
+        // Create a copy of the PatokanModel with the new fotoPatokan
+        var updatedPatokan = PatokanModel(
+          coordinates: patokanList[index].coordinates,
+          fotoPatokan: patokanList[index].fotoPatokan, // Set the new URL
+          coordComment: patokanList[index].coordComment,
+          coordCommentUser: patokanList[index].coordCommentUser,
+          coordVerif: patokanList[index].coordVerif,
+          coordStatus: patokanList[index].coordStatus,
+          coordPercent: patokanList[index].coordPercent,
+          localPath: pickedFile.path, // Store the local path
+        );
+
+        // Update only the specific entry in patokanList
+        patokanList[index] = updatedPatokan;
+        patokanList.refresh();
+
+        // Call the callback function to update the state in the widget
+        // updatedPatokanList(patokanList);
+      }
+      if (kDebugMode) {
+        print(patokanList);
       }
     } catch (e) {
       loading.value = false;
@@ -464,19 +598,29 @@ class TambahLahanControllerOld extends GetxController {
       barrierDismissible: true, // Allow dismissing when touching outside
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.white,
           title: const Text("Apakah terdapat patokan?"),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true); // Yes, there are landmarks
               },
-              child: const Text("Ya"),
+              child: Text("Ya",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: Colors.green)),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false); // No, there are no landmarks
               },
-              child: const Text("Tidak"),
+              child: Text("Tidak",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: Colors.black)),
             ),
           ],
         );
@@ -494,7 +638,7 @@ class TambahLahanControllerOld extends GetxController {
   //     }
   //     patokanList.removeAt(index);
   //   } catch (e) {
-  //     Get.snackbar('Oh Snap!', e.toString(),
+  //     Get.snackbar('Oh Tidak!', e.toString(),
   //         snackPosition: SnackPosition.BOTTOM);
   //   }
   // }
@@ -513,7 +657,7 @@ class TambahLahanControllerOld extends GetxController {
   //         );
   //       } catch (e) {
   //         DLoaders.errorSnackBar(
-  //             title: 'Oh Snap!', message: 'Failed to upload image: $e');
+  //             title: 'Oh Tidak!', message: 'Failed to upload image: $e');
   //       }
   //     }
   //   }
@@ -528,6 +672,15 @@ class TambahLahanControllerOld extends GetxController {
     return result != null ? XFile(result.path) : null;
   }
 
+  // Future<XFile?> compressImage2(XFile file, String targetPath) async {
+  //   var result = await FlutterImageCompress.compressAndGetFile(
+  //     file.path,
+  //     targetPath,
+  //     quality: 85,
+  //   );
+  //   return result != null ? XFile(result.path) : null;
+  // }
+
   Future<void> uploadPatokanImages() async {
     for (int i = 0; i < patokanList.length; i++) {
       final patokan = patokanList[i];
@@ -537,8 +690,9 @@ class TambahLahanControllerOld extends GetxController {
           File imageFile = File(patokan.localPath);
 
           // Compress the image
+          final lahanId = DateFormat('yyyyMMddHHmmss').format(DateTime.now());
           Directory tempDir = await getTemporaryDirectory();
-          String tempPath = '${tempDir.path}/temp_image_$i.jpg';
+          String tempPath = '${tempDir.path}/$lahanId-$i.jpg';
           XFile? compressedImageFile = await compressImage(imageFile, tempPath);
 
           if (compressedImageFile != null) {
@@ -551,6 +705,11 @@ class TambahLahanControllerOld extends GetxController {
               localPath: patokan.localPath,
               fotoPatokan: imageUrl,
               coordinates: patokan.coordinates,
+              coordVerif: '',
+              coordStatus: 0,
+              coordPercent: 0,
+              coordComment: '',
+              coordCommentUser: '',
             );
 
             // Delete the temporary file
@@ -560,7 +719,7 @@ class TambahLahanControllerOld extends GetxController {
           }
         } catch (e) {
           DLoaders.errorSnackBar(
-              title: 'Oh Snap!', message: 'Failed to upload image: $e');
+              title: 'Oh Tidak!', message: 'Failed to upload image: $e');
         }
       }
     }
@@ -603,7 +762,7 @@ class TambahLahanControllerOld extends GetxController {
 //         compressedImageFile.deleteSync();
 //       } catch (e) {
 //         DLoaders.errorSnackBar(
-//             title: 'Oh Snap!', message: 'Failed to upload image: $e');
+//             title: 'Oh Tidak!', message: 'Failed to upload image: $e');
 //       }
 //     }
 //   }
@@ -616,7 +775,7 @@ class TambahLahanControllerOld extends GetxController {
     try {
       //Start loading
       DFullScreenLoader.openLoadingDialog(
-          'We are processing your information', TImages.docerAnimation);
+          DTexts.sedangProses, TImages.docerAnimation);
 
       //Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
@@ -632,7 +791,7 @@ class TambahLahanControllerOld extends GetxController {
 
       if (serverresponse.statusCode != 200) {
         DLoaders.errorSnackBar(
-          title: 'Oh Snap!',
+          title: 'Oh Tidak!',
           message: 'Server or Database is not connected',
         );
         DFullScreenLoader.stopLoading();
@@ -754,7 +913,7 @@ class TambahLahanControllerOld extends GetxController {
         // ignore: avoid_print
         print('Failed to save lahan details: ${response.body}');
         DLoaders.errorSnackBar(
-            title: 'Oh Snap!',
+            title: 'Oh Tidak!',
             message: '${response.statusCode} + ${response.body}');
         // throw Exception('Failed to fetch user details');
         // throw 'Failed to save lahan record to PostgreSQL';
@@ -766,8 +925,8 @@ class TambahLahanControllerOld extends GetxController {
 
       // Show success message
       DLoaders.successSnackBar(
-        title: 'Success',
-        message: 'Lahan has been added successfully.',
+        title: 'Berhasil!',
+        message: 'Lahan berhasil ditambah.',
       );
 
       // Clear form fields and patokan list
@@ -783,8 +942,36 @@ class TambahLahanControllerOld extends GetxController {
       DFullScreenLoader.stopLoading();
 
       //Show some generic error to the user
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
     }
+  }
+
+  // Function to show confirmation dialog before saving
+  void confirmAndSaveTambahLahanForm() {
+    Get.defaultDialog(
+      title: "Konfirmasi",
+      backgroundColor: Colors.white,
+      middleText:
+          "Apakah Anda yakin ingin menyimpan data lahan ini? Pastikan data lahan yang Anda masukkan benar!",
+      textCancel: "Batal",
+      textConfirm: "Ya",
+      cancel: OutlinedButton(
+          onPressed: () => Navigator.of(Get.overlayContext!).pop(),
+          child: const Text('Batal')),
+      confirm: ElevatedButton(
+        onPressed: () {
+          Navigator.of(Get.overlayContext!).pop(); // Close the dialog
+          saveTambahLahanForm();
+        },
+        style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            side: const BorderSide(color: Colors.green)),
+        child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: DSizes.lg),
+            child: Text('Benar')),
+      ),
+      // contentPadding: const EdgeInsets.all(DSizes.defaultSpace),
+    );
   }
 
   // Function to update only the Foto Patokan
@@ -792,7 +979,7 @@ class TambahLahanControllerOld extends GetxController {
     try {
       //Start loading
       DFullScreenLoader.openLoadingDialog(
-          'We are processing your information', TImages.docerAnimation);
+          DTexts.sedangProses, TImages.docerAnimation);
 
       //Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
@@ -808,7 +995,7 @@ class TambahLahanControllerOld extends GetxController {
 
       if (serverresponse.statusCode != 200) {
         DLoaders.errorSnackBar(
-          title: 'Oh Snap!',
+          title: 'Oh Tidak!',
           message: 'Server or Database is not connected',
         );
         DFullScreenLoader.stopLoading();
@@ -833,35 +1020,115 @@ class TambahLahanControllerOld extends GetxController {
 
       if (response.statusCode != 200) {
         DLoaders.errorSnackBar(
-            title: 'Oh Snap!',
+            title: 'Oh Tidak!',
             message: '${response.statusCode} + ${response.body}');
         DFullScreenLoader.stopLoading();
         return;
       }
 
       // Update the patokan in Firestore
-      await FirebaseFirestore.instance
-          .collection('Lahan')
-          .doc(existingLahan.id)
-          .update({
-        'koordinat': patokanList.map((patokan) => patokan.toJson()).toList(),
-        'updated_at': Timestamp.now(),
-      });
+      // await FirebaseFirestore.instance
+      //     .collection('Lahan')
+      //     .doc(existingLahan.id)
+      //     .update({
+      //   'koordinat': patokanList.map((patokan) => patokan.toJson()).toList(),
+      //   'updated_at': Timestamp.now(),
+      // });
 
       // Show success message
       DLoaders.successSnackBar(
-        title: 'Success',
-        message: 'Foto patokan has been updated successfully.',
+        title: 'Berhasil',
+        message: 'Foto patokan berhasil direvisi.',
       );
 
       // Clear patokan list
       patokanList.clear();
 
       // Navigate back
-      Get.offAll(() => const NavigationMenu());
+      // Get.offAll(() => const NavigationMenu());
+      Get.to(() => PetaTitikValidasi(lahan: existingLahan));
     } catch (e) {
       DFullScreenLoader.stopLoading();
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
+    }
+  }
+
+  // Function to update only the Foto Patokan
+  void validasiTitikKoordinat(LahanModel existingLahan) async {
+    try {
+      //Start loading
+      DFullScreenLoader.openLoadingDialog(
+          DTexts.sedangProses, TImages.docerAnimation);
+
+      //Check Internet Connectivity
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        //remove loader
+        DFullScreenLoader.stopLoading();
+        return;
+      }
+
+      // Check server and database connection
+      final serverurl = Uri.parse('$baseUrl/checkConnectionDatabase');
+      final http.Response serverresponse = await http.get(serverurl);
+
+      if (serverresponse.statusCode != 200) {
+        DLoaders.errorSnackBar(
+          title: 'Oh Tidak!',
+          message: 'Server or Database is not connected',
+        );
+        DFullScreenLoader.stopLoading();
+        return;
+      }
+
+      // Upload images and update patokan list
+      await uploadPatokanImages();
+
+      // Send updated patokan to Node.js server to update PostgreSQL
+      var url = Uri.parse('$baseUrl/updateFotoPatokan');
+      var response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'map_id': existingLahan.id,
+          'koordinat': patokanList.map((patokan) => patokan.toJson()).toList(),
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        DLoaders.errorSnackBar(
+            title: 'Oh Tidak!',
+            message: '${response.statusCode} + ${response.body}');
+        DFullScreenLoader.stopLoading();
+        return;
+      }
+
+      // Update the patokan in Firestore
+      // await FirebaseFirestore.instance
+      //     .collection('Lahan')
+      //     .doc(existingLahan.id)
+      //     .update({
+      //   'koordinat': patokanList.map((patokan) => patokan.toJson()).toList(),
+      //   'updated_at': Timestamp.now(),
+      // });
+
+      // Show success message
+      DLoaders.successSnackBar(
+        title: 'Berhasil!',
+        message: 'Koordinat berhasil divalidasi oleh Anda!',
+      );
+
+      // Clear patokan list
+      patokanList.clear();
+
+      // Navigate back
+      // Get.offAll(() => const NavigationMenu());
+      Get.to(() => PetaTitikValidasi(lahan: existingLahan));
+    } catch (e) {
+      DFullScreenLoader.stopLoading();
+      DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
     }
   }
 

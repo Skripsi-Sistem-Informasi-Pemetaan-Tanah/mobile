@@ -96,6 +96,7 @@ class _TambahLahanBodyState extends State<TambahLahanBody> {
                   valueListenable: controller.jenisLahanNotifier,
                   builder: (context, selectedJenisLahan, child) {
                     return DropdownButtonFormField<JenisLahanDataModel>(
+                      dropdownColor: Colors.white,
                       decoration: const InputDecoration(
                         labelText: "Pilih Jenis Lahan",
                         // You can also add errorText or other InputDecoration properties here
@@ -138,6 +139,13 @@ class _TambahLahanBodyState extends State<TambahLahanBody> {
                 //Foto Patokan
                 Text(DTexts.fotoPatokan,
                     style: Theme.of(context).textTheme.headlineSmall),
+                const SizedBox(height: DSizes.spaceBtwInputFields),
+
+                Text(
+                  "Harap tambahkan patok dan titik koordinat secara berurutan untuk membentuk bidang atau bangun dasar lahan Anda.",
+                  style: Theme.of(context).textTheme.bodySmall,
+                  textAlign: TextAlign.justify,
+                ),
                 const SizedBox(height: DSizes.spaceBtwInputFields),
 
                 const SizedBox(height: 500, child: PinPoint()),
@@ -188,7 +196,8 @@ class _TambahLahanBodyState extends State<TambahLahanBody> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                      onPressed: () => controller.saveTambahLahanForm(),
+                      onPressed: () =>
+                          controller.confirmAndSaveTambahLahanForm(),
                       child: const Text(DTexts.submit)),
                 ),
               ],

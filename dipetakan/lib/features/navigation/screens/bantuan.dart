@@ -1,14 +1,8 @@
 // ignore_for_file: avoid_print
 
-// import 'dart:convert';
-
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:dipetakan/util/constants/api_constants.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
-// import 'package:dipetakan/util/popups/loaders.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
 
 class BantuanScreen extends StatefulWidget {
   const BantuanScreen({super.key});
@@ -18,6 +12,167 @@ class BantuanScreen extends StatefulWidget {
 }
 
 class _BantuanScreenState extends State<BantuanScreen> {
+  final List<Map<String, dynamic>> faqs = [
+    {
+      'question': 'Bagaimana cara membuat akun di aplikasi ini?',
+      'answer': [
+        '1. Buka aplikasi dan akan muncul splashscreen, kemudian halaman login.',
+        '2. Klik tombol “Buat Akun” di halaman login.',
+        '3. Isi form pendaftaran di halaman signup, centang persetujuan kebijakan privasi dan ketentuan penggunaan, lalu klik tombol “Buat Akun”.',
+        '4. Aplikasi akan menampilkan halaman verifikasi email dengan pesan “Selamat! Akun anda sudah berhasil dibuat, silahkan verifikasi email Anda untuk melanjutkan.”',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara login ke dalam aplikasi?',
+      'answer': [
+        '1. Masukkan email dan kata sandi di halaman login.',
+        '2. Centang opsi “Ingat Saya” jika ingin menyimpan data login di perangkat.',
+        '3. Klik tombol “Masuk”.',
+        '4. Setelah login, Anda akan diarahkan ke halaman Menu dengan nama lengkap Anda di bagian atas.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara memverifikasi email yang telah didaftarkan?',
+      'answer': [
+        '1. Cek kotak masuk email Anda setelah mendaftar.',
+        '2. Klik link verifikasi yang dikirimkan melalui email.',
+        '3. Jika email belum diverifikasi setelah 120 detik, aplikasi akan mengarahkan Anda kembali ke halaman login. Jika diverifikasi dalam 120 detik, aplikasi akan menampilkan pesan bahwa akun berhasil dibuat.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara mengubah kata sandi akun?',
+      'answer': [
+        '1. Di halaman Menu, klik navigation bottom “Akun Saya”.',
+        '2. Pilih menu “Ubah Kata Sandi”.',
+        '3. Masukkan kata sandi lama dan kata sandi baru Anda, lalu klik “Ubah”.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara mengubah nama lengkap akun?',
+      'answer': [
+        '1. Di halaman “Akun Saya”, pilih menu “Profil Saya”.',
+        '2. Klik ikon edit di sebelah informasi nama lengkap.',
+        '3. Masukkan nama lengkap baru dan klik tombol “Ubah”.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara mengubah username?',
+      'answer': [
+        '1. Di halaman “Profil Saya”, klik ikon edit di sebelah informasi username.',
+        '2. Masukkan username baru dan klik tombol “Ubah”.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara mengubah nomor telepon akun?',
+      'answer': [
+        '1. Di halaman “Profil Saya”, klik ikon edit di sebelah informasi nomor telepon.',
+        '2. Masukkan nomor telepon baru dan klik tombol “Ubah”.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara mengubah email akun?',
+      'answer': [
+        '1. Di halaman “Profil Saya”, klik ikon edit di sebelah informasi email.',
+        '2. Masukkan kata sandi dan email baru, lalu klik “Lanjutkan”.',
+        '3. Verifikasi email baru yang dikirimkan ke email baru Anda.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara menghapus akun?',
+      'answer': [
+        '1. Di halaman “Profil Saya”, klik “Hapus Akun”.',
+        '2. Pada dialog konfirmasi, klik “Hapus”.',
+        '3. Akun Anda akan dihapus, dan Anda akan diarahkan ke halaman login.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara menambah atau mengubah foto profil?',
+      'answer': [
+        '1. Di halaman “Profil Saya”, klik “Ubah Foto Profil”.',
+        '2. Pilih foto dari galeri atau file, dan foto tersebut akan ditampilkan sebagai foto profil.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara menambah lahan dan informasi terkait lahan?',
+      'answer': [
+        '1. Di halaman Menu, pilih halaman “Plot Lahan”.',
+        '2. Isi informasi lahan dan foto patok batas lahan, kemudian klik “Kirim”.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara melihat semua lahan yang dimiliki?',
+      'answer': [
+        '1. Di halaman Menu, pilih halaman “Lahan Saya”.',
+        '2. Semua lahan yang Anda miliki akan ditampilkan di halaman ini.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara melacak status verifikasi lahan?',
+      'answer': [
+        '1. Di halaman “Lahan Saya”, klik tombol “Lacak Status”.',
+        '2. Status verifikasi lahan akan ditampilkan di halaman ini.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara mencari nama lahan?',
+      'answer': [
+        '1. Di halaman “Lahan Saya”, gunakan search bar untuk mencari nama lahan.',
+        '2. Lahan yang Anda cari akan ditampilkan berdasarkan kata kunci yang dimasukkan.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara menerapkan filter pada lahan yang dimiliki?',
+      'answer': [
+        '1. Di halaman “Lahan Saya”, klik ikon filter.',
+        '2. Pilih jenis lahan atau status verifikasi yang ingin difilter, lalu klik “Terapkan”.',
+      ],
+    },
+    {
+      'question':
+          'Bagaimana cara menambahkan atau merevisi foto patokan lahan?',
+      'answer': [
+        '1. Di halaman “Lacak Status”, klik “Revisi Foto Patokan”.',
+        '2. Pilih marker titik koordinat di peta dan ambil foto baru untuk revisi.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara memvalidasi titik koordinat lahan?',
+      'answer': [
+        '1. Di halaman “Lacak Status”, klik “Validasi Titik Koordinat”.',
+        '2. Setujui atau tidak setujui titik koordinat yang diberikan, dan simpan perubahan.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara menampilkan peta lahan yang dimiliki?',
+      'answer': [
+        '1. Di halaman Menu, pilih menu “Peta Lahan”.',
+        '2. Lahan yang Anda miliki akan ditampilkan sebagai polygon di peta.',
+      ],
+    },
+    {
+      'question':
+          'Bagaimana cara menampilkan informasi lahan milik pengguna lain?',
+      'answer': [
+        '1. Di halaman “Peta Lahan”, klik polygon lahan milik pengguna lain.',
+        '2. Informasi lahan akan ditampilkan dalam bottomsheet, klik “Lihat Detail” untuk informasi lebih lanjut.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara melihat panduan penggunaan aplikasi?',
+      'answer': [
+        '1. Di halaman Menu, pilih menu “Bantuan”.',
+        '2. Aplikasi akan menampilkan halaman panduan penggunaan.',
+      ],
+    },
+    {
+      'question': 'Bagaimana cara melihat informasi tentang aplikasi ini?',
+      'answer': [
+        '1. Di halaman “Akun Saya”, pilih menu “Tentang Aplikasi”.',
+        '2. Informasi tentang aplikasi akan ditampilkan di halaman ini.',
+      ],
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,267 +183,42 @@ class _BantuanScreenState extends State<BantuanScreen> {
         title: const Text(
           'Bantuan',
           style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Inter',
-              fontStyle: FontStyle.normal),
+            color: Colors.white,
+            fontFamily: 'Inter',
+            fontStyle: FontStyle.normal,
+          ),
         ),
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(DSizes.defaultSpace),
-          child: Column(children: <Widget>[
-            // SizedBox(
-            //   width: double.infinity,
-            //   child: ElevatedButton(
-            //       onPressed: _fetchDataFromPostgresql,
-            //       child: Text(DTexts.tContinue)),
-            // ),
-          ]),
+          padding: const EdgeInsets.all(DSizes.defaultSpace),
+          child: Column(
+            children: faqs.map((faq) {
+              return ExpansionTile(
+                title: Text(faq['question']!,
+                    style: Theme.of(context).textTheme.headlineSmall),
+                // children: (faq['answer']! as List<String>).map((answer) {
+                //   return Padding(
+                //     padding: const EdgeInsets.symmetric(
+                //       vertical: DSizes.spaceBtwInputFields,
+                //       horizontal: DSizes.defaultSpace,
+                //     ),
+                //     child: Text(answer,
+                //         style: Theme.of(context).textTheme.bodyMedium,
+                //         textAlign: TextAlign.left),
+                //   );
+                // }).toList(),
+                children: (faq['answer']! as List<String>).map((answer) {
+                  return ListTile(
+                    title: Text(answer,
+                        style: Theme.of(context).textTheme.bodyMedium),
+                  );
+                }).toList(),
+              );
+            }).toList(),
+          ),
         ),
       ),
     );
   }
 }
-
-// Future<void> _fetchDataFromPostgresql() async {
-//   final userId = AuthenticationRepository.instance.authUser?.uid;
-//   var url = Uri.parse('$baseUrl/getAllLahanbyUserId/$userId');
-//   var response = await http.get(url);
-
-//   if (response.statusCode == 200) {
-//     Map<String, dynamic> responseData = json.decode(response.body);
-
-//     final FirebaseFirestore db = FirebaseFirestore.instance;
-
-//     // Using a batch write to Firestore for efficiency
-//     WriteBatch batch = db.batch();
-
-//     // Update data in Firestore
-//     if (responseData.containsKey('lahan')) {
-//       List<dynamic> lahanData = responseData['lahan'];
-//       for (var lahan in lahanData) {
-//         String userId = lahan['user_id'];
-//         String mapId = lahan['map_id'];
-//         DocumentReference lahanRef = db.collection('Lahan').doc(mapId);
-
-//         // Convert updated_at in lahan to Firestore Timestamp
-//         if (lahan.containsKey('updated_at')) {
-//           String updatedAtString = lahan['updated_at'];
-//           DateTime updatedAt = DateTime.parse(updatedAtString);
-//           Timestamp updatedAtTimestamp = Timestamp.fromDate(updatedAt);
-//           lahan['updated_at'] = updatedAtTimestamp;
-//         }
-
-//         Map<String, dynamic> lahanDataToUpdate = {
-//           'koordinat': lahan.containsKey('koordinat')
-//               ? List<Map<String, dynamic>>.from(lahan['koordinat'])
-//               : [],
-//           'verifikasi': lahan.containsKey('verifikasi')
-//               ? List<Map<String, dynamic>>.from(lahan['verifikasi'])
-//               : [],
-//           'updated_at': lahan['updated_at']
-//         };
-
-//         // Convert updated_at in verifikasi to Firestore Timestamp
-//         if (lahan.containsKey('verifikasi')) {
-//           List<Map<String, dynamic>> verifikasiList =
-//               List<Map<String, dynamic>>.from(lahan['verifikasi']);
-//           for (var verifikasi in verifikasiList) {
-//             if (verifikasi.containsKey('updated_at')) {
-//               String verifikasiUpdatedAtString = verifikasi['updated_at'];
-//               DateTime verifikasiUpdatedAt =
-//                   DateTime.parse(verifikasiUpdatedAtString);
-//               Timestamp verifikasiUpdatedAtTimestamp =
-//                   Timestamp.fromDate(verifikasiUpdatedAt);
-//               verifikasi['updated_at'] = verifikasiUpdatedAtTimestamp;
-//             }
-//           }
-//           lahanDataToUpdate['verifikasi'] = verifikasiList;
-//         }
-
-//         batch.set(lahanRef, lahanDataToUpdate, SetOptions(merge: true));
-
-//         // Also update in the user-specific collection
-//         DocumentReference userLahanRef =
-//             db.collection('Users').doc(userId).collection('Lahan').doc(mapId);
-//         batch.set(userLahanRef, lahanDataToUpdate, SetOptions(merge: true));
-//       }
-//     }
-
-//     // Commit the batch write
-//     await batch.commit();
-//     DLoaders.successSnackBar(
-//         title: 'Success', message: 'Data updated successfully in Firestore');
-//   } else {
-//     DLoaders.errorSnackBar(title: 'Fail', message: 'Failed to fetch data');
-//   }
-// }
-
-// Future<void> _fetchDataFromPostgresql() async {
-//   // Check server and database connection
-//   final serverurl =
-//       Uri.parse('http://192.168.1.34:5000/checkConnectionDatabase');
-//   final http.Response serverresponse = await http.get(serverurl);
-//   if (serverresponse.statusCode != 200
-//       // ||
-//       //     json.decode(serverresponse.body)['connected'] != true
-//       ) {
-//     DLoaders.errorSnackBar(
-//         title: 'Oh Snap!', message: 'Server or Database is not connected');
-//     // DFullScreenLoader.stopLoading();
-//     return;
-//   }
-
-//   var url = Uri.parse('$baseUrl/getAllLahan');
-//   var response = await http.get(url);
-
-//   if (response.statusCode == 200) {
-//     Map<String, dynamic> responseData = json.decode(response.body);
-
-//     final FirebaseFirestore db = FirebaseFirestore.instance;
-
-//     // Using a batch write to Firestore for efficiency
-//     WriteBatch batch = db.batch();
-
-//     // Update data in Firestore
-//     if (responseData.containsKey('lahan')) {
-//       List<dynamic> lahanData = responseData['lahan'];
-//       for (var lahan in lahanData) {
-//         String userId = lahan['user_id'];
-//         String mapId = lahan['map_id'];
-//         DocumentReference lahanRef = db.collection('Lahan').doc(mapId);
-
-//         // Convert updated_at in lahan to Firestore Timestamp
-//         if (lahan.containsKey('updated_at')) {
-//           String updatedAtString = lahan['updated_at'];
-//           DateTime updatedAt = DateTime.parse(updatedAtString);
-//           Timestamp updatedAtTimestamp = Timestamp.fromDate(updatedAt);
-//           lahan['updated_at'] = updatedAtTimestamp;
-//         }
-
-//         Map<String, dynamic> lahanDataToUpdate = {
-//           'koordinat': lahan.containsKey('koordinat')
-//               ? List<Map<String, dynamic>>.from(lahan['koordinat'])
-//               : [],
-//           'verifikasi': lahan.containsKey('verifikasi')
-//               ? List<Map<String, dynamic>>.from(lahan['verifikasi'])
-//               : [],
-//           'updated_at': lahan['updated_at']
-//         };
-
-//         // Convert updated_at in verifikasi to Firestore Timestamp
-//         if (lahan.containsKey('verifikasi')) {
-//           List<Map<String, dynamic>> verifikasiList =
-//               List<Map<String, dynamic>>.from(lahan['verifikasi']);
-//           for (var verifikasi in verifikasiList) {
-//             if (verifikasi.containsKey('updated_at')) {
-//               String verifikasiUpdatedAtString = verifikasi['updated_at'];
-//               DateTime verifikasiUpdatedAt =
-//                   DateTime.parse(verifikasiUpdatedAtString);
-//               Timestamp verifikasiUpdatedAtTimestamp =
-//                   Timestamp.fromDate(verifikasiUpdatedAt);
-//               verifikasi['updated_at'] = verifikasiUpdatedAtTimestamp;
-//             }
-//           }
-//           lahanDataToUpdate['verifikasi'] = verifikasiList;
-//         }
-
-//         batch.set(lahanRef, lahanDataToUpdate, SetOptions(merge: true));
-
-//         // Also update in the user-specific collection
-//         DocumentReference userLahanRef =
-//             db.collection('Users').doc(userId).collection('Lahan').doc(mapId);
-//         batch.set(userLahanRef, lahanDataToUpdate, SetOptions(merge: true));
-//       }
-//     }
-
-//     // Commit the batch write
-//     await batch.commit();
-//     DLoaders.successSnackBar(
-//         title: 'Success', message: 'Data updated successfully in Firestore');
-//   } else {
-//     DLoaders.errorSnackBar(title: 'Fail', message: 'Failed to fetch data');
-//   }
-// }
-
-// Future<void> _fetchDataFromPostgresql() async {
-//   // Check server and database connection
-//   final serverurl = Uri.parse('$baseUrl/checkConnectionDatabase');
-//   final http.Response serverresponse = await http.get(serverurl);
-
-//   if (serverresponse.statusCode != 200) {
-//     DLoaders.errorSnackBar(
-//       title: 'Oh Snap!',
-//       message: 'Server or Database is not connected',
-//     );
-//     return;
-//   }
-
-//   var url = Uri.parse('$baseUrl/getAllLahan');
-//   var response = await http.get(url);
-
-//   if (response.statusCode == 200) {
-//     Map<String, dynamic> responseData = json.decode(response.body);
-
-//     final FirebaseFirestore db = FirebaseFirestore.instance;
-//     WriteBatch batch = db.batch();
-
-//     if (responseData.containsKey('data') &&
-//         responseData['data'].containsKey('lahan')) {
-//       List<dynamic> lahanData = responseData['data']['lahan'];
-
-//       for (var lahan in lahanData) {
-//         String userId = lahan['user_id'];
-//         String mapId = lahan['map_id'];
-//         DocumentReference lahanRef = db.collection('Lahan').doc(mapId);
-//         DocumentReference userLahanRef =
-//             db.collection('Users').doc(userId).collection('Lahan').doc(mapId);
-
-//         // Convert updated_at to Firestore Timestamp
-//         if (lahan.containsKey('updated_at')) {
-//           String updatedAtString = lahan['updated_at'];
-//           Timestamp updatedAt = Timestamp.fromMillisecondsSinceEpoch(
-//               DateTime.parse(updatedAtString).millisecondsSinceEpoch);
-//           lahan['updated_at'] = updatedAt;
-//         }
-
-//         Map<String, dynamic> lahanDataToUpdate = {
-//           'koordinat': lahan.containsKey('koordinat') ? lahan['koordinat'] : [],
-//           'verifikasi':
-//               lahan.containsKey('verifikasi') ? lahan['verifikasi'] : [],
-//           'updated_at': lahan['updated_at'],
-//         };
-
-//         // Update verifikasi 'updated_at' to Firestore Timestamp
-//         if (lahan.containsKey('verifikasi')) {
-//           List<dynamic> verifikasiList = lahan['verifikasi'];
-//           for (var verifikasi in verifikasiList) {
-//             if (verifikasi.containsKey('updated_at')) {
-//               String verifikasiUpdatedAtString = verifikasi['updated_at'];
-//               Timestamp verifikasiUpdatedAt =
-//                   Timestamp.fromMillisecondsSinceEpoch(
-//                       DateTime.parse(verifikasiUpdatedAtString)
-//                           .millisecondsSinceEpoch);
-//               verifikasi['updated_at'] = verifikasiUpdatedAt;
-//             }
-//           }
-//           lahanDataToUpdate['verifikasi'] = verifikasiList;
-//         }
-
-//         batch.set(lahanRef, lahanDataToUpdate, SetOptions(merge: true));
-//         batch.set(userLahanRef, lahanDataToUpdate, SetOptions(merge: true));
-//       }
-//     }
-
-//     await batch.commit();
-//     DLoaders.successSnackBar(
-//       title: 'Success',
-//       message: 'Data updated successfully in Firestore',
-//     );
-//   } else {
-//     DLoaders.errorSnackBar(
-//       title: 'Fail',
-//       message: 'Failed to fetch data',
-//     );
-//   }
-// }

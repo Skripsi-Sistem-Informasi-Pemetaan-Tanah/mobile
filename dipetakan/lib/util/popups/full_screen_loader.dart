@@ -1,6 +1,5 @@
 import 'package:dipetakan/common/widgets/loaders/animation_loader.dart';
 import 'package:dipetakan/util/constants/colors.dart';
-import 'package:dipetakan/util/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,9 +11,10 @@ class DFullScreenLoader {
         builder: (_) => PopScope(
             canPop: false,
             child: Container(
-              color: DHelperFunctions.isDarkMode(Get.context!)
-                  ? DColors.dark
-                  : DColors.white,
+              color: DColors.white,
+              //  DHelperFunctions.isDarkMode(Get.context!)
+              //     ? DColors.dark
+              //     : DColors.white,
               width: double.infinity,
               height: double.infinity,
               child: Column(

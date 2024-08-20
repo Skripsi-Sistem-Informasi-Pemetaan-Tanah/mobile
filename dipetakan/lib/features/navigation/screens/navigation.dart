@@ -1,7 +1,6 @@
 import 'package:dipetakan/features/navigation/screens/akunsaya.dart';
 import 'package:dipetakan/features/navigation/screens/menu.dart';
 import 'package:dipetakan/util/constants/colors.dart';
-import 'package:dipetakan/util/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -19,7 +18,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(NavigationController());
-    final darkMode = DHelperFunctions.isDarkMode(context);
+    // final darkMode = DHelperFunctions.isDarkMode(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -109,11 +108,14 @@ class _NavigationMenuState extends State<NavigationMenu> {
             selectedIndex: controller.selectedIndex.value,
             onDestinationSelected: (index) =>
                 controller.selectedIndex.value = index,
-            backgroundColor: darkMode ? DColors.black : Colors.white,
-            surfaceTintColor: darkMode ? DColors.black : Colors.white,
-            indicatorColor: darkMode
-                ? DColors.white.withOpacity(0.1)
-                : DColors.black.withOpacity(0.1),
+            backgroundColor: Colors.white,
+            // darkMode ? DColors.black : Colors.white,
+            surfaceTintColor: Colors.white,
+            // darkMode ? DColors.black : Colors.white,
+            indicatorColor: DColors.black.withOpacity(0.1),
+            //  darkMode
+            //     ? DColors.white.withOpacity(0.1)
+            //     : DColors.black.withOpacity(0.1),
             destinations: const [
               NavigationDestination(icon: Icon(Iconsax.home), label: 'Home'),
               NavigationDestination(

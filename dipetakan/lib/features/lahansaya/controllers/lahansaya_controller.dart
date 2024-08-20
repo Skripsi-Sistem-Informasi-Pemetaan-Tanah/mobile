@@ -59,7 +59,7 @@ class LahanSayaController extends GetxController {
 
       return lahanList;
     } else {
-      throw Exception('Failed to fetch data from PostgreSQL');
+      throw Exception('Gagal mendapatkan data');
     }
   }
 }

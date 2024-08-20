@@ -9,7 +9,7 @@ import 'package:dipetakan/util/exceptions/firebase_auth_exceptions.dart';
 import 'package:dipetakan/util/exceptions/firebase_exceptions.dart';
 import 'package:dipetakan/util/exceptions/format_exceptions.dart';
 import 'package:dipetakan/util/exceptions/platform_exceptions.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -67,20 +67,20 @@ class AuthenticationRepository extends GetxController {
         }
       } else {
         // Local Storage
-        if (kDebugMode) {
-          print('================== GET STORAGE ===============');
-          print(deviceStorage.read('IsFirstTime'));
-        }
-        deviceStorage.writeIfNull('IsFirstTime', true);
-        bool isFirstTime = deviceStorage.read('IsFirstTime') ?? true;
-        if (isFirstTime) {
-          deviceStorage.write('IsFirstTime', false);
-          // Navigate to some initial setup or welcome screen if needed
-          // Get.offAll(() => const WelcomeScreen());
-          Get.offAll(() => const LoginScreen());
-        } else {
-          Get.offAll(() => const LoginScreen());
-        }
+        // if (kDebugMode) {
+        //   print('================== GET STORAGE ===============');
+        //   print(deviceStorage.read('IsFirstTime'));
+        // }
+        // deviceStorage.writeIfNull('IsFirstTime', true);
+        // bool isFirstTime = deviceStorage.read('IsFirstTime') ?? true;
+        // if (isFirstTime) {
+        //   deviceStorage.write('IsFirstTime', false);
+        //   // Navigate to some initial setup or welcome screen if needed
+        //   // Get.offAll(() => const WelcomeScreen());
+        //   Get.offAll(() => const LoginScreen());
+        // } else {
+        //   // Get.offAll(() => const LoginScreen());
+        // }
       }
     });
   }
@@ -142,9 +142,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      // DLoaders.errorSnackBar(
-      //     title: 'Error', message: 'Something went wrong try again');
-      throw 'Something went wrong, try again!';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
     return null;
   }
@@ -164,7 +162,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong, try again!';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 
@@ -181,7 +179,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong, try again!';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 
@@ -198,7 +196,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong, try again!';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 
@@ -218,7 +216,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong, try again!';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 
@@ -235,7 +233,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong, try again!';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 
@@ -264,7 +262,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong, try again!';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 
@@ -282,7 +280,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong, try again!';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 
@@ -301,7 +299,7 @@ class AuthenticationRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong, try again!';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 }

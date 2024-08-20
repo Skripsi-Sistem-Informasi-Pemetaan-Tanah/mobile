@@ -62,7 +62,7 @@ class LoginController extends GetxController {
       }
 
       //Privacy policy checks
-      if (rememberMe.value) {
+      if (rememberMe.value = true) {
         localStorage.write('REMEMBER_ME_EMAIL', email.text.trim());
         localStorage.write('REMEMBER_ME_PASSWORD', password.text.trim());
       }
@@ -82,7 +82,7 @@ class LoginController extends GetxController {
       DFullScreenLoader.stopLoading();
 
       //Show some generic error to the user
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
     }
   }
 }

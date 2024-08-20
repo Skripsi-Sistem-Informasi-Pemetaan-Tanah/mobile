@@ -33,11 +33,12 @@ class EmailUpdatedScreen extends StatelessWidget {
                 const SizedBox(height: DSizes.appBarHeight),
 
                 ///Title & Subtitle
-                Text('Your email has been updated',
+                Text('Email berhasil diubah!',
                     style: Theme.of(context).textTheme.headlineMedium,
                     textAlign: TextAlign.center),
                 const SizedBox(height: DSizes.spaceBtwItems),
-                Text(DTexts.yourAccountCreatedSubTitle,
+                Text(
+                    'Email Anda berhasil diubah, silahkan lanjutkan dan masuk dengan email baru Anda!',
                     style: Theme.of(context).textTheme.labelMedium,
                     textAlign: TextAlign.center),
 

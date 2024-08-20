@@ -38,7 +38,7 @@ class _ProfilSayaScreenState extends State<ProfilSayaScreen> {
           onPressed: () => Get.to(() => const NavigationMenu()),
         ),
         title: const Text(
-          'Profile Saya',
+          'Profil Saya',
           style: TextStyle(
               color: Colors.white,
               fontFamily: 'Inter',
@@ -68,7 +68,8 @@ class _ProfilSayaScreenState extends State<ProfilSayaScreen> {
                   }),
                   TextButton(
                       onPressed: () => controller.uploadUserProfilePicture(),
-                      child: const Text('Ubah Foto Profil'))
+                      child: const Text('Ubah Foto Profil',
+                          style: TextStyle(color: Colors.green)))
                 ],
               ),
             ),
@@ -95,59 +96,30 @@ class _ProfilSayaScreenState extends State<ProfilSayaScreen> {
                 onPressed: () => Get.to(() => const EditNotelpScreen())),
 
             const SizedBox(height: DSizes.spaceBtwSections),
+            TextButton(
+                onPressed: () =>
+                    controller.deleteAccountWarningPopup(controller.user.value),
+                child: const Text('Hapus Akun',
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.red,
+                        fontWeight: FontWeight.w600)))
           ]),
         ),
       ),
-      floatingActionButton: Padding(
-          padding: const EdgeInsets.all(DSizes.defaultSpace),
-          child: TextButton(
-              onPressed: () =>
-                  controller.deleteAccountWarningPopup(controller.user.value),
-              child: const Text('Hapus Akun',
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.red,
-                      fontWeight: FontWeight.w600)))
-
-          // Column(
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   children: [
-          //     //Edit Profile
-          //     SizedBox(
-          //       width: double.infinity,
-          //       child: ElevatedButton(
-          //           onPressed: () {
-          //             Navigator.push(
-          //               context,
-          //               MaterialPageRoute(
-          //                   builder: (context) => const EditProfilScreen()),
-          //             );
-          //           },
-          //           child: const Text('Edit Profile')),
-          //     ),
-          //     const SizedBox(height: DSizes.spaceBtwInputFields),
-          //     //Hapus Akun Button
-          //     TextButton(
-          //         onPressed: () {},
-          //         child: const Text('Hapus Akun',
-          //             style: TextStyle(
-          //                 fontSize: 15,
-          //                 color: Colors.red,
-          //                 fontWeight: FontWeight.w600)))
-          //     // SizedBox(
-          //     //   width: double.infinity,
-          //     //   child: ElevatedButton(
-          //     //       onPressed: () {},
-          //     //       style: ElevatedButton.styleFrom(
-          //     //         backgroundColor: Colors.red,
-          //     //         side: const BorderSide(color: Colors.red),
-          //     //       ),
-          //     //       child: const Text('Hapus Akun')),
-          //     // ),
-          //   ],
-          // ),
-          ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: Padding(
+      //     padding: const EdgeInsets.all(DSizes.defaultSpace),
+      //     child: TextButton(
+      //         onPressed: () =>
+      //             controller.deleteAccountWarningPopup(controller.user.value),
+      //         child: const Text('Hapus Akun',
+      //             style: TextStyle(
+      //                 fontSize: 15,
+      //                 color: Colors.red,
+      //                 fontWeight: FontWeight.w600))
+      //                 )
+      //     ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

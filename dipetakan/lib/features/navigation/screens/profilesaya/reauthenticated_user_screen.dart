@@ -81,7 +81,7 @@ class _ReAuthUserScreenState extends State<ReAuthUserScreen> {
               child: ElevatedButton(
                   onPressed: () => controller
                       .reAuthenticatedEmailAndPassword(controller.user.value),
-                  child: const Text('Submit')),
+                  child: const Text(DTexts.submit)),
             ),
             const SizedBox(height: DSizes.spaceBtwItems),
           ]),

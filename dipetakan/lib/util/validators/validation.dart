@@ -3,7 +3,7 @@ import 'package:dipetakan/features/tambahlahan/models/jenislahanmodel.dart';
 class TValidator {
   static String? validateEmptyText(String? fieldName, String? value) {
     if (value == null || value.isEmpty) {
-      return '$fieldName is required.';
+      return '$fieldName harap diisi.';
     }
     return null;
   }
@@ -11,14 +11,14 @@ class TValidator {
   static String? validateJenisLahan(
       String fieldName, JenisLahanDataModel? value) {
     if (value == null) {
-      return '$fieldName is required.';
+      return '$fieldName harap diisi.';
     }
     return null;
   }
 
   static String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Email is required.';
+      return 'Email harap diisi.';
     }
 
     // Regular expression for email validation
@@ -33,7 +33,7 @@ class TValidator {
 
   static String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Password is required.';
+      return 'Password harap diisi.';
     }
 
     // Check for minimum password length
@@ -61,7 +61,7 @@ class TValidator {
 
   static String? validatePhoneNumber(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Phone number is required.';
+      return 'Phone number harap diisi.';
     }
 
     // Regular expression for phone number validation (assuming a 10-digit US phone number format)

@@ -45,38 +45,46 @@ class _LahanSayaScreenState extends State<LahanSayaScreen> {
               fontStyle: FontStyle.normal),
         ),
       ),
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Column(
-            children: [
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  double buttonSize = constraints.maxWidth * 0.09;
-                  return Row(
-                    children: [
-                      Expanded(
-                          child: CustomSearchBar(
-                        controller: searchController,
-                        onSearchChanged: _updateSearchQuery,
-                      )),
-                      FilterButton(
-                        size: buttonSize,
-                        onFilterChanged: _updateFilters,
-                      ),
-                    ],
-                  );
-                },
-              ),
-              Expanded(
-                  child: ListLahan(
-                      selectedJenisLahan: selectedJenisLahan,
-                      selectedStatusValidasi: selectedStatusValidasi,
-                      searchQuery: searchQuery)),
-            ],
-          ),
-        ),
+      body:
+          // SingleChildScrollView(
+          //   child: SizedBox(
+          //     height: MediaQuery.of(context).size.height,
+          // child:
+
+          LayoutBuilder(
+        builder: (context, constraints) {
+          return OrientationBuilder(builder: (context, orientation) {
+            double buttonSize = orientation == Orientation.portrait
+                ? constraints.maxWidth * 0.09
+                : constraints.maxWidth * 0.04;
+            return Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                        child: CustomSearchBar(
+                      controller: searchController,
+                      onSearchChanged: _updateSearchQuery,
+                    )),
+                    FilterButton(
+                      size: buttonSize,
+                      onFilterChanged: _updateFilters,
+                    ),
+                  ],
+                ),
+                Expanded(
+                    child: ListLahan(
+                        selectedJenisLahan: selectedJenisLahan,
+                        selectedStatusValidasi: selectedStatusValidasi,
+                        searchQuery: searchQuery)),
+              ],
+            );
+            // -----------------------------------------------------------
+          });
+        },
       ),
+      //   ),
+      // ),
     );
   }
 }

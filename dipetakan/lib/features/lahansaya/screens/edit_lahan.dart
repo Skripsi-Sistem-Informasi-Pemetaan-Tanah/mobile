@@ -1,6 +1,5 @@
 import 'package:dipetakan/features/lahansaya/screens/widgets/edit_lahan_body.dart';
 // import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
-import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller_dua.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
@@ -25,7 +24,7 @@ class _EditLahanState extends State<EditLahan> {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: DColors.primary,
         title: const Text(
-          'Edit Lahan',
+          'Revisi Foto Patokan',
           style: TextStyle(
               color: Colors.white,
               fontFamily: 'Inter',
@@ -34,7 +33,7 @@ class _EditLahanState extends State<EditLahan> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Get.delete<TambahLahanControllerOld>(); // Dispose the controller
+            // Get.delete<TambahLahanControllerOld>(); // Dispose the controller
             Get.back(); // Navigate back
           },
         ),

@@ -46,7 +46,7 @@ class UpdateEmailController extends GetxController {
     try {
       //Start loading
       DFullScreenLoader.openLoadingDialog(
-          'We are updating your information', TImages.docerAnimation);
+          'Sedang memproses', TImages.docerAnimation);
 
       //Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
@@ -62,7 +62,7 @@ class UpdateEmailController extends GetxController {
 
       if (serverresponse.statusCode != 200) {
         DLoaders.errorSnackBar(
-          title: 'Oh Snap!',
+          title: 'Oh Tidak!',
           message: 'Server or Database is not connected',
         );
         DFullScreenLoader.stopLoading();
@@ -102,7 +102,7 @@ class UpdateEmailController extends GetxController {
       Get.to(() => VerifyUpdateEmailScreen(email: newEmail.text.trim()));
     } catch (e) {
       DFullScreenLoader.stopLoading();
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
     }
   }
 
@@ -147,7 +147,7 @@ class UpdateEmailController extends GetxController {
         throw TPlatformException(e.code).message;
       }
     } catch (e) {
-      throw 'Something went wrong, try again: $e';
+      throw 'Ada sebuah kesalahan, harap coba lagi!: $e';
       // DLoaders.errorSnackBar(
       //     title: 'Error', message: 'Something went wrong try again : $e');
     }
@@ -159,10 +159,10 @@ class UpdateEmailController extends GetxController {
       await AuthenticationRepository.instance
           .verifyBeforeUpdateEmail(newEmail.text.trim());
       DLoaders.successSnackBar(
-          title: 'Email Sent',
-          message: 'Please check your email and verify your email');
+          title: 'Email Terkirim',
+          message: 'Harap periksa dan verifikasi email Anda');
     } catch (e) {
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
     }
   }
 
@@ -206,7 +206,7 @@ class UpdateEmailController extends GetxController {
       Get.off(() => const LoginScreen());
     } catch (e) {
       DFullScreenLoader.stopLoading();
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
     }
   }
 }

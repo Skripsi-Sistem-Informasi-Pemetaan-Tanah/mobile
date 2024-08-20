@@ -1,5 +1,4 @@
 import 'package:dipetakan/util/constants/colors.dart';
-import 'package:dipetakan/util/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -19,9 +18,10 @@ class DLoaders {
           margin: const EdgeInsets.symmetric(horizontal: 38),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            color: DHelperFunctions.isDarkMode(Get.context!)
-                ? DColors.darkerGrey.withOpacity(6.9)
-                : DColors.grey.withOpacity(0.9),
+            color: DColors.grey.withOpacity(0.9),
+            // DHelperFunctions.isDarkMode(Get.context!)
+            //     ? DColors.darkerGrey.withOpacity(6.9)
+            //     : DColors.grey.withOpacity(0.9),
           ), // BoxDecoration
           child: Center(
               child: Text(message,

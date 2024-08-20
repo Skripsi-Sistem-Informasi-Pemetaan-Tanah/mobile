@@ -1,11 +1,12 @@
 import 'package:dipetakan/features/authentication/controllers/signup/signup_controller.dart';
 // import 'package:dipetakan/features/authentication/controllers/signup/signup_controller_postgres.dart';
-import 'package:dipetakan/features/authentication/screens/login/login.dart';
+import 'package:dipetakan/features/authentication/screens/signup/kebijakan_privasi.dart';
+import 'package:dipetakan/features/authentication/screens/signup/ketentuan_penggunaan.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
-import 'package:dipetakan/util/helpers/helper_functions.dart';
 import 'package:dipetakan/util/validators/validation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:get_storage/get_storage.dart';
@@ -35,7 +36,7 @@ class _DSignupBodyState extends State<DSignupBody> {
 
   @override
   Widget build(BuildContext context) {
-    final dark = DHelperFunctions.isDarkMode(context);
+    // final dark = DHelperFunctions.isDarkMode(context);
     final controller = Get.put(SignupController());
     return Form(
       key: controller.signupFormKey,
@@ -119,31 +120,47 @@ class _DSignupBodyState extends State<DSignupBody> {
                   ),
                 ),
                 const SizedBox(width: DSizes.spaceBtwItems),
-                Text.rich(
-                  TextSpan(children: [
-                    TextSpan(
-                        text: '${DTexts.iAgreeTo} ',
-                        style: Theme.of(context).textTheme.bodySmall),
-                    TextSpan(
+                Expanded(
+                  child: Text.rich(
+                    TextSpan(children: [
+                      TextSpan(
+                          text: '${DTexts.iAgreeTo} ',
+                          style: Theme.of(context).textTheme.bodySmall),
+                      TextSpan(
                         text: DTexts.privacyPolicy,
                         style: Theme.of(context).textTheme.bodySmall!.apply(
-                              color: dark ? DColors.white : DColors.primary,
+                              color: DColors.primary,
+                              // dark ? DColors.white : DColors.primary,
                               decoration: TextDecoration.underline,
-                              decorationColor:
-                                  dark ? DColors.white : DColors.primary,
-                            )),
-                    TextSpan(
-                        text: ' ${DTexts.and} ',
-                        style: Theme.of(context).textTheme.bodySmall),
-                    TextSpan(
+                              decorationColor: DColors.primary,
+                              // dark ? DColors.white : DColors.primary,
+                            ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            // Navigate to the Privacy Policy screen
+                            Get.to(() => const KebijakanPrivasi());
+                          },
+                      ),
+                      TextSpan(
+                          text: ' ${DTexts.and} ',
+                          style: Theme.of(context).textTheme.bodySmall),
+                      TextSpan(
                         text: DTexts.termsOfUse,
                         style: Theme.of(context).textTheme.bodySmall!.apply(
-                              color: dark ? DColors.white : DColors.primary,
+                              color: DColors.primary,
+                              // dark ? DColors.white : DColors.primary,
                               decoration: TextDecoration.underline,
-                              decorationColor:
-                                  dark ? DColors.white : DColors.primary,
-                            )),
-                  ]),
+                              decorationColor: DColors.primary,
+                              // dark ? DColors.white : DColors.primary,
+                            ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            // Navigate to the Privacy Policy screen
+                            Get.to(() => const KetentuanPenggunaan());
+                          },
+                      ),
+                    ]),
+                  ),
                 ),
               ],
             ),
@@ -162,8 +179,9 @@ class _DSignupBodyState extends State<DSignupBody> {
             SizedBox(
               width: double.infinity,
               child: TextButton(
-                  onPressed: () => Get.offAll(() => const LoginScreen()),
-                  child: const Text('Sudah Punya Akun? Login')),
+                  onPressed: () => Get.back(),
+                  child: const Text('Sudah Punya Akun? Login',
+                      style: TextStyle(color: Colors.black))),
             ),
             const SizedBox(height: DSizes.spaceBtwItems),
           ],

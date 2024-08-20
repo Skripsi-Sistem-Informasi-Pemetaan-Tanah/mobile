@@ -3,6 +3,7 @@ import 'package:dipetakan/features/navigation/controllers/user_controller.dart';
 // import 'package:dipetakan/features/navigation/controllers/user_controller_postgres.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/profilsaya.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
+import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:dipetakan/util/helpers/network_manager.dart';
 import 'package:dipetakan/util/popups/full_screen_loader.dart';
 import 'package:dipetakan/util/popups/loaders.dart';
@@ -59,13 +60,13 @@ class UpdatePhoneNoController extends GetxController {
 
       //Show success message
       DLoaders.successSnackBar(
-          title: 'Congratulations', message: 'Your name has been updated');
+          title: DTexts.selamat, message: DTexts.dataDiubah);
 
       //Move to verify email screen
       Get.off(() => const ProfilSayaScreen());
     } catch (e) {
       DFullScreenLoader.stopLoading();
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
     }
   }
 }

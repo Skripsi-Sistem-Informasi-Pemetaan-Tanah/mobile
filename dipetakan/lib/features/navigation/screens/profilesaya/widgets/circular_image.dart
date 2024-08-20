@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dipetakan/features/navigation/screens/widgets/shimmer.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
-import 'package:dipetakan/util/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class DCircularImages extends StatelessWidget {
@@ -31,10 +30,13 @@ class DCircularImages extends StatelessWidget {
       height: height,
       // padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
-        color: backgroundColor ??
-            (DHelperFunctions.isDarkMode(context)
-                ? DColors.black
-                : DColors.white),
+        color:
+            //  backgroundColor ??
+            //     (DHelperFunctions.isDarkMode(context)
+            //         ? DColors.black
+            //         :
+            DColors.white,
+        // ),
         borderRadius: BorderRadius.circular(100),
       ),
       child: ClipRRect(

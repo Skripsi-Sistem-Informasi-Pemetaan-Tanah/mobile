@@ -24,7 +24,7 @@ class _EditNamaScreenState extends State<EditNamaScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: DColors.primary,
         title: const Text(
-          'Edit Profil',
+          'Edit Nama Lengkap',
           style: TextStyle(
               color: Colors.white,
               fontFamily: 'Inter',

@@ -196,8 +196,8 @@
 
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 // import 'package:dipetakan/features/authentication/models/user_model.dart';
-import 'package:dipetakan/features/lahansaya/screens/edit_lahan.dart';
 import 'package:dipetakan/features/lahansaya/screens/lacak_status.dart';
+// import 'package:dipetakan/features/lahansaya/screens/peta_titik_validasi.dart';
 import 'package:dipetakan/features/petalahan/controllers/infolahan_controller.dart';
 // import 'package:dipetakan/features/lahansaya/screens/edit_lahan.dart';
 import 'package:dipetakan/features/lahansaya/screens/widgets/carousel_slide.dart';
@@ -221,11 +221,11 @@ class _DeskripsiLahanState extends State<DeskripsiLahan> {
   Widget build(BuildContext context) {
     final controller = Get.put(InfoLahanController());
     // Get the newest progressVerifikasi
-    int newestProgressVerifikasi = widget.lahan.verifikasi.isNotEmpty
-        ? widget.lahan.verifikasi.first.progress
-        : 0;
-    final authRepository = Get.find<AuthenticationRepository>();
-    final String currentUserId = authRepository.authUser?.uid ?? '';
+    // int newestProgressVerifikasi = widget.lahan.verifikasi.isNotEmpty
+    //     ? widget.lahan.verifikasi.first.progress
+    //     : 0;
+    // final authRepository = Get.find<AuthenticationRepository>();
+    // final String currentUserId = authRepository.authUser?.uid ?? '';
 
     // Foto Lahan & Patokan
     Widget buildCarousel(List<String> photoUrls) {
@@ -265,7 +265,8 @@ class _DeskripsiLahanState extends State<DeskripsiLahan> {
         stream: controller.lahanStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CircularProgressIndicator(color: Colors.green));
           }
 
           if (snapshot.hasError) {
@@ -277,10 +278,12 @@ class _DeskripsiLahanState extends State<DeskripsiLahan> {
           }
 
           final lahanList = snapshot.data!;
+          // final lahan = lahanList.where((lahan) => lahan.id == widget.lahan.id);
           final lahan = lahanList.firstWhere(
             (element) => element.id == widget.lahan.id,
             orElse: () => widget.lahan,
           );
+          // final lahan = widget.lahan;
 
           // Filter the patokan list to include only those with fotoPatokan
           final List<String> photoUrls = lahan.patokan
@@ -308,13 +311,13 @@ class _DeskripsiLahanState extends State<DeskripsiLahan> {
               statusVerifikasiText = 'Sudah tervalidasi';
               break;
             case 3:
-              statusVerifikasiText = 'Tidak ada status';
+              statusVerifikasiText = 'Ditolak';
               break;
             default:
               statusVerifikasiText = 'Tidak ada status';
           }
 
-          // Find the user who owns this lahan
+          // // Find the user who owns this lahan
           // final user = controller.userList.firstWhere(
           //     (user) => user.id == lahan.userId,
           //     orElse: () => UserModel.empty());
@@ -333,7 +336,7 @@ class _DeskripsiLahanState extends State<DeskripsiLahan> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(lahan.namaPemilik,
+                        Text(widget.lahan.namaPemilik,
                             style: Theme.of(context).textTheme.bodyLarge),
                         const SizedBox(height: DSizes.xs),
                         Text(lahan.namaLahan,
@@ -350,7 +353,7 @@ class _DeskripsiLahanState extends State<DeskripsiLahan> {
                                       ?.uid ==
                                   widget.lahan.userId,
                               child: TextButton(
-                                onPressed: () => Get.off(() =>
+                                onPressed: () => Get.to(() =>
                                     LacakStatusScreen(lahan: widget.lahan)),
                                 child: Text(
                                   'Lacak Status',
@@ -378,30 +381,33 @@ class _DeskripsiLahanState extends State<DeskripsiLahan> {
           );
         },
       ),
-      floatingActionButton:
-          newestProgressVerifikasi == 20 && currentUserId == widget.lahan.userId
-              ? Padding(
-                  padding: const EdgeInsets.only(
-                    left: DSizes.defaultSpace,
-                    right: DSizes.defaultSpace,
-                    bottom: DSizes.defaultSpace,
-                  ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    EditLahan(lahan: widget.lahan)),
-                          );
-                        },
-                        child: const Text('Edit')),
-                  ),
-                )
-              : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton:
+      //     // newestProgressVerifikasi == 20 && currentUserId == widget.lahan.userId
+      //     //     ?
+      //     Padding(
+      //   padding: const EdgeInsets.only(
+      //     left: DSizes.defaultSpace,
+      //     right: DSizes.defaultSpace,
+      //     bottom: DSizes.defaultSpace,
+      //   ),
+      //   child: SizedBox(
+      //     width: double.infinity,
+      //     child: ElevatedButton(
+      //         onPressed: () {
+      //           // Get.to(() => EditLahan(lahan: widget.lahan));
+      //           Get.to(() => PetaTitikValidasi(lahan: widget.lahan));
+      //           // Navigator.push(
+      //           //   context,
+      //           //   MaterialPageRoute(
+      //           //       builder: (context) =>
+      //           //           EditLahan(lahan: widget.lahan)),
+      //           // );
+      //         },
+      //         child: const Text('Lihat di Peta')),
+      //   ),
+      // ),
+      // // : null,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

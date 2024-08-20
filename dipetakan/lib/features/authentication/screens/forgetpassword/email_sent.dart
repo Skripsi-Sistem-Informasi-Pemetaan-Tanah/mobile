@@ -63,7 +63,8 @@ class EmailSentScreen extends StatelessWidget {
                   child: TextButton(
                       onPressed: () => ForgetPasswordController.instance
                           .resendPasswordResetEmail(email),
-                      child: const Text(DTexts.resendEmail)),
+                      child: const Text(DTexts.resendEmail,
+                          style: TextStyle(color: Colors.black))),
                 ),
               ],
             )),

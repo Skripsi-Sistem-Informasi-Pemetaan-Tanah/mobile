@@ -24,7 +24,7 @@ class _EditNotelpScreenState extends State<EditNotelpScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: DColors.primary,
         title: const Text(
-          'Edit Profil',
+          'Edit Nomor Telepon',
           style: TextStyle(
               color: Colors.white,
               fontFamily: 'Inter',

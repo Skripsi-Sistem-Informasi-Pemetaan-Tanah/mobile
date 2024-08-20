@@ -86,7 +86,8 @@ class _DLoginBodyState extends State<DLoginBody> {
                 //Forget Password
                 TextButton(
                     onPressed: () => Get.off(() => const ForgetPassScreen()),
-                    child: const Text(DTexts.forgetPassword)),
+                    child: const Text(DTexts.forgetPassword,
+                        style: TextStyle(color: Colors.black))),
               ],
             ),
             const SizedBox(height: DSizes.spaceBtwSections),

@@ -149,7 +149,7 @@ class LahanRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Failed to fetch save lahan record: $e';
+      throw 'Gagal menyimpan: $e';
     }
   }
 
@@ -215,10 +215,10 @@ class LahanRepository extends GetxController {
               .toList();
         });
       } else {
-        throw 'User not authenticated';
+        throw 'User tidak terauntetikasi';
       }
     } catch (e) {
-      throw 'Failed to fetch lahan records: $e';
+      throw 'Gagal mendapatkan data: $e';
     }
   }
 
@@ -250,7 +250,7 @@ class LahanRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Failed to fetch lahan records: $e';
+      throw 'Gagal mendapatkan data: $e';
     }
   }
 
@@ -306,7 +306,7 @@ class LahanRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 
@@ -322,7 +322,7 @@ class LahanRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 }

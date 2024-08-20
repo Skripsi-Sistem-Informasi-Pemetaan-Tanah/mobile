@@ -1,5 +1,8 @@
+import 'package:dipetakan/features/lahansaya/screens/edit_lahan.dart';
+import 'package:dipetakan/features/lahansaya/screens/peta_titik_validasi.dart';
 import 'package:dipetakan/features/petalahan/controllers/infolahan_controller.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
+// import 'package:dipetakan/features/tambahlahan/screens/editpatokan.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +44,8 @@ class _LacakStatusScreenState extends State<LacakStatusScreen> {
         return 'Dalam progress';
       case 2:
         return 'Sudah tervalidasi';
+      case 3:
+        return 'Ditolak';
       default:
         return 'Tidak ada status';
     }
@@ -57,9 +62,56 @@ class _LacakStatusScreenState extends State<LacakStatusScreen> {
         return Colors.orange;
       case 2:
         return Colors.green;
+      case 3:
+        return Colors.red;
       default:
         return Colors.grey;
     }
+  }
+
+  List<Widget> getActionButtons(String komentar, bool isFirst) {
+    List<Widget> buttons = [];
+    if (isFirst) {
+      String lowerKomentar = komentar.toLowerCase();
+
+      if (lowerKomentar
+          .startsWith("validator telah menambahkan koordinat asli")) {
+        buttons.add(
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () =>
+                  Get.to(() => PetaTitikValidasi(lahan: widget.lahan)),
+              child: const Text('Validasi Koordinat'),
+            ),
+          ),
+        );
+      }
+      if (lowerKomentar.contains(
+          "validator telah menambahkan koordinat asli dan foto patokan perlu direvisi")) {
+        buttons.add(
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => Get.to(() => EditLahan(lahan: widget.lahan)),
+              child: const Text('Revisi dan Validasi'),
+            ),
+          ),
+        );
+      }
+      if (lowerKomentar.startsWith("foto patokan perlu direvisi")) {
+        buttons.add(
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => Get.to(() => EditLahan(lahan: widget.lahan)),
+              child: const Text('Revisi Foto Patokan'),
+            ),
+          ),
+        );
+      }
+    }
+    return buttons;
   }
 
   @override
@@ -80,25 +132,23 @@ class _LacakStatusScreenState extends State<LacakStatusScreen> {
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Get.back()),
       ),
       body: StreamBuilder<List<LahanModel>>(
         stream: controller.lahanStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CircularProgressIndicator(color: Colors.green));
           }
 
           if (snapshot.hasError) {
-            return const Center(child: Text('Failed to load lahan data'));
+            return const Center(child: Text('Gagal memuat data'));
           }
 
           if (!snapshot.hasData || snapshot.data == null) {
-            return const Center(child: Text('No data available'));
+            return const Center(child: Text('Tidak ada data'));
           }
 
           final lahanList = snapshot.data!;
@@ -192,13 +242,28 @@ class _LacakStatusScreenState extends State<LacakStatusScreen> {
                                     verifikasi.comentar.isNotEmpty
                                         ? verifikasi.comentar
                                         : 'Tidak ada komentar',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                          color: Colors.black,
-                                        ),
+                                    style: isFirst
+                                        ? Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: Colors.black,
+                                            )
+                                        : Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(color: Colors.grey),
                                   ),
+                                  const SizedBox(height: DSizes.spaceBtwItems),
+                                  ...getActionButtons(
+                                      verifikasi.comentar, isFirst),
+                                  // SizedBox(
+                                  //   width: double.infinity,
+                                  //   child: ElevatedButton(
+                                  //       onPressed: () => Get.to(
+                                  //           () => const PetaTitikValidasi()),
+                                  //       child: const Text('Cek Koordinat')),
+                                  // ),
                                 ],
                               ),
                             ),

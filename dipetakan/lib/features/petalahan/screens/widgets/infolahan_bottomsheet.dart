@@ -40,7 +40,7 @@ class _InfoLahanBottomSheetState extends State<InfoLahanBottomSheet> {
         statusVerifikasiText = 'Sudah tervalidasi';
         break;
       case 3:
-        statusVerifikasiText = 'Tidak ada status';
+        statusVerifikasiText = 'Ditolak';
         break;
       default:
         statusVerifikasiText = 'Tidak ada status';

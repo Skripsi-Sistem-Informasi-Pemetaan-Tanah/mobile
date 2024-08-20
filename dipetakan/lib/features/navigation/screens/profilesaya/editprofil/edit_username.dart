@@ -24,7 +24,7 @@ class _EditUsernameScreenState extends State<EditUsernameScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: DColors.primary,
         title: const Text(
-          'Edit Profil',
+          'Edit Username',
           style: TextStyle(
               color: Colors.white,
               fontFamily: 'Inter',

@@ -1,6 +1,7 @@
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/features/authentication/screens/forgetpassword/email_sent.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
+import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:dipetakan/util/helpers/network_manager.dart';
 import 'package:dipetakan/util/popups/full_screen_loader.dart';
 import 'package:dipetakan/util/popups/loaders.dart';
@@ -19,7 +20,7 @@ class ForgetPasswordController extends GetxController {
     try {
       //Start Loading
       DFullScreenLoader.openLoadingDialog(
-          'Processing your request', TImages.docerAnimation);
+          DTexts.sedangProses, TImages.docerAnimation);
 
       //Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
@@ -43,8 +44,8 @@ class ForgetPasswordController extends GetxController {
 
       //Show success message
       DLoaders.successSnackBar(
-          title: 'Email Sent',
-          message: 'Email link sent to Reset your Password');
+          title: 'Email Terkirim',
+          message: 'Email link untuk mengubah kata sandi Anda telah terkirim');
 
       //Redirect
       Get.to(() => EmailSentScreen(email: email.text.trim()));
@@ -53,7 +54,7 @@ class ForgetPasswordController extends GetxController {
       DFullScreenLoader.stopLoading();
 
       //Show some generic error to the user
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
     }
   }
 
@@ -61,7 +62,7 @@ class ForgetPasswordController extends GetxController {
     try {
       //Start Loading
       DFullScreenLoader.openLoadingDialog(
-          'Processing your request', TImages.docerAnimation);
+          DTexts.sedangProses, TImages.docerAnimation);
 
       //Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
@@ -84,14 +85,14 @@ class ForgetPasswordController extends GetxController {
 
       //Show success message
       DLoaders.successSnackBar(
-          title: 'Email Sent',
-          message: 'Email link sent to Reset your Password');
+          title: 'Email Terkirim',
+          message: 'Email link untuk mengubah kata sandi Anda telah terkirim');
     } catch (e) {
       //remove loader
       DFullScreenLoader.stopLoading();
 
       //Show some generic error to the user
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
     }
   }
 }

@@ -20,7 +20,7 @@ class _TambahLahanState extends State<TambahLahan> {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: DColors.primary,
         title: const Text(
-          'Tambah Lahan',
+          'Plot Lahan',
           style: TextStyle(
               color: Colors.white,
               fontFamily: 'Inter',

@@ -62,7 +62,8 @@ class VerifyUpdateEmailScreen extends StatelessWidget {
                   width: double.infinity,
                   child: TextButton(
                       onPressed: () => controller.sendEmailVerification(),
-                      child: const Text(DTexts.resendEmail)),
+                      child: const Text(DTexts.resendEmail,
+                          style: TextStyle(color: Colors.black))),
                 ),
               ],
             )),

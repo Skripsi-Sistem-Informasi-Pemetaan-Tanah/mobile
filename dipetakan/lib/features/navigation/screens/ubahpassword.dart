@@ -24,7 +24,7 @@ class _UbahPasswordState extends State<UbahPassword> {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: DColors.primary,
         title: const Text(
-          'Ubah Password',
+          'Ubah Kata Sandi',
           style: TextStyle(
               color: Colors.white,
               fontFamily: 'Inter',
@@ -32,38 +32,41 @@ class _UbahPasswordState extends State<UbahPassword> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(
-            top: DSizes.defaultSpace,
-            left: DSizes.defaultSpace,
-            right: DSizes.defaultSpace,
-            bottom: DSizes.defaultSpace,
+        child: Form(
+          key: controller.forgetPasswordFormKey,
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: DSizes.defaultSpace,
+              left: DSizes.defaultSpace,
+              right: DSizes.defaultSpace,
+              bottom: DSizes.defaultSpace,
+            ),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Masukkan Ulang Email',
+                      style: Theme.of(context).textTheme.bodyMedium),
+                  const SizedBox(height: DSizes.spaceBtwItems),
+                  TextFormField(
+                    controller: controller.email,
+                    validator: TValidator.validateEmail,
+                    decoration: const InputDecoration(
+                        prefixIcon: Icon(Iconsax.direct_right),
+                        labelText: DTexts.email),
+                  ),
+
+                  const SizedBox(height: DSizes.spaceBtwSections),
+
+                  //Submit Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        onPressed: () => controller.sendPasswordResetEmail(),
+                        child: const Text(DTexts.submit)),
+                  ),
+                ]),
           ),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text('Masukkan Ulang Email',
-                    style: Theme.of(context).textTheme.bodyMedium),
-                const SizedBox(height: DSizes.spaceBtwItems),
-                TextFormField(
-                  controller: controller.email,
-                  validator: TValidator.validateEmail,
-                  decoration: const InputDecoration(
-                      prefixIcon: Icon(Iconsax.direct_right),
-                      labelText: DTexts.email),
-                ),
-
-                const SizedBox(height: DSizes.spaceBtwSections),
-
-                //Submit Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                      onPressed: () => controller.sendPasswordResetEmail(),
-                      child: const Text(DTexts.submit)),
-                ),
-              ]),
         ),
       ),
     );

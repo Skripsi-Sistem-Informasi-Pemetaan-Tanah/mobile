@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/data/repositories/authentication/user_repository.dart';
 import 'package:dipetakan/features/authentication/models/user_model.dart';
@@ -7,6 +5,7 @@ import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/reauthenticated_user_screen.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
+import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:dipetakan/util/helpers/network_manager.dart';
 import 'package:dipetakan/util/popups/full_screen_loader.dart';
 import 'package:dipetakan/util/popups/loaders.dart';
@@ -77,10 +76,11 @@ class UserController extends GetxController {
   /// Delete Account Worning
   void deleteAccountWarningPopup(UserModel user) {
     Get.defaultDialog(
-      contentPadding: const EdgeInsets.all(DSizes.md),
-      title: 'Delete Account',
+      // contentPadding: const EdgeInsets.all(DSizes.md)
+      backgroundColor: Colors.white,
+      title: 'Hapus Akun',
       middleText:
-          "Are you sure you want to delete your account permanently? This action is not reversible and all of your data will be removed permanently",
+          "Apakah Anda yakin ingin menghapus akun Anda secara permanen? Tindakan ini tidak dapat dibatalkan dan semua data Anda akan dihapus secara permanen.",
       confirm: ElevatedButton(
         onPressed: () async => deleteUserAccount(user),
         style: ElevatedButton.styleFrom(
@@ -88,11 +88,11 @@ class UserController extends GetxController {
             side: const BorderSide(color: Colors.red)),
         child: const Padding(
             padding: EdgeInsets.symmetric(horizontal: DSizes.lg),
-            child: Text('Delete')),
+            child: Text('Hapus')),
       ),
       cancel: OutlinedButton(
           onPressed: () => Navigator.of(Get.overlayContext!).pop(),
-          child: const Text('Cancel')),
+          child: const Text('Batal')),
     );
   }
 
@@ -110,29 +110,36 @@ class UserController extends GetxController {
   void deleteUserAccount(UserModel user) async {
     try {
       // Start loading
-      DFullScreenLoader.openLoadingDialog('Processing', TImages.docerAnimation);
+      DFullScreenLoader.openLoadingDialog(
+          'Sedang memproses', TImages.docerAnimation);
 
       final auth = AuthenticationRepository.instance;
       final provider =
           auth.authUser?.providerData.map((e) => e.providerId).first ?? '';
-      final userId = AuthenticationRepository.instance.authUser?.uid;
+      // final userId = AuthenticationRepository.instance.authUser?.uid;
+      final userId = user.id;
+      var url = Uri.parse('$baseUrl/deleteUser/$userId');
+      var response = await http.delete(url);
 
       if (provider.isNotEmpty) {
         // If provider data exists, re-authenticate
         DFullScreenLoader.stopLoading();
         Get.to(() => const ReAuthUserScreen());
       } else {
-        var url = Uri.parse('$baseUrl/deleteUser/$userId');
-        var response = await http.delete(
-          url,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode(user.toJson()),
-        );
+        // var url = Uri.parse('$baseUrl/deleteUser/$userId');
+        // var response = await http.delete(url);
+        // var url = Uri.parse('$baseUrl/deleteUser/$userId');
+        // var response = await http.delete(
+        //   url,
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //   },
+        //   body: jsonEncode(user.toJson()),
+        // );
 
         if (response.statusCode != 200) {
-          DLoaders.errorSnackBar(title: 'Oh Snap!', message: 'Gagal Menghapus');
+          DLoaders.errorSnackBar(
+              title: 'Oh Tidak!', message: 'Gagal Menghapus');
           DFullScreenLoader.stopLoading();
           return;
         }
@@ -147,7 +154,7 @@ class UserController extends GetxController {
       DFullScreenLoader.stopLoading();
       // Show some generic error to the user
       DLoaders.errorSnackBar(
-          title: 'Oh Snap!', message: 'Gagal Menghapus : $e');
+          title: 'Oh Tidak!', message: 'Gagal Menghapus : $e');
     }
   }
 
@@ -171,7 +178,7 @@ class UserController extends GetxController {
 
       if (serverresponse.statusCode != 200) {
         DLoaders.errorSnackBar(
-          title: 'Oh Snap!',
+          title: 'Oh Tidak!',
           message: 'Server or Database is not connected',
         );
         DFullScreenLoader.stopLoading();
@@ -197,7 +204,7 @@ class UserController extends GetxController {
       DFullScreenLoader.stopLoading();
 
       //Show some generic error to the user
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
     }
   }
 
@@ -220,12 +227,10 @@ class UserController extends GetxController {
         user.refresh();
 
         DLoaders.successSnackBar(
-            title: 'Congratulations',
-            message: 'Your Profile Image has been updated');
+            title: DTexts.selamat, message: DTexts.dataDiubah);
       }
     } catch (e) {
-      DLoaders.errorSnackBar(
-          title: 'OhSnap', message: 'Something went wrong: $e');
+      DLoaders.errorSnackBar(title: DTexts.error, message: DTexts.adaSalah);
     } finally {
       imageUploading.value = false;
     }

@@ -138,12 +138,12 @@ class InfoLahanController extends GetxController {
         profileLoading.value = false;
       }, onError: (error) {
         DLoaders.errorSnackBar(
-            title: 'Error', message: 'Failed to fetch user records: $error');
+            title: 'Error', message: 'Gagal mendapatkan data: $error');
         profileLoading.value = false;
       });
     } catch (e) {
       DLoaders.errorSnackBar(
-          title: 'Error', message: 'Failed to fetch user records: $e');
+          title: 'Error', message: 'Gagal mendapatkan data: $e');
       profileLoading.value = false;
     }
   }
@@ -189,7 +189,7 @@ class InfoLahanController extends GetxController {
 
       return lahanList;
     } else {
-      throw Exception('Failed to fetch data from PostgreSQL');
+      throw Exception('Gagal mendapatkan data');
     }
   }
 }

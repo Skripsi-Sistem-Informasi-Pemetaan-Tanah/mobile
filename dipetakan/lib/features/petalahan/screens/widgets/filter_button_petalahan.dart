@@ -2,11 +2,11 @@ import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:dipetakan/features/tambahlahan/data/jenislahanlist.dart';
 
-class FilterButton extends StatefulWidget {
+class FilterButtonPetaLahan extends StatefulWidget {
   final double size;
   final Function(List<String>, List<int>) onFilterChanged;
 
-  const FilterButton({
+  const FilterButtonPetaLahan({
     super.key,
     required this.size,
     required this.onFilterChanged,
@@ -14,18 +14,18 @@ class FilterButton extends StatefulWidget {
 
   @override
   // ignore: library_private_types_in_public_api
-  _FilterButtonState createState() => _FilterButtonState();
+  _FilterButtonPetaLahanState createState() => _FilterButtonPetaLahanState();
 }
 
-class _FilterButtonState extends State<FilterButton> {
+class _FilterButtonPetaLahanState extends State<FilterButtonPetaLahan> {
   List<String> selectedJenisLahan = [];
   List<int> selectedStatusValidasi = [];
 
   final Map<int, String> statusValidasiMap = {
-    0: 'Belum Tervalidasi',
+    // 0: 'Belum Tervalidasi',
     1: 'Dalam Progress',
     2: 'Sudah Tervalidasi',
-    3: 'Ditolak'
+    // 3: 'Ditolak'
   };
 
   @override

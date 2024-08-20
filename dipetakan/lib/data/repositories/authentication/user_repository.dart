@@ -13,8 +13,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert';
 
 class UserRepository extends GetxController {
   static UserRepository get instance => Get.find();
@@ -47,7 +45,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 
@@ -70,7 +68,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 
@@ -83,7 +81,7 @@ class UserRepository extends GetxController {
   //   } on PlatformException catch (e) {
   //     throw TPlatformException(e.code).message;
   //   } catch (e) {
-  //     throw 'Something went wrong. Please try again';
+  //     throw 'Ada sebuah kesalahan, harap coba lagi!';
   //   }
   // }
 
@@ -96,7 +94,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 
@@ -109,7 +107,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Failed to fetch user details: $e';
+      throw 'Gagal mendapatkan data: $e';
     }
   }
 
@@ -188,7 +186,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 
@@ -200,8 +198,8 @@ class UserRepository extends GetxController {
           .doc(AuthenticationRepository.instance.authUser?.uid)
           .update(json);
 
-      // Send update to Node.js server
-      // var url = Uri.parse('$baseUrl/updateField');
+      // // Send update to Node.js server
+      // var url = Uri.parse('$baseUrl/saveUser');
       // var response = await http.put(
       //   url,
       //   headers: {
@@ -223,7 +221,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 
@@ -262,7 +260,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 
@@ -280,7 +278,7 @@ class UserRepository extends GetxController {
     } on PlatformException catch (e) {
       throw TPlatformException(e.code).message;
     } catch (e) {
-      throw 'Something went wrong. Please try again';
+      throw 'Ada sebuah kesalahan, harap coba lagi!';
     }
   }
 }

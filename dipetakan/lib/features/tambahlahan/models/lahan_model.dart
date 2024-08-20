@@ -162,12 +162,23 @@ class PatokanModel {
   final String localPath;
   final String fotoPatokan;
   final String coordinates;
+  final String coordVerif;
+  int coordStatus;
+  final int coordPercent;
+  String coordComment;
+  String coordCommentUser;
+  bool isAgreed;
 
-  PatokanModel({
-    required this.localPath,
-    required this.fotoPatokan,
-    required this.coordinates,
-  });
+  PatokanModel(
+      {required this.localPath,
+      required this.fotoPatokan,
+      required this.coordinates,
+      required this.coordVerif,
+      required this.coordStatus,
+      required this.coordPercent,
+      required this.coordComment,
+      required this.coordCommentUser,
+      this.isAgreed = false});
 
   ///Convert model to JSON structure for storing data in Firestore
   Map<String, dynamic> toJson() {
@@ -175,6 +186,11 @@ class PatokanModel {
       'local_path': localPath,
       'image': fotoPatokan,
       'koordinat': coordinates,
+      'koordinat_verif': coordVerif,
+      'status': coordStatus,
+      'percent_agree': coordPercent,
+      'komentar': coordComment,
+      'komentar_mobile': coordCommentUser,
     };
   }
 
@@ -183,6 +199,11 @@ class PatokanModel {
       localPath: json['local_path'] ?? '',
       fotoPatokan: json['image'] ?? '',
       coordinates: json['koordinat'] ?? '',
+      coordVerif: json['koordinat_verif'] ?? '',
+      coordStatus: json['status'] ?? '',
+      coordPercent: json['percent_agree'] ?? '',
+      coordComment: json['komentar'] ?? '',
+      coordCommentUser: json['komentar_mobile'] ?? '',
     );
   }
 }

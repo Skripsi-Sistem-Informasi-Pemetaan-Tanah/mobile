@@ -2,6 +2,7 @@ import 'package:dipetakan/features/lahansaya/controllers/lahansaya_controller.da
 import 'package:dipetakan/features/lahansaya/screens/deskripsi_lahan.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
 import 'package:dipetakan/util/constants/colors.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -26,12 +27,13 @@ class ListLahan extends StatelessWidget {
       future: controller.fetchDataFromPostgresql(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+              child: CircularProgressIndicator(color: Colors.green));
         }
 
         if (snapshot.hasError) {
           return Center(
-              child: Text('Failed to load lahan records : ${snapshot.error}'));
+              child: Text('Gagal mendapatkan data lahan : ${snapshot.error}'));
         }
 
         List<LahanModel> lahanList = snapshot.data ?? [];
@@ -70,19 +72,27 @@ class ListLahan extends StatelessWidget {
         }
 
         return ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+          // shrinkWrap: true,
+          // physics: const NeverScrollableScrollPhysics(),
           itemCount: lahanList.length,
           itemBuilder: ((context, index) {
             final lahan = lahanList[index];
-            String imageUrl = '';
-
-            for (var patokan in lahan.patokan) {
-              if (patokan.fotoPatokan.isNotEmpty) {
-                imageUrl = patokan.fotoPatokan;
-                break;
-              }
+            // Check image URL extraction
+            for (var lahan in lahanList) {
+              if (kDebugMode) {
+                print(
+                    'lahan ID: ${lahan.id}, fotoPatokan: ${lahan.patokan.first.fotoPatokan}');
+              } // Replace with correct property access
             }
+            String imageUrl =
+                lahan.patokan.isNotEmpty ? lahan.patokan[0].fotoPatokan : '';
+
+            // for (var patokan in lahan.patokan) {
+            //   if (patokan.fotoPatokan.isNotEmpty) {
+            //     imageUrl = patokan.fotoPatokan;
+            //     break;
+            //   }
+            // }
 
             Widget imageWidget;
             if (imageUrl.isNotEmpty) {
@@ -160,7 +170,7 @@ class ListLahan extends StatelessWidget {
                 statusVerifikasiText = 'Sudah tervalidasi';
                 break;
               case 3:
-                statusVerifikasiText = 'Tidak ada status';
+                statusVerifikasiText = 'Ditolak';
                 break;
               default:
                 statusVerifikasiText = 'Tidak ada status';

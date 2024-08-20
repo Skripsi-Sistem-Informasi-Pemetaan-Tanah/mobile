@@ -1,6 +1,6 @@
 // import 'package:dipetakan/features/lahansaya/screens/widgets/search_bar.dart';
-import 'package:dipetakan/features/lahansaya/screens/widgets/filter_button.dart';
 import 'package:dipetakan/features/petalahan/controllers/petalahan_controller.dart';
+import 'package:dipetakan/features/petalahan/screens/widgets/filter_button_petalahan.dart';
 // import 'package:dipetakan/features/petalahan/screens/widgets/infolahan_bottomsheet.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +103,7 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
             Positioned(
               top: 1,
               right: 50,
-              child: FilterButton(
+              child: FilterButtonPetaLahan(
                 size: 38,
                 onFilterChanged:
                     // setFilters,

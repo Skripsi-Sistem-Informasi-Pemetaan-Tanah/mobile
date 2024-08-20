@@ -1,18 +1,22 @@
 // import 'dart:convert';
 
+import 'dart:convert';
+
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/data/repositories/authentication/user_repository.dart';
 import 'package:dipetakan/features/authentication/models/user_model.dart';
 import 'package:dipetakan/features/authentication/screens/signup/email_verification.dart';
+import 'package:dipetakan/util/constants/api_constants.dart';
 // import 'package:dipetakan/util/constants/api_constants.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
+import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:dipetakan/util/popups/full_screen_loader.dart';
 import 'package:dipetakan/util/popups/loaders.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dipetakan/util/helpers/network_manager.dart';
-// import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
 
 class SignupController extends GetxController {
   static SignupController get instance => Get.find();
@@ -33,7 +37,7 @@ class SignupController extends GetxController {
     try {
       //Start loading
       DFullScreenLoader.openLoadingDialog(
-          'We are processing your information', TImages.docerAnimation);
+          DTexts.sedangProses, TImages.docerAnimation);
 
       //Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
@@ -49,7 +53,7 @@ class SignupController extends GetxController {
 
       // if (serverresponse.statusCode != 200) {
       //   DLoaders.errorSnackBar(
-      //     title: 'Oh Snap!',
+      //     title: 'Oh Tidak!',
       //     message: 'Server or Database is not connected',
       //   );
       //   DFullScreenLoader.stopLoading();
@@ -85,28 +89,29 @@ class SignupController extends GetxController {
           phoneNo: phoneNo.text.trim(),
           profilePicture: '');
 
-      // var url = Uri.parse('$baseUrl/saveUser');
-      // var response = await http.post(
-      //   url,
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: jsonEncode(newUser.toJson()),
-      // );
+      var url = Uri.parse('$baseUrl/saveUser');
+      var response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(newUser.toJson()),
+      );
 
-      // if (response.statusCode != 200) {
-      //   DLoaders.errorSnackBar(title: 'Oh Snap!', message: 'Gagal Menyimpan');
-      //   DFullScreenLoader.stopLoading();
-      //   return;
-      // }
+      if (response.statusCode != 200) {
+        DLoaders.errorSnackBar(title: 'Oh Tidak!', message: 'Gagal Menyimpan');
+        DFullScreenLoader.stopLoading();
+        return;
+      }
 
       final userRepository = Get.put(UserRepository());
       userRepository.saveUserRecord(newUser);
 
       //Show success message
       DLoaders.successSnackBar(
-          title: 'Congratulations',
-          message: 'Your account has been created! Verify email to continue');
+          title: 'Selamat!',
+          message:
+              'Akun anda sudah berhasil dibuat, silahkan verifikasi email Anda untuk melanjutkan');
 
       //Move to verify email screen
       Get.to(() => VerifyEmailScreen(email: email.text.trim()));
@@ -115,7 +120,7 @@ class SignupController extends GetxController {
       DFullScreenLoader.stopLoading();
 
       //Show some generic error to the user
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
     }
   }
 }

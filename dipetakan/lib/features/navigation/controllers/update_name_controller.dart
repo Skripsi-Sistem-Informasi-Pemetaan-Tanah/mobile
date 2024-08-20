@@ -1,8 +1,12 @@
+import 'dart:convert';
+
+import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/data/repositories/authentication/user_repository.dart';
 import 'package:dipetakan/features/navigation/controllers/user_controller.dart';
 // import 'package:dipetakan/features/navigation/controllers/user_controller_postgres.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/profilsaya.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
+import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:dipetakan/util/helpers/network_manager.dart';
 import 'package:dipetakan/util/popups/full_screen_loader.dart';
 import 'package:dipetakan/util/popups/loaders.dart';
@@ -48,7 +52,7 @@ class UpdateNameController extends GetxController {
 
       if (serverresponse.statusCode != 200) {
         DLoaders.errorSnackBar(
-          title: 'Oh Snap!',
+          title: 'Oh Tidak!',
           message: 'Server or Database is not connected',
         );
         DFullScreenLoader.stopLoading();
@@ -68,18 +72,36 @@ class UpdateNameController extends GetxController {
 
       userController.user.value.fullName = fullName.text.trim();
 
+      var url = Uri.parse('$baseUrl/saveUser');
+      var response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'user_id': AuthenticationRepository.instance.authUser?.uid,
+          'nama_lengkap': fullName.text.trim(),
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        DLoaders.errorSnackBar(title: 'Oh Tidak!', message: 'Gagal Menyimpan');
+        DFullScreenLoader.stopLoading();
+        return;
+      }
+
       //remove loader
       DFullScreenLoader.stopLoading();
 
       //Show success message
       DLoaders.successSnackBar(
-          title: 'Congratulations', message: 'Your name has been updated');
+          title: DTexts.selamat, message: DTexts.dataDiubah);
 
       //Move to verify email screen
       Get.off(() => const ProfilSayaScreen());
     } catch (e) {
       DFullScreenLoader.stopLoading();
-      DLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
     }
   }
 }
