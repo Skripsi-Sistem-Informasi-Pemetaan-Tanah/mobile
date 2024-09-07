@@ -205,6 +205,12 @@ class _LacakStatusScreenState extends State<LacakStatusScreen> {
                         final color = getStatusColor(
                             verifikasi.statusverifikasi, isFirst);
 
+                        // Skip the tile if the comment contains "masih dalam progress"
+                        if (verifikasi.comentar
+                            .contains("Data masih dalam progress")) {
+                          return const SizedBox.shrink();
+                        }
+
                         return TimelineTile(
                           alignment: TimelineAlign.start,
                           isFirst: isFirst,

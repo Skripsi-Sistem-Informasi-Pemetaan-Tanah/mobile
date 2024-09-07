@@ -292,7 +292,7 @@ class PetaLahanController extends GetxController {
           position: point,
           icon: markerColor,
           infoWindow: InfoWindow(
-            title: 'Status Koordinat : ${patokan.coordPercent}%',
+            title: lahan.namaLahan,
             snippet: 'Koordinat: ${point.latitude}, ${point.longitude}',
           ),
         ),

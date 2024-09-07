@@ -75,9 +75,7 @@ class _PetaTitikValidasiState extends State<PetaTitikValidasi> {
                       controller.mapController.complete(mapController);
                     }
                   },
-                  markers: controller.buildMarkers(
-                      // mapId: widget.mapId
-                      ),
+                  markers: controller.buildMarkers(mapId: widget.lahan.id),
                   // controller.markers.toSet(),
                   polygons: controller.buildPolygons(mapId: widget.lahan.id),
                   zoomControlsEnabled: false,

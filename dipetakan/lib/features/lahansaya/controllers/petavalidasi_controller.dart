@@ -3,7 +3,8 @@ import 'dart:convert';
 // import 'dart:io';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dipetakan/data/repositories/tambahlahan/lahan_repository.dart';
-import 'package:dipetakan/features/lahansaya/screens/lacak_status.dart';
+// import 'package:dipetakan/features/lahansaya/screens/lacak_status.dart';
+import 'package:dipetakan/features/navigation/screens/navigation.dart';
 // import 'package:dipetakan/features/navigation/screens/navigation.dart';
 // import 'package:dipetakan/features/petalahan/screens/widgets/infolahan_bottomsheet.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
@@ -262,15 +263,15 @@ class PetaValidasiController extends GetxController {
     });
   }
 
-  Set<Marker> buildMarkers() {
+  Set<Marker> buildMarkers({required String mapId}) {
     // Set<Marker> markers = {};
 
     // Iterate through lahanData
     for (var lahan in lahanData) {
-      // if (lahan.id != mapId) {
-      //   // Skip lahan that does not match the mapId
-      //   continue;
-      // }
+      if (lahan.id != mapId) {
+        // Skip lahan that does not match the mapId
+        continue;
+      }
       // Check if verifikasi list is not empty
       if (lahan.verifikasi.isNotEmpty) {
         for (var patokan in lahan.patokan) {
@@ -299,7 +300,7 @@ class PetaValidasiController extends GetxController {
               icon: markerIcon,
               infoWindow: InfoWindow(
                 title:
-                    "Titik Validasi", // Use coordComment if available, else "Tidak Ada Komentar"
+                    "Tap untuk validasi", // Use coordComment if available, else "Tidak Ada Komentar"
                 // patokan.coordComment, // Use coordComment for the title
                 snippet: 'Coordinate: ${point.latitude}, ${point.longitude}',
                 onTap: () => _onMarkerTapped(patokan),
@@ -344,6 +345,8 @@ class PetaValidasiController extends GetxController {
                       child: RadioListTile<bool>(
                         fillColor: WidgetStateProperty.all(Colors.green),
                         title: const Text('Setuju'),
+                        contentPadding: EdgeInsets.zero,
+                        visualDensity: VisualDensity.compact,
                         value: true,
                         groupValue: patokan.isAgreed,
                         onChanged: (bool? value) {
@@ -359,6 +362,8 @@ class PetaValidasiController extends GetxController {
                       child: RadioListTile<bool>(
                         fillColor: WidgetStateProperty.all(Colors.green),
                         title: const Text('Tidak Setuju'),
+                        contentPadding: EdgeInsets.zero,
+                        visualDensity: VisualDensity.compact,
                         value: false,
                         groupValue: patokan.isAgreed,
                         onChanged: (bool? value) {
@@ -515,8 +520,8 @@ class PetaValidasiController extends GetxController {
 
       // Navigate to PetaTitikValidasi
       // DFullScreenLoader.stopLoading();
-      // Get.offAll(() => const NavigationMenu());
-      Get.off(() => LacakStatusScreen(lahan: existingLahan));
+      Get.offAll(() => const NavigationMenu());
+      // Get.off(() => LacakStatusScreen(lahan: existingLahan));
     } catch (e) {
       DFullScreenLoader.stopLoading();
       DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());

@@ -1,0 +1,1804 @@
+@startuml
+set namespaceSeparator ::
+
+class "dipetakan::app.dart::App" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::app.dart::App"
+
+class "dipetakan::bindings::general_bindings.dart::GeneralBindings" {
+  +void dependencies()
+}
+
+"get::get_instance::src::bindings_interface.dart::Bindings" <|-- "dipetakan::bindings::general_bindings.dart::GeneralBindings"
+
+class "dipetakan::common::styles::spacing_styles.dart::DSpacingStyle" {
+  {static} +EdgeInsetsGeometry paddingWithAppBarHeight
+}
+
+"dipetakan::common::styles::spacing_styles.dart::DSpacingStyle" o-- "flutter::src::painting::edge_insets.dart::EdgeInsetsGeometry"
+
+class "dipetakan::common::widgets::loaders::animation_loader.dart::DAnimationLoaderWidget" {
+  +String text
+  +String animation
+  +bool showAction
+  +String? actionText
+  +void Function()? onActionPressed
+  +Widget build()
+}
+
+"dipetakan::common::widgets::loaders::animation_loader.dart::DAnimationLoaderWidget" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::common::widgets::loaders::animation_loader.dart::DAnimationLoaderWidget"
+
+class "dipetakan::data::repositories::authentication::authentication_repository.dart::AuthenticationRepository" {
+  +GetStorage deviceStorage
+  -FirebaseAuth _auth
+  {static} +AuthenticationRepository instance
+  +User? authUser
+  +void onReady()
+  +void screenRedirect()
+  +dynamic loginWithEmailAndPassword()
+  +dynamic registerWithEmailAndPassword()
+  +dynamic sendEmailVerification()
+  +dynamic sendPasswordResetEmail()
+  +dynamic reAuthenticatedEmailandPassword()
+  +dynamic verifyBeforeUpdateEmail()
+  +dynamic userUpdated()
+  +dynamic logout()
+  +dynamic deleteAccount()
+}
+
+"dipetakan::data::repositories::authentication::authentication_repository.dart::AuthenticationRepository" o-- "get_storage::src::storage_impl.dart::GetStorage"
+"dipetakan::data::repositories::authentication::authentication_repository.dart::AuthenticationRepository" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"dipetakan::data::repositories::authentication::authentication_repository.dart::AuthenticationRepository" o-- "dipetakan::data::repositories::authentication::authentication_repository.dart::AuthenticationRepository"
+"dipetakan::data::repositories::authentication::authentication_repository.dart::AuthenticationRepository" o-- "firebase_auth::firebase_auth.dart::User"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::data::repositories::authentication::authentication_repository.dart::AuthenticationRepository"
+
+class "dipetakan::data::repositories::authentication::user_repository.dart::UserRepository" {
+  -FirebaseFirestore _db
+  {static} +UserRepository instance
+  +dynamic saveUserRecord()
+  +dynamic fetchUserDetails()
+  +dynamic fetchAllUserIds()
+  +dynamic fetchUserById()
+  +dynamic updateUserDetails()
+  +dynamic updateSingleField()
+  +dynamic removeUserRecord()
+  +dynamic uploadImage()
+}
+
+"dipetakan::data::repositories::authentication::user_repository.dart::UserRepository" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"dipetakan::data::repositories::authentication::user_repository.dart::UserRepository" o-- "dipetakan::data::repositories::authentication::user_repository.dart::UserRepository"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::data::repositories::authentication::user_repository.dart::UserRepository"
+
+class "dipetakan::data::repositories::tambahlahan::lahan_repository.dart::LahanRepository" {
+  -FirebaseFirestore _db
+  {static} +LahanRepository instance
+  +void onInit()
+  +dynamic saveLahanRecord()
+  +Stream<List<LahanModel>> fetchAllLahanByUserId()
+  +Stream<List<LahanModel>> fetchAllLahan()
+  +dynamic updateLahanDetails()
+  +dynamic removeLahanRecord()
+  +dynamic uploadImage()
+  +dynamic deleteImage()
+}
+
+"dipetakan::data::repositories::tambahlahan::lahan_repository.dart::LahanRepository" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"dipetakan::data::repositories::tambahlahan::lahan_repository.dart::LahanRepository" o-- "dipetakan::data::repositories::tambahlahan::lahan_repository.dart::LahanRepository"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::data::repositories::tambahlahan::lahan_repository.dart::LahanRepository"
+
+class "dipetakan::features::authentication::controllers::forget_password::forget_password_controller.dart::ForgetPasswordController" {
+  +TextEditingController email
+  +GlobalKey<FormState> forgetPasswordFormKey
+  {static} +ForgetPasswordController instance
+  +dynamic sendPasswordResetEmail()
+  +dynamic resendPasswordResetEmail()
+}
+
+"dipetakan::features::authentication::controllers::forget_password::forget_password_controller.dart::ForgetPasswordController" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"dipetakan::features::authentication::controllers::forget_password::forget_password_controller.dart::ForgetPasswordController" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"dipetakan::features::authentication::controllers::forget_password::forget_password_controller.dart::ForgetPasswordController" o-- "dipetakan::features::authentication::controllers::forget_password::forget_password_controller.dart::ForgetPasswordController"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::authentication::controllers::forget_password::forget_password_controller.dart::ForgetPasswordController"
+
+class "dipetakan::features::authentication::controllers::login::login_controller.dart::LoginController" {
+  +RxBool rememberMe
+  +RxBool hidePassword
+  +GetStorage localStorage
+  +TextEditingController email
+  +TextEditingController password
+  +GlobalKey<FormState> loginFormKey
+  +void onInit()
+  +dynamic emailAndPasswordSignIn()
+}
+
+"dipetakan::features::authentication::controllers::login::login_controller.dart::LoginController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"dipetakan::features::authentication::controllers::login::login_controller.dart::LoginController" o-- "get_storage::src::storage_impl.dart::GetStorage"
+"dipetakan::features::authentication::controllers::login::login_controller.dart::LoginController" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"dipetakan::features::authentication::controllers::login::login_controller.dart::LoginController" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::authentication::controllers::login::login_controller.dart::LoginController"
+
+class "dipetakan::features::authentication::controllers::signup::signup_controller.dart::SignupController" {
+  +RxBool hidePassword
+  +RxBool privacyPolicy
+  +TextEditingController namaLengkap
+  +TextEditingController email
+  +TextEditingController username
+  +TextEditingController password
+  +TextEditingController phoneNo
+  +GlobalKey<FormState> signupFormKey
+  +Rx<UserModel> user
+  {static} +SignupController instance
+  +void signup()
+}
+
+"dipetakan::features::authentication::controllers::signup::signup_controller.dart::SignupController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"dipetakan::features::authentication::controllers::signup::signup_controller.dart::SignupController" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"dipetakan::features::authentication::controllers::signup::signup_controller.dart::SignupController" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"dipetakan::features::authentication::controllers::signup::signup_controller.dart::SignupController" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<UserModel>"
+"dipetakan::features::authentication::controllers::signup::signup_controller.dart::SignupController" o-- "dipetakan::features::authentication::controllers::signup::signup_controller.dart::SignupController"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::authentication::controllers::signup::signup_controller.dart::SignupController"
+
+class "dipetakan::features::authentication::controllers::signup::verify_email_controller.dart::VerifyEmailController" {
+  -Timer? _timer
+  {static} +VerifyEmailController instance
+  +void onInit()
+  +dynamic sendEmailVerification()
+  +dynamic checkEmailVerificationStatus()
+  -dynamic _checkEmailVerifiedWithRetries()
+  +dynamic setTimerForAutoRedirect()
+  +void onClose()
+}
+
+"dipetakan::features::authentication::controllers::signup::verify_email_controller.dart::VerifyEmailController" o-- "dart::async::Timer"
+"dipetakan::features::authentication::controllers::signup::verify_email_controller.dart::VerifyEmailController" o-- "dipetakan::features::authentication::controllers::signup::verify_email_controller.dart::VerifyEmailController"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::authentication::controllers::signup::verify_email_controller.dart::VerifyEmailController"
+
+class "dipetakan::features::authentication::models::user_model.dart::UserModel" {
+  +String id
+  +String fullName
+  +String username
+  +String email
+  +String phoneNo
+  +String profilePicture
+  +String formattedPhoneNo
+  {static} +UserModel empty()
+  +Map<String, dynamic> toJson()
+}
+
+class "dipetakan::features::authentication::screens::forgetpassword::email_sent.dart::EmailSentScreen" {
+  +String email
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::authentication::screens::forgetpassword::email_sent.dart::EmailSentScreen"
+
+class "dipetakan::features::authentication::screens::forgetpassword::forget_password.dart::ForgetPassScreen" {
+  +State<ForgetPassScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::authentication::screens::forgetpassword::forget_password.dart::ForgetPassScreen"
+
+class "dipetakan::features::authentication::screens::forgetpassword::forget_password.dart::_ForgetPassScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::authentication::screens::forgetpassword::forget_password.dart::_ForgetPassScreenState"
+
+class "dipetakan::features::authentication::screens::forgetpassword::widgets::forgetpass_body.dart::DForgetPassBody" {
+  +State<DForgetPassBody> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::authentication::screens::forgetpassword::widgets::forgetpass_body.dart::DForgetPassBody"
+
+class "dipetakan::features::authentication::screens::forgetpassword::widgets::forgetpass_body.dart::_DForgetPassBodyState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::authentication::screens::forgetpassword::widgets::forgetpass_body.dart::_DForgetPassBodyState"
+
+class "dipetakan::features::authentication::screens::forgetpassword::widgets::forgetpass_header.dart::DForgetPassHeader" {
+  +State<DForgetPassHeader> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::authentication::screens::forgetpassword::widgets::forgetpass_header.dart::DForgetPassHeader"
+
+class "dipetakan::features::authentication::screens::forgetpassword::widgets::forgetpass_header.dart::_DForgetPassHeaderState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::authentication::screens::forgetpassword::widgets::forgetpass_header.dart::_DForgetPassHeaderState"
+
+class "dipetakan::features::authentication::screens::login::login.dart::LoginScreen" {
+  +State<LoginScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::authentication::screens::login::login.dart::LoginScreen"
+
+class "dipetakan::features::authentication::screens::login::login.dart::_LoginScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::authentication::screens::login::login.dart::_LoginScreenState"
+
+class "dipetakan::features::authentication::screens::login::widgets::login_body.dart::DLoginBody" {
+  +State<DLoginBody> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::authentication::screens::login::widgets::login_body.dart::DLoginBody"
+
+class "dipetakan::features::authentication::screens::login::widgets::login_body.dart::_DLoginBodyState" {
+  +LoginController controller
+  +Widget build()
+}
+
+"dipetakan::features::authentication::screens::login::widgets::login_body.dart::_DLoginBodyState" o-- "dipetakan::features::authentication::controllers::login::login_controller.dart::LoginController"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::authentication::screens::login::widgets::login_body.dart::_DLoginBodyState"
+
+class "dipetakan::features::authentication::screens::login::widgets::login_header.dart::DLoginHeader" {
+  +State<DLoginHeader> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::authentication::screens::login::widgets::login_header.dart::DLoginHeader"
+
+class "dipetakan::features::authentication::screens::login::widgets::login_header.dart::_DLoginHeaderState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::authentication::screens::login::widgets::login_header.dart::_DLoginHeaderState"
+
+class "dipetakan::features::authentication::screens::resetpassword::reset_success.dart::ResetPassSuccessScreen" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::authentication::screens::resetpassword::reset_success.dart::ResetPassSuccessScreen"
+
+class "dipetakan::features::authentication::screens::resetpassword::widgets::resetpass_body.dart::DResetPassBody" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::authentication::screens::resetpassword::widgets::resetpass_body.dart::DResetPassBody"
+
+class "dipetakan::features::authentication::screens::resetpassword::widgets::resetpass_header.dart::DResetPassHeader" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::authentication::screens::resetpassword::widgets::resetpass_header.dart::DResetPassHeader"
+
+class "dipetakan::features::authentication::screens::signup::account_created.dart::AccountCreatedScreen" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::authentication::screens::signup::account_created.dart::AccountCreatedScreen"
+
+class "dipetakan::features::authentication::screens::signup::email_verification.dart::VerifyEmailScreen" {
+  +String? email
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::authentication::screens::signup::email_verification.dart::VerifyEmailScreen"
+
+class "dipetakan::features::authentication::screens::signup::kebijakan_privasi.dart::KebijakanPrivasi" {
+  +State<KebijakanPrivasi> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::authentication::screens::signup::kebijakan_privasi.dart::KebijakanPrivasi"
+
+class "dipetakan::features::authentication::screens::signup::kebijakan_privasi.dart::_KebijakanPrivasiState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::authentication::screens::signup::kebijakan_privasi.dart::_KebijakanPrivasiState"
+
+class "dipetakan::features::authentication::screens::signup::ketentuan_penggunaan.dart::KetentuanPenggunaan" {
+  +State<KetentuanPenggunaan> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::authentication::screens::signup::ketentuan_penggunaan.dart::KetentuanPenggunaan"
+
+class "dipetakan::features::authentication::screens::signup::ketentuan_penggunaan.dart::_KetentuanPenggunaanState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::authentication::screens::signup::ketentuan_penggunaan.dart::_KetentuanPenggunaanState"
+
+class "dipetakan::features::authentication::screens::signup::signup.dart::SignupScreen" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::authentication::screens::signup::signup.dart::SignupScreen"
+
+class "dipetakan::features::authentication::screens::signup::test.dart::MyWidget" {
+  +State<MyWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::authentication::screens::signup::test.dart::MyWidget"
+
+class "dipetakan::features::authentication::screens::signup::test.dart::_MyWidgetState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::authentication::screens::signup::test.dart::_MyWidgetState"
+
+class "dipetakan::features::authentication::screens::signup::widgets::signup_body.dart::DSignupBody" {
+  +State<DSignupBody> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::authentication::screens::signup::widgets::signup_body.dart::DSignupBody"
+
+class "dipetakan::features::authentication::screens::signup::widgets::signup_body.dart::_DSignupBodyState" {
+  +void initState()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::authentication::screens::signup::widgets::signup_body.dart::_DSignupBodyState"
+
+class "dipetakan::features::authentication::screens::signup::widgets::signup_header.dart::DSignupHeader" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::authentication::screens::signup::widgets::signup_header.dart::DSignupHeader"
+
+class "dipetakan::features::lahansaya::controllers::carousal_controller.dart::CarousalController" {
+  +RxInt carousalCurrentIndex
+  {static} +CarousalController instance
+  +void updatePageIndicator()
+}
+
+"dipetakan::features::lahansaya::controllers::carousal_controller.dart::CarousalController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxInt"
+"dipetakan::features::lahansaya::controllers::carousal_controller.dart::CarousalController" o-- "dipetakan::features::lahansaya::controllers::carousal_controller.dart::CarousalController"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::lahansaya::controllers::carousal_controller.dart::CarousalController"
+
+class "dipetakan::features::lahansaya::controllers::lahansaya_controller.dart::LahanSayaController" {
+  +UserRepository userRepository
+  +Rx<UserModel> user
+  +RxBool profileLoading
+  {static} +LahanSayaController instance
+  +void onInit()
+  +dynamic fetchUserRecord()
+  +dynamic fetchDataFromPostgresql()
+}
+
+"dipetakan::features::lahansaya::controllers::lahansaya_controller.dart::LahanSayaController" o-- "dipetakan::data::repositories::authentication::user_repository.dart::UserRepository"
+"dipetakan::features::lahansaya::controllers::lahansaya_controller.dart::LahanSayaController" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<UserModel>"
+"dipetakan::features::lahansaya::controllers::lahansaya_controller.dart::LahanSayaController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"dipetakan::features::lahansaya::controllers::lahansaya_controller.dart::LahanSayaController" o-- "dipetakan::features::lahansaya::controllers::lahansaya_controller.dart::LahanSayaController"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::lahansaya::controllers::lahansaya_controller.dart::LahanSayaController"
+
+class "dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" {
+  +Completer<GoogleMapController> mapController
+  +Location location
+  +LahanRepository lahanRepository
+  +Rxn<LocationData> currentLocation
+  +Rx<LatLng?> initialPosition
+  +RxList<String> selectedJenisLahan
+  +RxList<int> selectedStatusValidasi
+  +RxList<LahanModel> lahanData
+  +Rx<BitmapDescriptor> markerbitmap
+  +RxList<PatokanModel> patokanList
+  +RxBool loading
+  +RxString strLatLong
+  +RxSet<Marker> markers
+  +RxInt filterTrigger
+  +ImagePicker imagePicker
+  +void onInit()
+  +dynamic fetchDataFromPostgresql()
+  +void getCurrentLocation()
+  +void setFilters()
+  +Set<Polygon> buildPolygons()
+  +Set<Marker> buildMarkers()
+  -void _onMarkerTapped()
+  -void _setMapFitToPolygon()
+  +void addMarkersForPolygon()
+  +void updateFotoPatokan()
+  +dynamic uploadPatokanImages()
+  +dynamic replaceFotoPatokan()
+  +dynamic compressImage()
+}
+
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "dart::async::Completer<GoogleMapController>"
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "location::location.dart::Location"
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "dipetakan::data::repositories::tambahlahan::lahan_repository.dart::LahanRepository"
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "get::get_rx::src::rx_types::rx_types.dart::Rxn<LocationData>"
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<LatLng>"
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<String>"
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<int>"
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<LahanModel>"
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<BitmapDescriptor>"
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<PatokanModel>"
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxString"
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxSet<Marker>"
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxInt"
+"dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController" o-- "image_picker::image_picker.dart::ImagePicker"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController"
+
+class "dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" {
+  +Completer<GoogleMapController> mapController
+  +Location location
+  +LahanRepository lahanRepository
+  +Rxn<LocationData> currentLocation
+  +Rx<LatLng?> initialPosition
+  +RxList<String> selectedJenisLahan
+  +RxList<int> selectedStatusValidasi
+  +RxList<LahanModel> lahanData
+  +Rx<BitmapDescriptor> markerbitmap
+  +RxList<PatokanModel> patokanList
+  +RxBool loading
+  +RxString strLatLong
+  +RxSet<Marker> markers
+  +RxInt filterTrigger
+  +ImagePicker imagePicker
+  +bool isAgreed
+  +void onInit()
+  +dynamic fetchDataFromPostgresql()
+  +void getCurrentLocation()
+  +void addCustomMarker()
+  +void setFilters()
+  +Set<Polygon> buildPolygons()
+  -void _setMapFitToPolygon()
+  +Set<Marker> buildMarkers()
+  -void _onMarkerTapped()
+  +void verifikasiKoordinat()
+  +LatLng? getInitialCameraPosition()
+  +void setInitialCameraPosition()
+}
+
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "dart::async::Completer<GoogleMapController>"
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "location::location.dart::Location"
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "dipetakan::data::repositories::tambahlahan::lahan_repository.dart::LahanRepository"
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "get::get_rx::src::rx_types::rx_types.dart::Rxn<LocationData>"
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<LatLng>"
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<String>"
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<int>"
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<LahanModel>"
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<BitmapDescriptor>"
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<PatokanModel>"
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxString"
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxSet<Marker>"
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxInt"
+"dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController" o-- "image_picker::image_picker.dart::ImagePicker"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController"
+
+class "dipetakan::features::lahansaya::screens::deskripsi_lahan.dart::DeskripsiLahan" {
+  +LahanModel lahan
+  +State<DeskripsiLahan> createState()
+}
+
+"dipetakan::features::lahansaya::screens::deskripsi_lahan.dart::DeskripsiLahan" o-- "dipetakan::features::tambahlahan::models::lahan_model.dart::LahanModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::lahansaya::screens::deskripsi_lahan.dart::DeskripsiLahan"
+
+class "dipetakan::features::lahansaya::screens::deskripsi_lahan.dart::_DeskripsiLahanState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::lahansaya::screens::deskripsi_lahan.dart::_DeskripsiLahanState"
+
+class "dipetakan::features::lahansaya::screens::edit_lahan.dart::EditLahan" {
+  +LahanModel lahan
+  +State<EditLahan> createState()
+}
+
+"dipetakan::features::lahansaya::screens::edit_lahan.dart::EditLahan" o-- "dipetakan::features::tambahlahan::models::lahan_model.dart::LahanModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::lahansaya::screens::edit_lahan.dart::EditLahan"
+
+class "dipetakan::features::lahansaya::screens::edit_lahan.dart::_EditLahanState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::lahansaya::screens::edit_lahan.dart::_EditLahanState"
+
+class "dipetakan::features::lahansaya::screens::lacak_status.dart::LacakStatusScreen" {
+  +LahanModel lahan
+  +State<LacakStatusScreen> createState()
+}
+
+"dipetakan::features::lahansaya::screens::lacak_status.dart::LacakStatusScreen" o-- "dipetakan::features::tambahlahan::models::lahan_model.dart::LahanModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::lahansaya::screens::lacak_status.dart::LacakStatusScreen"
+
+class "dipetakan::features::lahansaya::screens::lacak_status.dart::_LacakStatusScreenState" {
+  +void initState()
+  +String formatTimestamp()
+  +String getStatusText()
+  +Color getStatusColor()
+  +List<Widget> getActionButtons()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::lahansaya::screens::lacak_status.dart::_LacakStatusScreenState"
+
+class "dipetakan::features::lahansaya::screens::lahan_saya.dart::LahanSayaScreen" {
+  +State<LahanSayaScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::lahansaya::screens::lahan_saya.dart::LahanSayaScreen"
+
+class "dipetakan::features::lahansaya::screens::lahan_saya.dart::_LahanSayaScreenState" {
+  +List<String> selectedJenisLahan
+  +List<int> selectedStatusValidasi
+  +String searchQuery
+  +TextEditingController searchController
+  -void _updateFilters()
+  -void _updateSearchQuery()
+  +Widget build()
+}
+
+"dipetakan::features::lahansaya::screens::lahan_saya.dart::_LahanSayaScreenState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::lahansaya::screens::lahan_saya.dart::_LahanSayaScreenState"
+
+class "dipetakan::features::lahansaya::screens::peta_revisi_foto_patokan.dart::PetaRevisiFotoPatokan" {
+  +String mapId
+  +State<PetaRevisiFotoPatokan> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::lahansaya::screens::peta_revisi_foto_patokan.dart::PetaRevisiFotoPatokan"
+
+class "dipetakan::features::lahansaya::screens::peta_revisi_foto_patokan.dart::_PetaRevisiFotoPatokanState" {
+  +PetaFotoPatokanController controller
+  +Widget build()
+}
+
+"dipetakan::features::lahansaya::screens::peta_revisi_foto_patokan.dart::_PetaRevisiFotoPatokanState" o-- "dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::lahansaya::screens::peta_revisi_foto_patokan.dart::_PetaRevisiFotoPatokanState"
+
+class "dipetakan::features::lahansaya::screens::peta_titik_validasi.dart::PetaTitikValidasi" {
+  +LahanModel lahan
+  +State<PetaTitikValidasi> createState()
+}
+
+"dipetakan::features::lahansaya::screens::peta_titik_validasi.dart::PetaTitikValidasi" o-- "dipetakan::features::tambahlahan::models::lahan_model.dart::LahanModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::lahansaya::screens::peta_titik_validasi.dart::PetaTitikValidasi"
+
+class "dipetakan::features::lahansaya::screens::peta_titik_validasi.dart::_PetaTitikValidasiState" {
+  +PetaValidasiController controller
+  +RxSet<Marker> markers
+  +void initState()
+  +Widget build()
+}
+
+"dipetakan::features::lahansaya::screens::peta_titik_validasi.dart::_PetaTitikValidasiState" o-- "dipetakan::features::lahansaya::controllers::petavalidasi_controller.dart::PetaValidasiController"
+"dipetakan::features::lahansaya::screens::peta_titik_validasi.dart::_PetaTitikValidasiState" o-- "get::get_rx::src::rx_types::rx_types.dart::RxSet<Marker>"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::lahansaya::screens::peta_titik_validasi.dart::_PetaTitikValidasiState"
+
+class "dipetakan::features::lahansaya::screens::widgets::carousel_slide.dart::CarouselSlide" {
+  +List<String> photos
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::lahansaya::screens::widgets::carousel_slide.dart::CarouselSlide"
+
+class "dipetakan::features::lahansaya::screens::widgets::carousel_slide.dart::DRoundedImage" {
+  +double? width
+  +double? height
+  +String imageUrl
+  +bool applyImageRadius
+  +BoxBorder? border
+  +Color backgroundColor
+  +BoxFit? fit
+  +EdgeInsetsGeometry? padding
+  +bool isNetworkimage
+  +void Function()? onPressed
+  +double borderRadius
+  +Widget build()
+}
+
+"dipetakan::features::lahansaya::screens::widgets::carousel_slide.dart::DRoundedImage" o-- "flutter::src::painting::box_border.dart::BoxBorder"
+"dipetakan::features::lahansaya::screens::widgets::carousel_slide.dart::DRoundedImage" o-- "dart::ui::Color"
+"dipetakan::features::lahansaya::screens::widgets::carousel_slide.dart::DRoundedImage" o-- "flutter::src::painting::box_fit.dart::BoxFit"
+"dipetakan::features::lahansaya::screens::widgets::carousel_slide.dart::DRoundedImage" o-- "flutter::src::painting::edge_insets.dart::EdgeInsetsGeometry"
+"dipetakan::features::lahansaya::screens::widgets::carousel_slide.dart::DRoundedImage" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::lahansaya::screens::widgets::carousel_slide.dart::DRoundedImage"
+
+class "dipetakan::features::lahansaya::screens::widgets::circular_container.dart::DCircularContainer" {
+  +double? width
+  +double? height
+  +double radius
+  +double padding
+  +EdgeInsets? margin
+  +Widget? child
+  +Color backgroundColor
+  +Widget build()
+}
+
+"dipetakan::features::lahansaya::screens::widgets::circular_container.dart::DCircularContainer" o-- "flutter::src::painting::edge_insets.dart::EdgeInsets"
+"dipetakan::features::lahansaya::screens::widgets::circular_container.dart::DCircularContainer" o-- "flutter::src::widgets::framework.dart::Widget"
+"dipetakan::features::lahansaya::screens::widgets::circular_container.dart::DCircularContainer" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::lahansaya::screens::widgets::circular_container.dart::DCircularContainer"
+
+class "dipetakan::features::lahansaya::screens::widgets::edit_lahan_body.dart::EditLahanBody" {
+  +LahanModel lahan
+  +State<EditLahanBody> createState()
+}
+
+"dipetakan::features::lahansaya::screens::widgets::edit_lahan_body.dart::EditLahanBody" o-- "dipetakan::features::tambahlahan::models::lahan_model.dart::LahanModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::lahansaya::screens::widgets::edit_lahan_body.dart::EditLahanBody"
+
+class "dipetakan::features::lahansaya::screens::widgets::edit_lahan_body.dart::_EditLahanBodyState" {
+  +PetaFotoPatokanController controller
+  +void initState()
+  +Widget build()
+}
+
+"dipetakan::features::lahansaya::screens::widgets::edit_lahan_body.dart::_EditLahanBodyState" o-- "dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::lahansaya::screens::widgets::edit_lahan_body.dart::_EditLahanBodyState"
+
+class "dipetakan::features::lahansaya::screens::widgets::filter_button.dart::FilterButton" {
+  +double size
+  +dynamic Function(List<String>, List<int>) onFilterChanged
+  +_FilterButtonState createState()
+}
+
+"dipetakan::features::lahansaya::screens::widgets::filter_button.dart::FilterButton" o-- "null::dynamic Function(List<String>, List<int>)"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::lahansaya::screens::widgets::filter_button.dart::FilterButton"
+
+class "dipetakan::features::lahansaya::screens::widgets::filter_button.dart::_FilterButtonState" {
+  +List<String> selectedJenisLahan
+  +List<int> selectedStatusValidasi
+  +Map<int, String> statusValidasiMap
+  +Widget build()
+  -void _showFilterDialog()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::lahansaya::screens::widgets::filter_button.dart::_FilterButtonState"
+
+class "dipetakan::features::lahansaya::screens::widgets::list_lahan.dart::ListLahan" {
+  +List<String> selectedJenisLahan
+  +List<int> selectedStatusValidasi
+  +String searchQuery
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::lahansaya::screens::widgets::list_lahan.dart::ListLahan"
+
+class "dipetakan::features::lahansaya::screens::widgets::list_patokan_edit.dart::ListPatokanEdit" {
+  +List<PatokanModel> initialPatokanList
+  +PetaFotoPatokanController controller
+  +_ListPatokanEditState createState()
+}
+
+"dipetakan::features::lahansaya::screens::widgets::list_patokan_edit.dart::ListPatokanEdit" o-- "dipetakan::features::lahansaya::controllers::petafotopatokan_controller.dart::PetaFotoPatokanController"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::lahansaya::screens::widgets::list_patokan_edit.dart::ListPatokanEdit"
+
+class "dipetakan::features::lahansaya::screens::widgets::list_patokan_edit.dart::_ListPatokanEditState" {
+  +ImagePicker imagePicker
+  +String strLatLong
+  +bool loading
+  +void initState()
+  +Widget build()
+}
+
+"dipetakan::features::lahansaya::screens::widgets::list_patokan_edit.dart::_ListPatokanEditState" o-- "image_picker::image_picker.dart::ImagePicker"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::lahansaya::screens::widgets::list_patokan_edit.dart::_ListPatokanEditState"
+
+class "dipetakan::features::lahansaya::screens::widgets::search_bar.dart::CustomSearchBar" {
+  +TextEditingController controller
+  +void Function(String) onSearchChanged
+  +Widget build()
+}
+
+"dipetakan::features::lahansaya::screens::widgets::search_bar.dart::CustomSearchBar" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"dipetakan::features::lahansaya::screens::widgets::search_bar.dart::CustomSearchBar" o-- "flutter::src::foundation::basic_types.dart::void Function(String)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::lahansaya::screens::widgets::search_bar.dart::CustomSearchBar"
+
+class "dipetakan::features::navigation::controllers::update_email_controller.dart::UpdateEmailController" {
+  +TextEditingController newEmail
+  +TextEditingController oldEmail
+  +RxBool hidePassword
+  +TextEditingController oldPassword
+  +UserController userController
+  +UserRepository userRepository
+  +GlobalKey<FormState> updateEmailFormKey
+  {static} +UpdateEmailController instance
+  +void onInit()
+  +dynamic initializeEmail()
+  +dynamic updateEmail()
+  +dynamic checkEmailVerificationStatus()
+  +dynamic sendEmailVerification()
+  +dynamic updateEmailFirestore()
+}
+
+"dipetakan::features::navigation::controllers::update_email_controller.dart::UpdateEmailController" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"dipetakan::features::navigation::controllers::update_email_controller.dart::UpdateEmailController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"dipetakan::features::navigation::controllers::update_email_controller.dart::UpdateEmailController" o-- "dipetakan::features::navigation::controllers::user_controller.dart::UserController"
+"dipetakan::features::navigation::controllers::update_email_controller.dart::UpdateEmailController" o-- "dipetakan::data::repositories::authentication::user_repository.dart::UserRepository"
+"dipetakan::features::navigation::controllers::update_email_controller.dart::UpdateEmailController" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"dipetakan::features::navigation::controllers::update_email_controller.dart::UpdateEmailController" o-- "dipetakan::features::navigation::controllers::update_email_controller.dart::UpdateEmailController"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::navigation::controllers::update_email_controller.dart::UpdateEmailController"
+
+class "dipetakan::features::navigation::controllers::update_name_controller.dart::UpdateNameController" {
+  +TextEditingController fullName
+  +UserController userController
+  +UserRepository userRepository
+  +GlobalKey<FormState> updateUserFullnameFormKey
+  {static} +UpdateNameController instance
+  +void onInit()
+  +dynamic initializeNames()
+  +dynamic updateUserFullname()
+}
+
+"dipetakan::features::navigation::controllers::update_name_controller.dart::UpdateNameController" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"dipetakan::features::navigation::controllers::update_name_controller.dart::UpdateNameController" o-- "dipetakan::features::navigation::controllers::user_controller.dart::UserController"
+"dipetakan::features::navigation::controllers::update_name_controller.dart::UpdateNameController" o-- "dipetakan::data::repositories::authentication::user_repository.dart::UserRepository"
+"dipetakan::features::navigation::controllers::update_name_controller.dart::UpdateNameController" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"dipetakan::features::navigation::controllers::update_name_controller.dart::UpdateNameController" o-- "dipetakan::features::navigation::controllers::update_name_controller.dart::UpdateNameController"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::navigation::controllers::update_name_controller.dart::UpdateNameController"
+
+class "dipetakan::features::navigation::controllers::update_phoneno_controller.dart::UpdatePhoneNoController" {
+  +TextEditingController phoneNo
+  +UserController userController
+  +UserRepository userRepository
+  +GlobalKey<FormState> updatephoneNoFormKey
+  {static} +UpdatePhoneNoController instance
+  +void onInit()
+  +dynamic initializeNames()
+  +dynamic updatephoneNo()
+}
+
+"dipetakan::features::navigation::controllers::update_phoneno_controller.dart::UpdatePhoneNoController" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"dipetakan::features::navigation::controllers::update_phoneno_controller.dart::UpdatePhoneNoController" o-- "dipetakan::features::navigation::controllers::user_controller.dart::UserController"
+"dipetakan::features::navigation::controllers::update_phoneno_controller.dart::UpdatePhoneNoController" o-- "dipetakan::data::repositories::authentication::user_repository.dart::UserRepository"
+"dipetakan::features::navigation::controllers::update_phoneno_controller.dart::UpdatePhoneNoController" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"dipetakan::features::navigation::controllers::update_phoneno_controller.dart::UpdatePhoneNoController" o-- "dipetakan::features::navigation::controllers::update_phoneno_controller.dart::UpdatePhoneNoController"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::navigation::controllers::update_phoneno_controller.dart::UpdatePhoneNoController"
+
+class "dipetakan::features::navigation::controllers::update_username_controller.dart::UpdateUsernameController" {
+  +TextEditingController username
+  +UserController userController
+  +UserRepository userRepository
+  +GlobalKey<FormState> updateUsernameFormKey
+  {static} +UpdateUsernameController instance
+  +void onInit()
+  +dynamic initializeNames()
+  +dynamic updateUsername()
+}
+
+"dipetakan::features::navigation::controllers::update_username_controller.dart::UpdateUsernameController" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"dipetakan::features::navigation::controllers::update_username_controller.dart::UpdateUsernameController" o-- "dipetakan::features::navigation::controllers::user_controller.dart::UserController"
+"dipetakan::features::navigation::controllers::update_username_controller.dart::UpdateUsernameController" o-- "dipetakan::data::repositories::authentication::user_repository.dart::UserRepository"
+"dipetakan::features::navigation::controllers::update_username_controller.dart::UpdateUsernameController" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"dipetakan::features::navigation::controllers::update_username_controller.dart::UpdateUsernameController" o-- "dipetakan::features::navigation::controllers::update_username_controller.dart::UpdateUsernameController"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::navigation::controllers::update_username_controller.dart::UpdateUsernameController"
+
+class "dipetakan::features::navigation::controllers::user_controller.dart::UserController" {
+  +RxBool profileLoading
+  +Rx<UserModel> user
+  +RxBool hidePassword
+  +RxBool imageUploading
+  +TextEditingController verifyEmail
+  +TextEditingController verifyPassword
+  +UserRepository userRepository
+  +GlobalKey<FormState> reAuthFormKey
+  {static} +UserController instance
+  +void onInit()
+  +dynamic fetchUserRecord()
+  +dynamic saveUserRecord()
+  +void deleteAccountWarningPopup()
+  +void deleteUserAccount()
+  +dynamic reAuthenticatedEmailAndPassword()
+  +dynamic uploadUserProfilePicture()
+}
+
+"dipetakan::features::navigation::controllers::user_controller.dart::UserController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"dipetakan::features::navigation::controllers::user_controller.dart::UserController" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<UserModel>"
+"dipetakan::features::navigation::controllers::user_controller.dart::UserController" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"dipetakan::features::navigation::controllers::user_controller.dart::UserController" o-- "dipetakan::data::repositories::authentication::user_repository.dart::UserRepository"
+"dipetakan::features::navigation::controllers::user_controller.dart::UserController" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"dipetakan::features::navigation::controllers::user_controller.dart::UserController" o-- "dipetakan::features::navigation::controllers::user_controller.dart::UserController"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::navigation::controllers::user_controller.dart::UserController"
+
+class "dipetakan::features::navigation::screens::akunsaya.dart::AkunSaya" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::navigation::screens::akunsaya.dart::AkunSaya"
+
+class "dipetakan::features::navigation::screens::bantuan.dart::BantuanScreen" {
+  +State<BantuanScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::navigation::screens::bantuan.dart::BantuanScreen"
+
+class "dipetakan::features::navigation::screens::bantuan.dart::_BantuanScreenState" {
+  +List<Map<String, dynamic>> faqs
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::navigation::screens::bantuan.dart::_BantuanScreenState"
+
+class "dipetakan::features::navigation::screens::menu.dart::MenuScreen" {
+  +List<dynamic> imgData
+  +List<dynamic> titles
+  +List<dynamic> screen
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::navigation::screens::menu.dart::MenuScreen"
+
+class "dipetakan::features::navigation::screens::menu.dart::Items" {
+  +String title
+  +String subtitle
+  +String event
+  +String img
+}
+
+class "dipetakan::features::navigation::screens::navigation.dart::NavigationMenu" {
+  +State<NavigationMenu> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::navigation::screens::navigation.dart::NavigationMenu"
+
+class "dipetakan::features::navigation::screens::navigation.dart::_NavigationMenuState" {
+  +int counter
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::navigation::screens::navigation.dart::_NavigationMenuState"
+
+class "dipetakan::features::navigation::screens::navigation.dart::NavigationController" {
+  +Rx<int> selectedIndex
+  +List<StatelessWidget> screens
+}
+
+"dipetakan::features::navigation::screens::navigation.dart::NavigationController" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<int>"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::navigation::screens::navigation.dart::NavigationController"
+
+class "dipetakan::features::navigation::screens::notification.dart::NotificationScreen" {
+  +State<NotificationScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::navigation::screens::notification.dart::NotificationScreen"
+
+class "dipetakan::features::navigation::screens::notification.dart::_NotificationScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::navigation::screens::notification.dart::_NotificationScreenState"
+
+class "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_email.dart::EditEmailScreen" {
+  +State<EditEmailScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_email.dart::EditEmailScreen"
+
+class "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_email.dart::_EditEmailScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_email.dart::_EditEmailScreenState"
+
+class "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_nama.dart::EditNamaScreen" {
+  +State<EditNamaScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_nama.dart::EditNamaScreen"
+
+class "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_nama.dart::_EditNamaScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_nama.dart::_EditNamaScreenState"
+
+class "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_notelp.dart::EditNotelpScreen" {
+  +State<EditNotelpScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_notelp.dart::EditNotelpScreen"
+
+class "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_notelp.dart::_EditNotelpScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_notelp.dart::_EditNotelpScreenState"
+
+class "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_username.dart::EditUsernameScreen" {
+  +State<EditUsernameScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_username.dart::EditUsernameScreen"
+
+class "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_username.dart::_EditUsernameScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::navigation::screens::profilesaya::editprofil::edit_username.dart::_EditUsernameScreenState"
+
+class "dipetakan::features::navigation::screens::profilesaya::editprofil::email_updated.dart::EmailUpdatedScreen" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::navigation::screens::profilesaya::editprofil::email_updated.dart::EmailUpdatedScreen"
+
+class "dipetakan::features::navigation::screens::profilesaya::editprofil::update_email_verification.dart::VerifyUpdateEmailScreen" {
+  +String? email
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::navigation::screens::profilesaya::editprofil::update_email_verification.dart::VerifyUpdateEmailScreen"
+
+class "dipetakan::features::navigation::screens::profilesaya::profilsaya.dart::ProfilSayaScreen" {
+  +State<ProfilSayaScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::navigation::screens::profilesaya::profilsaya.dart::ProfilSayaScreen"
+
+class "dipetakan::features::navigation::screens::profilesaya::profilsaya.dart::_ProfilSayaScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::navigation::screens::profilesaya::profilsaya.dart::_ProfilSayaScreenState"
+
+class "dipetakan::features::navigation::screens::profilesaya::profilsaya.dart::InformasiAkun" {
+  +void Function() onPressed
+  +String title
+  +String value
+  +Widget build()
+}
+
+"dipetakan::features::navigation::screens::profilesaya::profilsaya.dart::InformasiAkun" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::navigation::screens::profilesaya::profilsaya.dart::InformasiAkun"
+
+class "dipetakan::features::navigation::screens::profilesaya::reauthenticated_user_screen.dart::ReAuthUserScreen" {
+  +State<ReAuthUserScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::navigation::screens::profilesaya::reauthenticated_user_screen.dart::ReAuthUserScreen"
+
+class "dipetakan::features::navigation::screens::profilesaya::reauthenticated_user_screen.dart::_ReAuthUserScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::navigation::screens::profilesaya::reauthenticated_user_screen.dart::_ReAuthUserScreenState"
+
+class "dipetakan::features::navigation::screens::profilesaya::widgets::circular_image.dart::DCircularImages" {
+  +BoxFit? fit
+  +String image
+  +bool isNetworkImage
+  +Color? overlayColor
+  +Color? backgroundColor
+  +double width
+  +double height
+  +double padding
+  +Widget build()
+}
+
+"dipetakan::features::navigation::screens::profilesaya::widgets::circular_image.dart::DCircularImages" o-- "flutter::src::painting::box_fit.dart::BoxFit"
+"dipetakan::features::navigation::screens::profilesaya::widgets::circular_image.dart::DCircularImages" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::navigation::screens::profilesaya::widgets::circular_image.dart::DCircularImages"
+
+class "dipetakan::features::navigation::screens::sidebar.dart::SideBar" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::navigation::screens::sidebar.dart::SideBar"
+
+class "dipetakan::features::navigation::screens::tentang_aplikasi.dart::TentangAplikasiScreen" {
+  +State<TentangAplikasiScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::navigation::screens::tentang_aplikasi.dart::TentangAplikasiScreen"
+
+class "dipetakan::features::navigation::screens::tentang_aplikasi.dart::_TentangAplikasiScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::navigation::screens::tentang_aplikasi.dart::_TentangAplikasiScreenState"
+
+class "dipetakan::features::navigation::screens::ubahpassword.dart::UbahPassword" {
+  +State<UbahPassword> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::navigation::screens::ubahpassword.dart::UbahPassword"
+
+class "dipetakan::features::navigation::screens::ubahpassword.dart::_UbahPasswordState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::navigation::screens::ubahpassword.dart::_UbahPasswordState"
+
+class "dipetakan::features::navigation::screens::widgets::shimmer.dart::DShimmerEfffect" {
+  +double width
+  +double height
+  +double radius
+  +Color? color
+  +Widget build()
+}
+
+"dipetakan::features::navigation::screens::widgets::shimmer.dart::DShimmerEfffect" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "dipetakan::features::navigation::screens::widgets::shimmer.dart::DShimmerEfffect"
+
+class "dipetakan::features::petalahan::controllers::infolahan_controller.dart::InfoLahanController" {
+  +LahanRepository lahanRepository
+  +UserRepository userRepository
+  +RxList<LahanModel> lahanList
+  +RxList<UserModel> userList
+  +RxBool profileLoading
+  {static} +InfoLahanController instance
+  +Stream<List<LahanModel>> lahanStream
+  +void onInit()
+  +void listenForLahanChanges()
+  +dynamic fetchDataFromPostgresql()
+}
+
+"dipetakan::features::petalahan::controllers::infolahan_controller.dart::InfoLahanController" o-- "dipetakan::data::repositories::tambahlahan::lahan_repository.dart::LahanRepository"
+"dipetakan::features::petalahan::controllers::infolahan_controller.dart::InfoLahanController" o-- "dipetakan::data::repositories::authentication::user_repository.dart::UserRepository"
+"dipetakan::features::petalahan::controllers::infolahan_controller.dart::InfoLahanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<LahanModel>"
+"dipetakan::features::petalahan::controllers::infolahan_controller.dart::InfoLahanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<UserModel>"
+"dipetakan::features::petalahan::controllers::infolahan_controller.dart::InfoLahanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"dipetakan::features::petalahan::controllers::infolahan_controller.dart::InfoLahanController" o-- "dipetakan::features::petalahan::controllers::infolahan_controller.dart::InfoLahanController"
+"dipetakan::features::petalahan::controllers::infolahan_controller.dart::InfoLahanController" o-- "dart::async::Stream<List<LahanModel>>"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::petalahan::controllers::infolahan_controller.dart::InfoLahanController"
+
+class "dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" {
+  +Completer<GoogleMapController> mapController
+  +Location location
+  +LahanRepository lahanRepository
+  +Rxn<LocationData> currentLocation
+  +RxList<String> selectedJenisLahan
+  +RxList<int> selectedStatusValidasi
+  +RxList<LahanModel> lahanData
+  +Rx<BitmapDescriptor> markerbitmap
+  +RxList<PatokanModel> patokanList
+  +RxBool loading
+  +RxString strLatLong
+  +RxSet<Marker> markers
+  +RxInt filterTrigger
+  +ImagePicker imagePicker
+  +void onInit()
+  +dynamic fetchDataFromPostgresql()
+  +void getCurrentLocation()
+  +void setFilters()
+  +Set<Polygon> buildPolygons()
+  +void addMarkersForPolygon()
+}
+
+"dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" o-- "dart::async::Completer<GoogleMapController>"
+"dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" o-- "location::location.dart::Location"
+"dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" o-- "dipetakan::data::repositories::tambahlahan::lahan_repository.dart::LahanRepository"
+"dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" o-- "get::get_rx::src::rx_types::rx_types.dart::Rxn<LocationData>"
+"dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<String>"
+"dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<int>"
+"dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<LahanModel>"
+"dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<BitmapDescriptor>"
+"dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<PatokanModel>"
+"dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxString"
+"dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxSet<Marker>"
+"dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" o-- "get::get_rx::src::rx_types::rx_types.dart::RxInt"
+"dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController" o-- "image_picker::image_picker.dart::ImagePicker"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController"
+
+class "dipetakan::features::petalahan::screens::peta_lahan.dart::PetaLahanScreen" {
+  +State<PetaLahanScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::petalahan::screens::peta_lahan.dart::PetaLahanScreen"
+
+class "dipetakan::features::petalahan::screens::peta_lahan.dart::_PetaLahanScreenState" {
+  +PetaLahanController controller
+  +List<String> selectedJenisLahan
+  +List<int> selectedStatusValidasi
+  +void initState()
+  +Widget build()
+}
+
+"dipetakan::features::petalahan::screens::peta_lahan.dart::_PetaLahanScreenState" o-- "dipetakan::features::petalahan::controllers::petalahan_controller.dart::PetaLahanController"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::petalahan::screens::peta_lahan.dart::_PetaLahanScreenState"
+
+class "dipetakan::features::petalahan::screens::widgets::filter_button_petalahan.dart::FilterButtonPetaLahan" {
+  +double size
+  +dynamic Function(List<String>, List<int>) onFilterChanged
+  +_FilterButtonPetaLahanState createState()
+}
+
+"dipetakan::features::petalahan::screens::widgets::filter_button_petalahan.dart::FilterButtonPetaLahan" o-- "null::dynamic Function(List<String>, List<int>)"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::petalahan::screens::widgets::filter_button_petalahan.dart::FilterButtonPetaLahan"
+
+class "dipetakan::features::petalahan::screens::widgets::filter_button_petalahan.dart::_FilterButtonPetaLahanState" {
+  +List<String> selectedJenisLahan
+  +List<int> selectedStatusValidasi
+  +Map<int, String> statusValidasiMap
+  +Widget build()
+  -void _showFilterDialog()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::petalahan::screens::widgets::filter_button_petalahan.dart::_FilterButtonPetaLahanState"
+
+class "dipetakan::features::petalahan::screens::widgets::infolahan_bottomsheet.dart::InfoLahanBottomSheet" {
+  +LahanModel lahan
+  +State<InfoLahanBottomSheet> createState()
+}
+
+"dipetakan::features::petalahan::screens::widgets::infolahan_bottomsheet.dart::InfoLahanBottomSheet" o-- "dipetakan::features::tambahlahan::models::lahan_model.dart::LahanModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::petalahan::screens::widgets::infolahan_bottomsheet.dart::InfoLahanBottomSheet"
+
+class "dipetakan::features::petalahan::screens::widgets::infolahan_bottomsheet.dart::_InfoLahanBottomSheetState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::petalahan::screens::widgets::infolahan_bottomsheet.dart::_InfoLahanBottomSheetState"
+
+class "dipetakan::features::petalahan::screens::widgets::maps.dart::MapSample" {
+  +State<MapSample> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::petalahan::screens::widgets::maps.dart::MapSample"
+
+class "dipetakan::features::petalahan::screens::widgets::maps.dart::MapSampleState" {
+  -Completer<GoogleMapController> _controller
+  {static} -CameraPosition _kGooglePlex
+  {static} -CameraPosition _kLake
+  +Widget build()
+  -dynamic _goToTheLake()
+}
+
+"dipetakan::features::petalahan::screens::widgets::maps.dart::MapSampleState" o-- "dart::async::Completer<GoogleMapController>"
+"dipetakan::features::petalahan::screens::widgets::maps.dart::MapSampleState" o-- "google_maps_flutter_platform_interface::src::types::camera.dart::CameraPosition"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::petalahan::screens::widgets::maps.dart::MapSampleState"
+
+class "dipetakan::features::petalahan::screens::widgets::maps_copy.dart::MapsSample2" {
+  +State<MapsSample2> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::petalahan::screens::widgets::maps_copy.dart::MapsSample2"
+
+class "dipetakan::features::petalahan::screens::widgets::maps_copy.dart::_MapsSample2State" {
+  {static} -LatLng _pGooglePlex
+  +Widget build()
+}
+
+"dipetakan::features::petalahan::screens::widgets::maps_copy.dart::_MapsSample2State" o-- "google_maps_flutter_platform_interface::src::types::location.dart::LatLng"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::petalahan::screens::widgets::maps_copy.dart::_MapsSample2State"
+
+class "dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" {
+  +TextEditingController namaLahanController
+  +TextEditingController deskripsiLahanController
+  +ValueNotifier<JenisLahanDataModel?> jenisLahanNotifier
+  +ImagePicker imagePicker
+  +RxBool profileLoading
+  +LahanRepository lahanRepository
+  +Rx<LahanModel> lahan
+  +RxList<PatokanModel> patokanList
+  +RxList<VerifikasiModel> verifikasiList
+  +RxString strLatLong
+  +RxBool loading
+  +Rx<BitmapDescriptor> markerbitmap
+  +RxSet<Marker> markers
+  +RxBool shouldReloadMap
+  +RxList<LatLng> coordinatesList
+  +Rxn<LocationData> currentLocation
+  +Location location
+  +Completer<GoogleMapController> mapController
+  +GlobalKey<FormState> tambahLahanFormKey
+  {static} +TambahLahanControllerOld instance
+  +void onInit()
+  +void getCurrentLocation()
+  +LatLng locationDataToLatLng()
+  +dynamic addPatokan()
+  -void _addPatokanLogic()
+  +void addMarker()
+  +dynamic deletePatokan()
+  +void removeMarker()
+  +dynamic editPatokan()
+  +dynamic replaceFotoPatokan()
+  -dynamic _showLandmarkDialog()
+  +dynamic compressImage()
+  +dynamic uploadPatokanImages()
+  +void removeMarkerFromPinPoint()
+  +void saveTambahLahanForm()
+  +void confirmAndSaveTambahLahanForm()
+  +void updateFotoPatokan()
+  +void validasiTitikKoordinat()
+}
+
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<JenisLahanDataModel>"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "image_picker::image_picker.dart::ImagePicker"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "get::get_rx::src::rx_types::rx_types.dart::RxBool"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "dipetakan::data::repositories::tambahlahan::lahan_repository.dart::LahanRepository"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<LahanModel>"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<PatokanModel>"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<VerifikasiModel>"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "get::get_rx::src::rx_types::rx_types.dart::RxString"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<BitmapDescriptor>"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "get::get_rx::src::rx_types::rx_types.dart::RxSet<Marker>"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<LatLng>"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "get::get_rx::src::rx_types::rx_types.dart::Rxn<LocationData>"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "location::location.dart::Location"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "dart::async::Completer<GoogleMapController>"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld" o-- "dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld"
+
+class "dipetakan::features::tambahlahan::models::jenislahanmodel.dart::JenisLahanDataModel" {
+  +String jenisLahan
+}
+
+class "dipetakan::features::tambahlahan::models::lahan_model.dart::LahanModel" {
+  +String id
+  +String userId
+  +String namaPemilik
+  +String namaLahan
+  +String jenisLahan
+  +String deskripsiLahan
+  +List<PatokanModel> patokan
+  +List<VerifikasiModel> verifikasi
+  +Timestamp createdAt
+  +Timestamp updatedAt
+  +String formatTimestamp()
+  {static} +LahanModel empty()
+  +Map<String, dynamic> toJson()
+  +Map<String, dynamic> toJsonPostgres()
+}
+
+"dipetakan::features::tambahlahan::models::lahan_model.dart::LahanModel" o-- "cloud_firestore_platform_interface::src::timestamp.dart::Timestamp"
+
+class "dipetakan::features::tambahlahan::models::lahan_model.dart::PatokanModel" {
+  +String localPath
+  +String fotoPatokan
+  +String coordinates
+  +String coordVerif
+  +int coordStatus
+  +int coordPercent
+  +String coordComment
+  +String coordCommentUser
+  +bool isAgreed
+  +Map<String, dynamic> toJson()
+}
+
+class "dipetakan::features::tambahlahan::models::lahan_model.dart::VerifikasiModel" {
+  +String comentar
+  +int statusverifikasi
+  +int progress
+  +Timestamp verifiedAt
+  +Map<String, dynamic> toJson()
+  +String formatTimestamp()
+  +Map<String, dynamic> toJsonPostgres()
+}
+
+"dipetakan::features::tambahlahan::models::lahan_model.dart::VerifikasiModel" o-- "cloud_firestore_platform_interface::src::timestamp.dart::Timestamp"
+
+class "dipetakan::features::tambahlahan::models::patokan.dart::Patokan" {
+  +String imagePath
+  +String coordinates
+}
+
+class "dipetakan::features::tambahlahan::screens::editpatokan.dart::EditPatokan" {
+  +State<EditPatokan> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::tambahlahan::screens::editpatokan.dart::EditPatokan"
+
+class "dipetakan::features::tambahlahan::screens::editpatokan.dart::_EditPatokanState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::tambahlahan::screens::editpatokan.dart::_EditPatokanState"
+
+class "dipetakan::features::tambahlahan::screens::tambahlahan.dart::TambahLahan" {
+  +State<TambahLahan> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::tambahlahan::screens::tambahlahan.dart::TambahLahan"
+
+class "dipetakan::features::tambahlahan::screens::tambahlahan.dart::_TambahLahanState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::tambahlahan::screens::tambahlahan.dart::_TambahLahanState"
+
+class "dipetakan::features::tambahlahan::screens::tambahpatokan.dart::TambahPatokan" {
+  +State<TambahPatokan> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::tambahlahan::screens::tambahpatokan.dart::TambahPatokan"
+
+class "dipetakan::features::tambahlahan::screens::tambahpatokan.dart::_TambahPatokanState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::tambahlahan::screens::tambahpatokan.dart::_TambahPatokanState"
+
+class "dipetakan::features::tambahlahan::screens::widgets::edit_patokan_body.dart::EditPatokanBody" {
+  +State<EditPatokanBody> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::tambahlahan::screens::widgets::edit_patokan_body.dart::EditPatokanBody"
+
+class "dipetakan::features::tambahlahan::screens::widgets::edit_patokan_body.dart::_EditPatokanBodyState" {
+  +File? imageFile
+  +ImagePicker imagePicker
+  +String strLatLong
+  +String strAlamat
+  +bool loading
+  -dynamic _getGeoLocationPosition()
+  +Widget build()
+  +dynamic showPictureDialog()
+  +dynamic getFromGallery()
+  +dynamic getFromCamera()
+}
+
+"dipetakan::features::tambahlahan::screens::widgets::edit_patokan_body.dart::_EditPatokanBodyState" o-- "dart::io::File"
+"dipetakan::features::tambahlahan::screens::widgets::edit_patokan_body.dart::_EditPatokanBodyState" o-- "image_picker::image_picker.dart::ImagePicker"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::tambahlahan::screens::widgets::edit_patokan_body.dart::_EditPatokanBodyState"
+
+class "dipetakan::features::tambahlahan::screens::widgets::list_patokan.dart::ListPatokan" {
+  +RxList<PatokanModel> patokanList
+  +_ListPatokanState createState()
+}
+
+"dipetakan::features::tambahlahan::screens::widgets::list_patokan.dart::ListPatokan" o-- "get::get_rx::src::rx_types::rx_types.dart::RxList<PatokanModel>"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::tambahlahan::screens::widgets::list_patokan.dart::ListPatokan"
+
+class "dipetakan::features::tambahlahan::screens::widgets::list_patokan.dart::_ListPatokanState" {
+  +TambahLahanControllerOld controller
+  +ImagePicker imagePicker
+  +String strLatLong
+  +bool loading
+  +Widget build()
+}
+
+"dipetakan::features::tambahlahan::screens::widgets::list_patokan.dart::_ListPatokanState" o-- "dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld"
+"dipetakan::features::tambahlahan::screens::widgets::list_patokan.dart::_ListPatokanState" o-- "image_picker::image_picker.dart::ImagePicker"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::tambahlahan::screens::widgets::list_patokan.dart::_ListPatokanState"
+
+class "dipetakan::features::tambahlahan::screens::widgets::list_patokan_geolocator.dart::ListPatokanGeo" {
+  +_ListPatokanGeoState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::tambahlahan::screens::widgets::list_patokan_geolocator.dart::ListPatokanGeo"
+
+class "dipetakan::features::tambahlahan::screens::widgets::list_patokan_geolocator.dart::_ListPatokanGeoState" {
+  +TambahLahanControllerOld controller
+  +ImagePicker imagePicker
+  +String strLatLong
+  +bool loading
+  +Widget build()
+}
+
+"dipetakan::features::tambahlahan::screens::widgets::list_patokan_geolocator.dart::_ListPatokanGeoState" o-- "dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld"
+"dipetakan::features::tambahlahan::screens::widgets::list_patokan_geolocator.dart::_ListPatokanGeoState" o-- "image_picker::image_picker.dart::ImagePicker"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::tambahlahan::screens::widgets::list_patokan_geolocator.dart::_ListPatokanGeoState"
+
+class "dipetakan::features::tambahlahan::screens::widgets::list_patokan_old.dart::ListPatokanOld" {
+  +State<ListPatokanOld> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::tambahlahan::screens::widgets::list_patokan_old.dart::ListPatokanOld"
+
+class "dipetakan::features::tambahlahan::screens::widgets::list_patokan_old.dart::_ListPatokanOldState" {
+  +ImagePicker imagePicker
+  +String strLatLong
+  +bool loading
+  -List<Patokan> _patokanList
+  +Widget build()
+}
+
+"dipetakan::features::tambahlahan::screens::widgets::list_patokan_old.dart::_ListPatokanOldState" o-- "image_picker::image_picker.dart::ImagePicker"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::tambahlahan::screens::widgets::list_patokan_old.dart::_ListPatokanOldState"
+
+class "dipetakan::features::tambahlahan::screens::widgets::pin_point.dart::PinPoint" {
+  +State<PinPoint> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::tambahlahan::screens::widgets::pin_point.dart::PinPoint"
+
+class "dipetakan::features::tambahlahan::screens::widgets::pin_point.dart::_PinPointState" {
+  +TambahLahanControllerOld controller
+  +Widget build()
+}
+
+"dipetakan::features::tambahlahan::screens::widgets::pin_point.dart::_PinPointState" o-- "dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::tambahlahan::screens::widgets::pin_point.dart::_PinPointState"
+
+class "dipetakan::features::tambahlahan::screens::widgets::tambah_lahan_body.dart::TambahLahanBody" {
+  +State<TambahLahanBody> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::tambahlahan::screens::widgets::tambah_lahan_body.dart::TambahLahanBody"
+
+class "dipetakan::features::tambahlahan::screens::widgets::tambah_lahan_body.dart::_TambahLahanBodyState" {
+  +TambahLahanControllerOld controller
+  +Widget build()
+}
+
+"dipetakan::features::tambahlahan::screens::widgets::tambah_lahan_body.dart::_TambahLahanBodyState" o-- "dipetakan::features::tambahlahan::controllers::tambahlahan_controller_dua.dart::TambahLahanControllerOld"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::tambahlahan::screens::widgets::tambah_lahan_body.dart::_TambahLahanBodyState"
+
+class "dipetakan::features::tambahlahan::screens::widgets::tambah_patokan_body.dart::TambahPatokanBody" {
+  +State<TambahPatokanBody> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "dipetakan::features::tambahlahan::screens::widgets::tambah_patokan_body.dart::TambahPatokanBody"
+
+class "dipetakan::features::tambahlahan::screens::widgets::tambah_patokan_body.dart::_TambahPatokanBodyState" {
+  +File? imageFile
+  +ImagePicker imagePicker
+  +String strLatLong
+  +String strAlamat
+  +bool loading
+  -dynamic _getGeoLocationPosition()
+  +Widget build()
+  +dynamic showPictureDialog()
+  +dynamic getFromGallery()
+  +dynamic getFromCamera()
+}
+
+"dipetakan::features::tambahlahan::screens::widgets::tambah_patokan_body.dart::_TambahPatokanBodyState" o-- "dart::io::File"
+"dipetakan::features::tambahlahan::screens::widgets::tambah_patokan_body.dart::_TambahPatokanBodyState" o-- "image_picker::image_picker.dart::ImagePicker"
+"flutter::src::widgets::framework.dart::State" <|-- "dipetakan::features::tambahlahan::screens::widgets::tambah_patokan_body.dart::_TambahPatokanBodyState"
+
+class "dipetakan::firebase_options.dart::DefaultFirebaseOptions" {
+  {static} +FirebaseOptions web
+  {static} +FirebaseOptions android
+  {static} +FirebaseOptions ios
+  {static} +FirebaseOptions currentPlatform
+}
+
+"dipetakan::firebase_options.dart::DefaultFirebaseOptions" o-- "firebase_core_platform_interface::firebase_core_platform_interface.dart::FirebaseOptions"
+
+class "dipetakan::util::constants::colors.dart::DColors" {
+  {static} +Color primary
+  {static} +Color secondary
+  {static} +Color accent
+  {static} +Color textPrimary
+  {static} +Color textSecondary
+  {static} +Color textWhite
+  {static} +Color light
+  {static} +Color dark
+  {static} +Color primaryBackground
+  {static} +Color lightContainer
+  {static} +Color darkContainer
+  {static} +Color buttonPrimary
+  {static} +Color buttonSecondary
+  {static} +Color buttonDisabled
+  {static} +Color borderPrimary
+  {static} +Color borderSecondary
+  {static} +Color error
+  {static} +Color success
+  {static} +Color warning
+  {static} +Color info
+  {static} +Color black
+  {static} +Color darkerGrey
+  {static} +Color darkGrey
+  {static} +Color grey
+  {static} +Color softGrey
+  {static} +Color lightGrey
+  {static} +Color white
+}
+
+"dipetakan::util::constants::colors.dart::DColors" o-- "dart::ui::Color"
+
+class "dipetakan::util::constants::image_strings.dart::TImages" {
+  {static} +String docerAnimation
+  {static} +String user
+}
+
+class "dipetakan::util::constants::sizes.dart::DSizes" {
+  {static} +double xs
+  {static} +double sm
+  {static} +double md
+  {static} +double lg
+  {static} +double xl
+  {static} +double xxl
+  {static} +double xxxl
+  {static} +double iconXs
+  {static} +double iconSm
+  {static} +double iconMd
+  {static} +double iconLg
+  {static} +double fontSizeSm
+  {static} +double fontSizeMd
+  {static} +double fontSizeLg
+  {static} +double buttonHeight
+  {static} +double buttonRadius
+  {static} +double buttonWidth
+  {static} +double buttonElevation
+  {static} +double appBarHeight
+  {static} +double imageThumbSize
+  {static} +double defaultSpace
+  {static} +double spaceBtwItems
+  {static} +double spaceBtwSections
+  {static} +double borderRadiusSm
+  {static} +double borderRadiusMd
+  {static} +double borderRadiusLg
+  {static} +double dividerHeight
+  {static} +double productImageSize
+  {static} +double productImageRadius
+  {static} +double productItemHeight
+  {static} +double inputFieldRadius
+  {static} +double spaceBtwInputFields
+  {static} +double cardRadiusLg
+  {static} +double cardRadiusMd
+  {static} +double cardRadiusSm
+  {static} +double cardRadiusXs
+  {static} +double cardElevation
+  {static} +double imageCarouselHeight
+  {static} +double loadingIndicatorSize
+  {static} +double gridViewSpacing
+}
+
+class "dipetakan::util::constants::text_strings.dart::DTexts" {
+  {static} +String and
+  {static} +String done
+  {static} +String submit
+  {static} +String appName
+  {static} +String tContinue
+  {static} +String close
+  {static} +String save
+  {static} +String cancel
+  {static} +String namalengkap
+  {static} +String email
+  {static} +String password
+  {static} +String newPassword
+  {static} +String username
+  {static} +String phoneNo
+  {static} +String rememberMe
+  {static} +String forgetPassword
+  {static} +String signIn
+  {static} +String createAccount
+  {static} +String iAgreeTo
+  {static} +String privacyPolicy
+  {static} +String termsOfUse
+  {static} +String verificationCode
+  {static} +String resendEmail
+  {static} +String selamat
+  {static} +String dataDiubah
+  {static} +String error
+  {static} +String adaSalah
+  {static} +String sedangProses
+  {static} +String loginTitle
+  {static} +String loginSubTitle
+  {static} +String signupSubTitle
+  {static} +String signupTitle
+  {static} +String forgetPasswordTitle
+  {static} +String resetPasswordTitle
+  {static} +String confirmPassword
+  {static} +String resetPasswordSuccessTitle
+  {static} +String resetPasswordSuccessSubtitle
+  {static} +String forgetPasswordSubTitle
+  {static} +String changeYourPasswordTitle
+  {static} +String changeYourPasswordSubTitle
+  {static} +String confirmEmail
+  {static} +String confirmEmailSubTitle
+  {static} +String emailNotReceivedMessage
+  {static} +String yourAccountCreatedTitle
+  {static} +String yourAccountCreatedSubTitle
+  {static} +String accountName
+  {static} +String accountEmail
+  {static} +String ubahPassword
+  {static} +String signOut
+  {static} +String bantuan
+  {static} +String profile
+  {static} +String namaLahan
+  {static} +String namaPemilikLahan
+  {static} +String deskripsiLahan
+  {static} +String statusverifikasi
+  {static} +String jenisLahan
+  {static} +String tambahPatokan
+  {static} +String hapusPatokan
+  {static} +String informasiLahan
+  {static} +String fotoPatokan
+  {static} +String ambilfotoPatokan
+  {static} +String hapusFoto
+  {static} +String titikKoordinat
+  {static} +String latitude
+  {static} +String longitude
+  {static} +String dapatkanLokasi
+}
+
+class "dipetakan::util::device::device_utility.dart::TDeviceUtils" {
+  {static} +void hideKeyboard()
+  {static} +dynamic setStatusBarColor()
+  {static} +bool isLandscapeOrientation()
+  {static} +bool isPortraitOrientation()
+  {static} +void setFullScreen()
+  {static} +double getScreenHeight()
+  {static} +double getScreenWidth()
+  {static} +double getPixelRatio()
+  {static} +double getStatusBarHeight()
+  {static} +double getBottomNavigationBarHeight()
+  {static} +double getAppBarHeight()
+  {static} +double getKeyboardHeight()
+  {static} +dynamic isKeyboardVisible()
+  {static} +dynamic isPhysicalDevice()
+  {static} +void vibrate()
+  {static} +dynamic setPreferredOrientations()
+  {static} +void hideStatusBar()
+  {static} +void showStatusBar()
+  {static} +dynamic hasInternetConnection()
+  {static} +bool isIOS()
+  {static} +bool isAndroid()
+  {static} +void launchUrl()
+}
+
+class "dipetakan::util::exceptions::exceptions.dart::TExceptions" {
+  +String message
+}
+
+"dart::core::Exception" <|-- "dipetakan::util::exceptions::exceptions.dart::TExceptions"
+
+class "dipetakan::util::exceptions::firebase_auth_exceptions.dart::TFirebaseAuthException" {
+  +String code
+  +String message
+}
+
+"dart::core::Exception" <|-- "dipetakan::util::exceptions::firebase_auth_exceptions.dart::TFirebaseAuthException"
+
+class "dipetakan::util::exceptions::firebase_exceptions.dart::TFirebaseException" {
+  +String code
+  +String message
+}
+
+"dart::core::Exception" <|-- "dipetakan::util::exceptions::firebase_exceptions.dart::TFirebaseException"
+
+class "dipetakan::util::exceptions::format_exceptions.dart::TFormatException" {
+  +String message
+  +String formattedMessage
+}
+
+"dart::core::Exception" <|-- "dipetakan::util::exceptions::format_exceptions.dart::TFormatException"
+
+class "dipetakan::util::exceptions::platform_exceptions.dart::TPlatformException" {
+  +String code
+  +String message
+}
+
+"dart::core::Exception" <|-- "dipetakan::util::exceptions::platform_exceptions.dart::TPlatformException"
+
+class "dipetakan::util::formatters::formatter.dart::TFormatter" {
+  {static} +String formatDate()
+  {static} +String formatCurrency()
+  {static} +String formatPhoneNumber()
+  {static} +String internationalFormatPhoneNumber()
+}
+
+class "dipetakan::util::helpers::helper_functions.dart::DHelperFunctions" {
+  {static} +Color? getColor()
+  {static} +void showSnackBar()
+  {static} +void showAlert()
+  {static} +void navigateToScreen()
+  {static} +String truncateText()
+  {static} +bool isDarkMode()
+  {static} +Size screenSize()
+  {static} +double screenHeight()
+  {static} +double screenWidth()
+  {static} +String getFormattedDate()
+  {static} +List<T> removeDuplicates()
+  {static} +List<Widget> wrapWidgets()
+}
+
+class "dipetakan::util::helpers::network_manager.dart::NetworkManager" {
+  -Connectivity _connectivity
+  -StreamSubscription<ConnectivityResult> _connectivitySubscription
+  -Rx<ConnectivityResult> _connectionStatus
+  {static} +NetworkManager instance
+  +void onInit()
+  -dynamic _updateConnectionStatus()
+  +dynamic isConnected()
+  +void onClose()
+}
+
+"dipetakan::util::helpers::network_manager.dart::NetworkManager" o-- "connectivity_plus::connectivity_plus.dart::Connectivity"
+"dipetakan::util::helpers::network_manager.dart::NetworkManager" o-- "dart::async::StreamSubscription<ConnectivityResult>"
+"dipetakan::util::helpers::network_manager.dart::NetworkManager" o-- "get::get_rx::src::rx_types::rx_types.dart::Rx<ConnectivityResult>"
+"dipetakan::util::helpers::network_manager.dart::NetworkManager" o-- "dipetakan::util::helpers::network_manager.dart::NetworkManager"
+"get::get_state_manager::src::simple::get_controllers.dart::GetxController" <|-- "dipetakan::util::helpers::network_manager.dart::NetworkManager"
+
+class "dipetakan::util::http::http_client.dart::THttpHelper" {
+  {static} -String _baseUrl
+  {static} +dynamic get()
+  {static} +dynamic post()
+  {static} +dynamic put()
+  {static} +dynamic delete()
+  {static} -Map<String, dynamic> _handleResponse()
+}
+
+class "dipetakan::util::local_storage::storage_utility.dart::TLocalStorage" {
+  {static} -TLocalStorage _instance
+  -GetStorage _storage
+  +dynamic saveData()
+  +T? readData()
+  +dynamic removeData()
+  +dynamic clearAll()
+}
+
+"dipetakan::util::local_storage::storage_utility.dart::TLocalStorage" o-- "dipetakan::util::local_storage::storage_utility.dart::TLocalStorage"
+"dipetakan::util::local_storage::storage_utility.dart::TLocalStorage" o-- "get_storage::src::storage_impl.dart::GetStorage"
+
+class "dipetakan::util::logging::logger.dart::TLoggerHelper" {
+  {static} -Logger _logger
+  {static} +void debug()
+  {static} +void info()
+  {static} +void warning()
+  {static} +void error()
+}
+
+"dipetakan::util::logging::logger.dart::TLoggerHelper" o-- "logger::src::logger.dart::Logger"
+
+class "dipetakan::util::popups::full_screen_loader.dart::DFullScreenLoader" {
+  {static} +void openLoadingDialog()
+  {static} +dynamic stopLoading()
+}
+
+class "dipetakan::util::popups::loaders.dart::DLoaders" {
+  {static} +dynamic hideSnackBar()
+  {static} +dynamic customToast()
+  {static} +dynamic successSnackBar()
+  {static} +dynamic warningSnackBar()
+  {static} +dynamic errorSnackBar()
+}
+
+class "dipetakan::util::theme::custom_themes::appbar_theme.dart::DAppBarTheme" {
+  {static} +AppBarTheme lightAppBarTheme
+  {static} +AppBarTheme darkAppBarTheme
+}
+
+"dipetakan::util::theme::custom_themes::appbar_theme.dart::DAppBarTheme" o-- "flutter::src::material::app_bar_theme.dart::AppBarTheme"
+
+class "dipetakan::util::theme::custom_themes::buttom_sheet_theme.dart::DBottomSheetTheme" {
+  {static} +BottomSheetThemeData lightBottomSheetTheme
+  {static} +BottomSheetThemeData darkBottomSheetTheme
+}
+
+"dipetakan::util::theme::custom_themes::buttom_sheet_theme.dart::DBottomSheetTheme" o-- "flutter::src::material::bottom_sheet_theme.dart::BottomSheetThemeData"
+
+class "dipetakan::util::theme::custom_themes::checkbox_theme.dart::DCheckboxTheme" {
+  {static} +CheckboxThemeData lightCheckboxTheme
+  {static} +CheckboxThemeData darkCheckboxTheme
+}
+
+"dipetakan::util::theme::custom_themes::checkbox_theme.dart::DCheckboxTheme" o-- "flutter::src::material::checkbox_theme.dart::CheckboxThemeData"
+
+class "dipetakan::util::theme::custom_themes::chip_theme.dart::DChipTheme" {
+  {static} +ChipThemeData lightChipTheme
+  {static} +ChipThemeData darkChipTheme
+}
+
+"dipetakan::util::theme::custom_themes::chip_theme.dart::DChipTheme" o-- "flutter::src::material::chip_theme.dart::ChipThemeData"
+
+class "dipetakan::util::theme::custom_themes::elevated_button_theme.dart::DElevatedButtonTheme" {
+  {static} +ElevatedButtonThemeData lightElevatedButtonTheme
+  {static} +ElevatedButtonThemeData darkElevatedButtonTheme
+}
+
+"dipetakan::util::theme::custom_themes::elevated_button_theme.dart::DElevatedButtonTheme" o-- "flutter::src::material::elevated_button_theme.dart::ElevatedButtonThemeData"
+
+class "dipetakan::util::theme::custom_themes::outlined_button_theme.dart::DOutlinedButtonTheme" {
+  {static} +OutlinedButtonThemeData lightOutlinedButtonTheme
+  {static} +OutlinedButtonThemeData darkOutlinedButtonTheme
+}
+
+"dipetakan::util::theme::custom_themes::outlined_button_theme.dart::DOutlinedButtonTheme" o-- "flutter::src::material::outlined_button_theme.dart::OutlinedButtonThemeData"
+
+class "dipetakan::util::theme::custom_themes::text_field_theme.dart::DTextFormFieldTheme" {
+  {static} +InputDecorationTheme lightInputDecorationTheme
+  {static} +InputDecorationTheme darkInputDecorationTheme
+}
+
+"dipetakan::util::theme::custom_themes::text_field_theme.dart::DTextFormFieldTheme" o-- "flutter::src::material::input_decorator.dart::InputDecorationTheme"
+
+class "dipetakan::util::theme::custom_themes::text_theme.dart::DTextTheme" {
+  {static} +TextTheme lightTextTheme
+  {static} +TextTheme darkTextTheme
+}
+
+"dipetakan::util::theme::custom_themes::text_theme.dart::DTextTheme" o-- "flutter::src::material::text_theme.dart::TextTheme"
+
+class "dipetakan::util::theme::theme.dart::DAppTheme" {
+  {static} +ThemeData lightTheme
+  {static} +ThemeData darkTheme
+}
+
+"dipetakan::util::theme::theme.dart::DAppTheme" o-- "flutter::src::material::theme_data.dart::ThemeData"
+
+class "dipetakan::util::validators::validation.dart::TValidator" {
+  {static} +String? validateEmptyText()
+  {static} +String? validateJenisLahan()
+  {static} +String? validateEmail()
+  {static} +String? validatePassword()
+  {static} +String? validatePhoneNumber()
+}
+
+
+@enduml
