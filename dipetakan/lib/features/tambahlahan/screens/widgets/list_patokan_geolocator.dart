@@ -1,23 +1,22 @@
 import 'dart:io';
 
 // import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
-import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller_dua.dart';
+import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ListPatokanGeo extends StatefulWidget {
-  const ListPatokanGeo({super.key});
+class ListPatokan extends StatefulWidget {
+  const ListPatokan({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _ListPatokanGeoState createState() => _ListPatokanGeoState();
+  _ListPatokanState createState() => _ListPatokanState();
 }
 
-class _ListPatokanGeoState extends State<ListPatokanGeo> {
-  final TambahLahanControllerOld controller =
-      Get.put(TambahLahanControllerOld());
+class _ListPatokanState extends State<ListPatokan> {
+  final TambahLahanController controller = Get.put(TambahLahanController());
   // final TambahLahanController controller = Get.put(TambahLahanController());
   final ImagePicker imagePicker = ImagePicker();
   String strLatLong = 'Belum mendapatkan Lat dan Long';

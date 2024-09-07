@@ -34,8 +34,8 @@ import 'package:location/location.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
-class TambahLahanControllerOld extends GetxController {
-  static TambahLahanControllerOld get instance => Get.find();
+class TambahLahanController extends GetxController {
+  static TambahLahanController get instance => Get.find();
 
   final namaLahanController = TextEditingController();
   final deskripsiLahanController = TextEditingController();

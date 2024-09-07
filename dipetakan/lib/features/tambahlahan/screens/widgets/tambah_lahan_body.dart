@@ -1,6 +1,6 @@
 // import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
 // import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
-import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller_dua.dart';
+import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
 import 'package:dipetakan/features/tambahlahan/data/jenislahanlist.dart';
 import 'package:dipetakan/features/tambahlahan/models/jenislahanmodel.dart';
 // import 'package:dipetakan/features/tambahlahan/screens/widgets/list_patokan.dart';
@@ -21,8 +21,7 @@ class TambahLahanBody extends StatefulWidget {
 
 class _TambahLahanBodyState extends State<TambahLahanBody> {
   // final TambahLahanController controller = Get.put(TambahLahanController());
-  final TambahLahanControllerOld controller =
-      Get.put(TambahLahanControllerOld());
+  final TambahLahanController controller = Get.put(TambahLahanController());
   // JenisLahanDataModel? _jenislahanChoose;
 
   // void _onDropDownItemSelected(JenisLahanDataModel? newSelectedJenisLahan) {
@@ -174,7 +173,7 @@ class _TambahLahanBodyState extends State<TambahLahanBody> {
                 //   ),
                 // ),
                 // const ListPatokanOld(),
-                const ListPatokanGeo(),
+                const ListPatokan(),
 
                 const SizedBox(height: DSizes.spaceBtwInputFields),
 
