@@ -19,10 +19,7 @@ class DLoaders {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             color: DColors.grey.withOpacity(0.9),
-            // DHelperFunctions.isDarkMode(Get.context!)
-            //     ? DColors.darkerGrey.withOpacity(6.9)
-            //     : DColors.grey.withOpacity(0.9),
-          ), // BoxDecoration
+          ),
           child: Center(
               child: Text(message,
                   style: Theme.of(Get.context!).textTheme.labelLarge)),

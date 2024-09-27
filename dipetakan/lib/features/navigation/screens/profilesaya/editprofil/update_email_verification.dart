@@ -1,12 +1,10 @@
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/features/navigation/controllers/update_email_controller.dart';
-// import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:get/get.dart';
 
 class VerifyUpdateEmailScreen extends StatelessWidget {
   const VerifyUpdateEmailScreen({super.key, this.email});

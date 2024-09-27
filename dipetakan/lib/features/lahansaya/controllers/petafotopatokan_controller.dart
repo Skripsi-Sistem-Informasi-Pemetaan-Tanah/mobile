@@ -1,12 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-// import 'dart:io';
-// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dipetakan/data/repositories/tambahlahan/lahan_repository.dart';
-import 'package:dipetakan/features/lahansaya/screens/lacak_status.dart';
-// import 'package:dipetakan/features/lahansaya/screens/peta_titik_validasi.dart';
-// import 'package:dipetakan/features/petalahan/screens/widgets/infolahan_bottomsheet.dart';
+import 'package:dipetakan/features/navigation/screens/navigation.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
 import 'package:dipetakan/util/constants/api_constants.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
@@ -23,7 +19,6 @@ import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-// ignore: depend_on_referenced_packages
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
@@ -33,7 +28,6 @@ class PetaFotoPatokanController extends GetxController {
   final lahanRepository = Get.put(LahanRepository());
   var currentLocation = Rxn<LocationData>();
   var initialPosition = Rx<LatLng?>(null);
-  // LatLng? initialPosition;
   final RxList<String> selectedJenisLahan = RxList([]);
   final RxList<int> selectedStatusValidasi = RxList([]);
   final RxList<LahanModel> lahanData = RxList([]);
@@ -41,8 +35,7 @@ class PetaFotoPatokanController extends GetxController {
   var patokanList = <PatokanModel>[].obs;
   var loading = false.obs;
   var strLatLong = ''.obs;
-  var markers = <Marker>{}.obs; // Manage markers as a se
-  // var markers = <Marker>[].obs;
+  var markers = <Marker>{}.obs;
   var filterTrigger = 0.obs;
   final imagePicker = ImagePicker();
 
@@ -51,10 +44,6 @@ class PetaFotoPatokanController extends GetxController {
     super.onInit();
     getCurrentLocation();
     fetchDataFromPostgresql();
-    // .then((_) {
-    //   setInitialCameraPosition(Get.arguments['map_id']);
-    // });
-    // addCustomMarker();
   }
 
   Future<void> fetchDataFromPostgresql() async {
@@ -109,39 +98,24 @@ class PetaFotoPatokanController extends GetxController {
     }
   }
 
-  // void addCustomMarker() async {
-  //   BitmapDescriptor.fromAssetImage(
-  //           const ImageConfiguration(), 'assets/images/location_icon.png')
-  //       .then((markerIcon) {
-  //     markerbitmap.value = markerIcon;
-  //   });
-  // }
-
   void setFilters(List<String> jenisLahan, List<int> statusValidasi) {
     selectedJenisLahan.value = jenisLahan;
     selectedStatusValidasi.value = statusValidasi;
     filterTrigger.value++;
     lahanData.refresh();
-    // lahanData.update((val) => val); // Trigger rebuild
   }
 
   Set<Polygon> buildPolygons({required String mapId}) {
     Set<Polygon> polygons = {};
 
-    // Iterate through lahanData
     for (var lahan in lahanData) {
       if (lahan.id != mapId) {
-        // Skip lahan that does not match the mapId
         continue;
       }
       // Check if verifikasi list is not empty
       if (lahan.verifikasi.isNotEmpty) {
         // Sort the verifikasi list by verifiedAt in descending order
         lahan.verifikasi.sort((a, b) => b.verifiedAt.compareTo(a.verifiedAt));
-
-        // // Get the newest statusverifikasi
-        // String newestStatusVerifikasi =
-        //     lahan.verifikasi.first.statusverifikasi.trim(); // Trim whitespace
 
         // Get the newest statusverifikasi
         int newestStatusVerifikasi = lahan.verifikasi.first.statusverifikasi;
@@ -171,66 +145,40 @@ class PetaFotoPatokanController extends GetxController {
           polygonPoints.add(point);
         }
 
-        Color fillColor = Colors.red; // Default color for "belum tervalidasi"
-        if (newestStatusVerifikasi == 0 & 1) {
-          fillColor = Colors.yellow; // Change color for "sudah tervalidasi"
+        Color fillColor;
+        Color strokeColor;
+
+        switch (newestStatusVerifikasi) {
+          case 0:
+            fillColor = Colors.red.withOpacity(0.2);
+            strokeColor = Colors.red;
+            break;
+          case 1:
+            fillColor = Colors.yellow.withOpacity(0.2);
+            strokeColor = Colors.yellow;
+            break;
+          case 2:
+            fillColor = Colors.green.withOpacity(0.2);
+            strokeColor = Colors.green;
+            break;
+          case 3:
+            fillColor = Colors.red.withOpacity(0.2);
+            strokeColor = Colors.red;
+            break;
+          default:
+            fillColor = Colors.grey.withOpacity(0.2);
+            strokeColor = Colors.grey;
         }
 
-        Color strokeColor = Colors.red; // Default color for "belum tervalidasi"
-        if (newestStatusVerifikasi == 2) {
-          strokeColor = Colors.yellow; // Change color for "sudah tervalidasi"
-        }
-        // for (var point in polygonPoints) {
-        //   markers.add(
-        //     Marker(
-        //       markerId: MarkerId('${point.latitude},${point.longitude}'),
-        //       position: point,
-        //       icon: markerbitmap.value,
-        //       infoWindow: InfoWindow(
-        //         title: lahan.namaLahan,
-        //         snippet: 'Coordinate: ${point.latitude}, ${point.longitude}',
-        //       ),
-        //     ),
-        //   );
-        // }
-
-        // // Add marker for each coordinate
-        //   markers.add(
-        //     Marker(
-        //       markerId: MarkerId('${point.latitude},${point.longitude}'),
-        //       position: point,
-        //       icon: markerbitmap.value,
-        //       infoWindow: InfoWindow(
-        //         title: lahan.namaLahan,
-        //         snippet: 'Coordinate: ${point.latitude}, ${point.longitude}',
-        //       ),
-        //     ),
-        //   );
         polygons.add(Polygon(
           polygonId: PolygonId(lahan.id),
           points: polygonPoints,
           strokeColor: strokeColor,
           strokeWidth: 2,
-          fillColor: fillColor.withOpacity(0.2),
+          fillColor: fillColor,
           consumeTapEvents: true,
-
-          // onTap: () async {
-          //   addMarkersForPolygon(lahan, polygonPoints);
-          //   await showModalBottomSheet<dynamic>(
-          //       backgroundColor: Colors.white,
-          //       context: Get.context!,
-          //       builder: (context) => SizedBox(
-          //           height: MediaQuery.of(context).size.height * 0.28,
-          //           child: InfoLahanBottomSheet(lahan: lahan)));
-          // },
         ));
 
-        // Set the initial position to the first point in the polygon
-        // if (initialPosition.value == null && polygonPoints.isNotEmpty) {
-
-        // }
-        // initialPosition = polygonPoints.first;
-        // update();
         addMarkersForPolygon(lahan, polygonPoints);
 
         _setMapFitToPolygon(polygonPoints);
@@ -239,23 +187,6 @@ class PetaFotoPatokanController extends GetxController {
 
     return polygons;
   }
-
-  // Add this method to your PetaFotoPatokanController
-  // Set<Marker> buildMarkers({required String mapId}) {
-  //   // final lahanData = fetchDataFromPostgresql(); // Ensure this fetches data correctly
-  //   for
-
-  //   final selectedLahan = lahanData.firstWhere(
-  //     (lahan) => lahan.id == mapId,
-  //     orElse: () => null,
-  //   );
-
-  //   if (selectedLahan != null) {
-  //     addMarkersForPolygon(selectedLahan, selectedLahan.polygonPoints);
-  //   }
-
-  //   return markers.toSet();
-  // }
 
   Set<Marker> buildMarkers({required String mapId}) {
     Set<Marker> markers = {};
@@ -292,11 +223,9 @@ class PetaFotoPatokanController extends GetxController {
               infoWindow: InfoWindow(
                 title: patokan.coordComment.isEmpty == false
                     ? patokan.coordComment
-                    : "Tidak Ada Komentar", // Use coordComment if available, else "Tidak Ada Komentar"
-                // patokan.coordComment, // Use coordComment for the title
+                    : "Tidak Ada Komentar",
                 snippet: 'Coordinate: ${point.latitude}, ${point.longitude}',
                 onTap: () => _onMarkerTapped(patokan),
-                // () => Get.to(() => EditLahan(lahan: lahan)),
               ),
             ),
           );
@@ -318,9 +247,6 @@ class PetaFotoPatokanController extends GetxController {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // patokan.localPath.isNotEmpty
-            //     ? Image.file(File(patokan.localPath))
-            //     :
             patokan.fotoPatokan.isNotEmpty
                 ? Image.network(patokan.fotoPatokan)
                 : const Text('No Image'),
@@ -329,12 +255,6 @@ class PetaFotoPatokanController extends GetxController {
           ],
         ),
         actions: [
-          // SizedBox(
-          //   width: DSizes.buttonWidth,
-          //   child: ElevatedButton(
-          //       onPressed: () => replaceFotoPatokan(patokan),
-          //       child: const Text('Ganti Foto')),
-          // ),
           TextButton(
             onPressed: () => Get.back(),
             child:
@@ -366,8 +286,7 @@ class PetaFotoPatokanController extends GetxController {
       northeast: LatLng(maxLat, maxLong),
     );
 
-    // Define the padding factor
-    double paddingFactor = 0.2; // Adjust this value as needed
+    double paddingFactor = 0.2;
 
     LatLngBounds paddedBounds = LatLngBounds(
       southwest: LatLng(
@@ -386,8 +305,6 @@ class PetaFotoPatokanController extends GetxController {
   }
 
   void addMarkersForPolygon(LahanModel lahan, List<LatLng> polygonPoints) {
-    // markers.clear(); // Clear existing markers
-
     for (var point in polygonPoints) {
       markers.add(
         Marker(
@@ -465,17 +382,13 @@ class PetaFotoPatokanController extends GetxController {
       // Clear patokan list
       patokanList.clear();
 
-      // // Navigate to PetaTitikValidasi
-      // Get.to(() => PetaTitikValidasi(lahan: existingLahan));
-      // Get.back();
-      Get.off(() => LacakStatusScreen(lahan: existingLahan));
+      Get.offAll(() => const NavigationMenu());
     } catch (e) {
       DFullScreenLoader.stopLoading();
       DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
     }
   }
 
-  // void updatePolygons(List<LatLng> polygonCoords) {}
   Future<void> uploadPatokanImages() async {
     for (int i = 0; i < patokanList.length; i++) {
       final patokan = patokanList[i];
@@ -495,16 +408,6 @@ class PetaFotoPatokanController extends GetxController {
             final imageUrl = await lahanRepository.uploadImage(
                 'Lahan/Patokan/', compressedImageFile);
 
-            // // Update the patokanList with the new image URL
-            // patokanList[i] = PatokanModel(
-            //   localPath: patokan.localPath,
-            //   fotoPatokan: imageUrl,
-            //   coordinates: patokan.coordinates,
-            //   coordComment: patokan.coordComment,
-            //   coordVerif: patokan.coordVerif,
-            //   coordStatus: patokan.coordStatus,
-            //   coordPercent: patokan.coordPercent,
-            // );
             // Find the corresponding patokan based on coordinates
             var updatedPatokanList = patokanList.map((p) {
               if (p.coordinates == patokan.coordinates) {
@@ -553,13 +456,13 @@ class PetaFotoPatokanController extends GetxController {
           if (patokan.coordinates == coordinate) {
             return PatokanModel(
               coordinates: patokan.coordinates,
-              fotoPatokan: patokan.fotoPatokan, // Set the new URL
+              fotoPatokan: patokan.fotoPatokan,
               coordComment: patokan.coordComment,
               coordCommentUser: patokan.coordCommentUser,
               coordVerif: patokan.coordVerif,
               coordStatus: patokan.coordStatus,
               coordPercent: patokan.coordPercent,
-              localPath: pickedFile.path, // Store the local path
+              localPath: pickedFile.path,
             );
           }
           return patokan;

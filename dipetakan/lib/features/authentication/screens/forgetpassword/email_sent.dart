@@ -5,7 +5,6 @@ import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:get/get.dart';
 
 class EmailSentScreen extends StatelessWidget {
   const EmailSentScreen({super.key, required this.email});

@@ -12,9 +12,6 @@ class DFullScreenLoader {
             canPop: false,
             child: Container(
               color: DColors.white,
-              //  DHelperFunctions.isDarkMode(Get.context!)
-              //     ? DColors.dark
-              //     : DColors.white,
               width: double.infinity,
               height: double.infinity,
               child: Column(

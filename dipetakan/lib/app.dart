@@ -1,6 +1,5 @@
 import 'package:dipetakan/bindings/general_bindings.dart';
 import 'package:dipetakan/features/authentication/screens/login/login.dart';
-// import 'package:dipetakan/features/authentication/screens/signup/signup.dart';
 import 'package:dipetakan/util/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';

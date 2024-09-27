@@ -1,18 +1,13 @@
-// import 'dart:convert';
-
 import 'dart:convert';
-
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/data/repositories/authentication/user_repository.dart';
 import 'package:dipetakan/features/authentication/models/user_model.dart';
 import 'package:dipetakan/features/authentication/screens/signup/email_verification.dart';
 import 'package:dipetakan/util/constants/api_constants.dart';
-// import 'package:dipetakan/util/constants/api_constants.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:dipetakan/util/popups/full_screen_loader.dart';
 import 'package:dipetakan/util/popups/loaders.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dipetakan/util/helpers/network_manager.dart';
@@ -46,19 +41,6 @@ class SignupController extends GetxController {
         DFullScreenLoader.stopLoading();
         return;
       }
-
-      // Check server and database connection
-      // final serverurl = Uri.parse('$baseUrl/checkConnectionDatabase');
-      // final http.Response serverresponse = await http.get(serverurl);
-
-      // if (serverresponse.statusCode != 200) {
-      //   DLoaders.errorSnackBar(
-      //     title: 'Oh Tidak!',
-      //     message: 'Server or Database is not connected',
-      //   );
-      //   DFullScreenLoader.stopLoading();
-      //   return;
-      // }
 
       //Form validation
       if (!signupFormKey.currentState!.validate()) {

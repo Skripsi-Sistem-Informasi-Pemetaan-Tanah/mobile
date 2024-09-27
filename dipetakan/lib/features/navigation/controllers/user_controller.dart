@@ -76,7 +76,6 @@ class UserController extends GetxController {
   /// Delete Account Worning
   void deleteAccountWarningPopup(UserModel user) {
     Get.defaultDialog(
-      // contentPadding: const EdgeInsets.all(DSizes.md)
       backgroundColor: Colors.white,
       title: 'Hapus Akun',
       middleText:
@@ -96,17 +95,6 @@ class UserController extends GetxController {
     );
   }
 
-  // void deleteUserAccount() async {
-  //   DFullScreenLoader.openLoadingDialog('Processing', TImages.docerAnimation);
-
-  //   final auth = AuthenticationRepository.instance;
-  //   final provider = auth.authUser!.providerData.map((e) => e.providerId).first;
-  //   if (provider.isNotEmpty) {
-  //     DFullScreenLoader.stopLoading();
-  //     Get.to(() => const ReAuthUserScreen());
-  //   }
-  // }
-
   void deleteUserAccount(UserModel user) async {
     try {
       // Start loading
@@ -116,7 +104,6 @@ class UserController extends GetxController {
       final auth = AuthenticationRepository.instance;
       final provider =
           auth.authUser?.providerData.map((e) => e.providerId).first ?? '';
-      // final userId = AuthenticationRepository.instance.authUser?.uid;
       final userId = user.id;
       var url = Uri.parse('$baseUrl/deleteUser/$userId');
       var response = await http.delete(url);
@@ -126,17 +113,6 @@ class UserController extends GetxController {
         DFullScreenLoader.stopLoading();
         Get.to(() => const ReAuthUserScreen());
       } else {
-        // var url = Uri.parse('$baseUrl/deleteUser/$userId');
-        // var response = await http.delete(url);
-        // var url = Uri.parse('$baseUrl/deleteUser/$userId');
-        // var response = await http.delete(
-        //   url,
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //   },
-        //   body: jsonEncode(user.toJson()),
-        // );
-
         if (response.statusCode != 200) {
           DLoaders.errorSnackBar(
               title: 'Oh Tidak!', message: 'Gagal Menghapus');

@@ -49,14 +49,7 @@ class MenuScreen extends StatelessWidget {
         builder: (context, constraints) {
           return OrientationBuilder(
             builder: (context, orientation) {
-              // Adjust grid layout based on screen size and orientation
-              int crossAxisCount = orientation == Orientation.portrait
-                  ? 2
-                  : 4; // 2 columns in portrait, 3 in landscape
-              // double containerHeight = orientation == Orientation.portrait
-              //     ? constraints.maxHeight * 0.14 // Height for portrait
-              //     : constraints.maxHeight * 0.4; // Height for landscape
-
+              int crossAxisCount = orientation == Orientation.portrait ? 2 : 4;
               return SingleChildScrollView(
                 child: Container(
                   color: DColors.primary,
@@ -64,8 +57,6 @@ class MenuScreen extends StatelessWidget {
                     children: [
                       Container(
                         color: DColors.primary,
-                        // width: constraints.maxWidth,
-                        // height: containerHeight,
                         alignment: Alignment.centerLeft,
                         child: Padding(
                           padding: const EdgeInsets.only(
@@ -129,8 +120,6 @@ class MenuScreen extends StatelessWidget {
                             topRight: Radius.circular(30),
                           ),
                         ),
-                        // height: constraints.maxHeight * 1,
-                        // width: constraints.maxWidth,
                         child: Padding(
                           padding: const EdgeInsets.only(
                             top: 25.0,

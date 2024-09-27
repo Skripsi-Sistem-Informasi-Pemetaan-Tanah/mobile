@@ -1,31 +1,10 @@
 name: dipetakan
 description: "A new Flutter project."
-
-
 publish_to: 'none' 
-
-
-
-
-
-
-
-
-
-
-
-
-
 version: 1.0.0+1
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
-
-
-
-
-
-
 
 dependencies:
   flutter:
@@ -33,44 +12,30 @@ dependencies:
 
   # Utility Packages
   http: ^1.2.0
-  provider: ^6.1.2
-  flutter_secure_storage: ^9.2.2
   intl: ^0.19.0
-  logger: ^2.0.1
   lottie: ^3.1.0
   connectivity_plus: ^5.0.1
-  url_launcher: ^6.2.3
   flutter_native_splash: ^2.4.0
-  smooth_page_indicator: ^1.1.0
   timeline_tile: ^2.0.0
-  easy_stepper: ^0.8.5
-  baseflow_plugin_template: ^2.1.2
   flutter_image_compress: ^2.3.0
+  carousel_slider: ^4.2.1
+  cached_network_image: ^3.3.1
+  path_provider: ^2.1.4
 
   # Icons & UI
   iconsax: ^0.0.8
   cupertino_icons: ^1.0.6
-  getwidget: ^4.0.0
   shimmer: ^3.0.0
 
   # State Management
   get: ^4.6.6
   get_storage: ^2.1.1
 
-  # Product Specific
-  readmore: ^2.2.0
-  carousel_slider: ^4.2.1
-  flutter_rating_bar: ^4.0.1
-  capped_progress_indicator: ^0.0.2
-
   # Google Maps
   google_maps_flutter: ^2.5.3
 
   # Feature
   image_picker: ^1.0.7
-  dotted_border: ^2.1.0
-  geolocator: ^12.0.0
-  geocoding: ^3.0.0
   location: ^5.0.0
 
   #Firebase
@@ -78,11 +43,6 @@ dependencies:
   firebase_auth: ^4.14.0
   cloud_firestore: ^4.17.2
   firebase_storage: ^11.7.5
-  cached_network_image: ^3.3.1
-  firebase_app_check: ^0.2.2+7
-  path_provider: ^2.1.4
-  dcdg: ^4.1.0
-
 
 
 dev_dependencies:

@@ -1,18 +1,14 @@
 import 'package:dipetakan/features/lahansaya/controllers/petavalidasi_controller.dart';
-// import 'package:dipetakan/features/petalahan/controllers/petalahan_controller.dart';
 import 'package:dipetakan/features/lahansaya/screens/widgets/filter_button.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:get/get.dart';
 
 class PetaTitikValidasi extends StatefulWidget {
-  // final String mapId;
   final LahanModel lahan;
 
   const PetaTitikValidasi({super.key, required this.lahan});
@@ -25,17 +21,10 @@ class _PetaTitikValidasiState extends State<PetaTitikValidasi> {
   final PetaValidasiController controller = Get.put(PetaValidasiController());
   var markers = <Marker>{}.obs;
 
-  // LatLng? _initialPosition;
-
-  // late CameraPosition _initialCameraPosition;
-
   @override
   void initState() {
     super.initState();
-    // controller.buildMarkers();
     controller.patokanList.value = widget.lahan.patokan;
-    // controller._onMarkerTapped;
-    // controller.setInitialCameraPosition(widget.mapId);
   }
 
   @override
@@ -76,11 +65,9 @@ class _PetaTitikValidasiState extends State<PetaTitikValidasi> {
                     }
                   },
                   markers: controller.buildMarkers(mapId: widget.lahan.id),
-                  // controller.markers.toSet(),
                   polygons: controller.buildPolygons(mapId: widget.lahan.id),
                   zoomControlsEnabled: false,
                   zoomGesturesEnabled: true,
-                  // scrollGesturesEnabled: true,
                   myLocationEnabled: true,
                   myLocationButtonEnabled: true,
                   compassEnabled: true,
@@ -104,22 +91,6 @@ class _PetaTitikValidasiState extends State<PetaTitikValidasi> {
           right: DSizes.defaultSpace,
           bottom: DSizes.defaultSpace,
         ),
-//         child: Obx(() {
-//   bool isButtonDisabled = false;
-
-//   return SizedBox(
-//     width: double.infinity,
-//     child: ElevatedButton(
-//       onPressed: isButtonDisabled
-//           ? null // Disable the button
-//           : () {
-//               controller.verifikasiKoordinat(widget.lahan);
-//               isButtonDisabled = true; // Disable the button after it's clicked
-//             },
-//       child: const Text(DTexts.submit),
-//     ),
-//   );
-// }),
         child: SizedBox(
           width: double.infinity,
           child: ElevatedButton(
@@ -127,8 +98,6 @@ class _PetaTitikValidasiState extends State<PetaTitikValidasi> {
               child: const Text(DTexts.submit)),
         ),
       ),
-
-      // : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }

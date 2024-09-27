@@ -1,9 +1,5 @@
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
-// import 'package:dipetakan/features/authentication/controllers/signup/signup_controller.dart';
-// import 'package:dipetakan/features/authentication/controllers/signup/signup_controller_postgres.dart';
 import 'package:dipetakan/features/navigation/controllers/user_controller.dart';
-// import 'package:dipetakan/features/navigation/controllers/user_controller_postgres.dart';
-// import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/profilsaya.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/widgets/circular_image.dart';
 import 'package:dipetakan/features/navigation/screens/tentang_aplikasi.dart';
@@ -22,15 +18,11 @@ class AkunSaya extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final controller = UserController.instance;
     final controller = Get.put(UserController());
 
     return Scaffold(
       body: LayoutBuilder(builder: (context, constraints) {
         return OrientationBuilder(builder: (context, orientation) {
-          // double containerHeight = orientation == Orientation.portrait
-          //     ? constraints.maxHeight * 0.16 // Height for portrait
-          //     : constraints.maxHeight * 0.5; // Height for landscape
           return SingleChildScrollView(
             child: Container(
               color: DColors.primary,
@@ -38,8 +30,6 @@ class AkunSaya extends StatelessWidget {
                 children: [
                   Container(
                     color: DColors.primary,
-                    // width: MediaQuery.of(context).size.width,
-                    // height: containerHeight,
                     child: Padding(
                       padding: const EdgeInsets.only(
                           top: 8.0, left: 24.0, right: 24.0, bottom: 24.0),
@@ -57,7 +47,6 @@ class AkunSaya extends StatelessWidget {
                                     image: image,
                                     width: 80,
                                     height: 80,
-                                    // padding: 0.0,
                                     isNetworkImage: networkImage.isNotEmpty);
                           }),
                           const SizedBox(width: DSizes.md),
@@ -71,10 +60,8 @@ class AkunSaya extends StatelessWidget {
                                     .textTheme
                                     .headlineSmall
                                     ?.copyWith(
-                                      color: Colors
-                                          .white, // Set the color to white
-                                      fontWeight: FontWeight
-                                          .bold, // Set the font weight to bold
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
                                     ),
                               ),
                               const SizedBox(height: DSizes.xs),
@@ -84,8 +71,7 @@ class AkunSaya extends StatelessWidget {
                                     .textTheme
                                     .bodySmall
                                     ?.copyWith(
-                                      color: Colors
-                                          .white, // Set the text color to white
+                                      color: Colors.white,
                                     ),
                               ),
                             ],
@@ -157,7 +143,6 @@ class AkunSaya extends StatelessWidget {
                                     onPressed: () => AuthenticationRepository
                                         .instance
                                         .logout(),
-                                    // SignupController.instance.logout(),
                                     child: const Text(DTexts.signOut)),
                               ),
                             ),

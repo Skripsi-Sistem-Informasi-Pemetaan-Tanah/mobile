@@ -2,10 +2,8 @@ import 'package:dipetakan/data/repositories/authentication/authentication_reposi
 import 'package:dipetakan/data/repositories/authentication/user_repository.dart';
 import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/features/navigation/controllers/user_controller.dart';
-// import 'package:dipetakan/features/navigation/controllers/user_controller_postgres.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/email_updated.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/update_email_verification.dart';
-// import 'package:dipetakan/features/navigation/screens/profilesaya/profilsaya.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
 import 'package:dipetakan/util/exceptions/firebase_auth_exceptions.dart';
 import 'package:dipetakan/util/exceptions/firebase_exceptions.dart';
@@ -82,13 +80,11 @@ class UpdateEmailController extends GetxController {
       await AuthenticationRepository.instance
           .verifyBeforeUpdateEmail(newEmail.text.trim());
 
-      // /Update user's email in the Firebase Firestore
+      // Update user's email in the Firebase Firestore
       Map<String, dynamic> userEmail = {'email': newEmail.text.trim()};
       await userRepository.updateSingleField(userEmail);
 
       userController.user.value.email = newEmail.text.trim();
-
-      // await AuthenticationRepository.instance.userUpdated();
 
       //remove loader
       DFullScreenLoader.stopLoading();
@@ -148,8 +144,6 @@ class UpdateEmailController extends GetxController {
       }
     } catch (e) {
       throw 'Ada sebuah kesalahan, harap coba lagi!: $e';
-      // DLoaders.errorSnackBar(
-      //     title: 'Error', message: 'Something went wrong try again : $e');
     }
     return null;
   }

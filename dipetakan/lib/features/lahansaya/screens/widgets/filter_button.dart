@@ -148,7 +148,6 @@ class _FilterButtonState extends State<FilterButton> {
               ),
               actions: [
                 SizedBox(
-                  // width: DSizes.buttonWidth,
                   child: OutlinedButton(
                     onPressed: () {
                       setState(() {

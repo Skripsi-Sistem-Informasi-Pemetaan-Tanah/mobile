@@ -1,5 +1,4 @@
 import 'package:dipetakan/features/authentication/controllers/signup/signup_controller.dart';
-// import 'package:dipetakan/features/authentication/controllers/signup/signup_controller_postgres.dart';
 import 'package:dipetakan/features/authentication/screens/signup/kebijakan_privasi.dart';
 import 'package:dipetakan/features/authentication/screens/signup/ketentuan_penggunaan.dart';
 import 'package:dipetakan/util/constants/colors.dart';
@@ -9,7 +8,6 @@ import 'package:dipetakan/util/validators/validation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 
 class DSignupBody extends StatefulWidget {
@@ -22,21 +20,13 @@ class DSignupBody extends StatefulWidget {
 }
 
 class _DSignupBodyState extends State<DSignupBody> {
-  // ignore: prefer_typing_uninitialized_variables
-  // var _passwordInVisible;
-  // ignore: prefer_typing_uninitialized_variables
-  // var isChecked;
-
   @override
   void initState() {
     super.initState();
-    // _passwordInVisible = true;
-    // isChecked = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    // final dark = DHelperFunctions.isDarkMode(context);
     final controller = Get.put(SignupController());
     return Form(
       key: controller.signupFormKey,
@@ -130,14 +120,11 @@ class _DSignupBodyState extends State<DSignupBody> {
                         text: DTexts.privacyPolicy,
                         style: Theme.of(context).textTheme.bodySmall!.apply(
                               color: DColors.primary,
-                              // dark ? DColors.white : DColors.primary,
                               decoration: TextDecoration.underline,
                               decorationColor: DColors.primary,
-                              // dark ? DColors.white : DColors.primary,
                             ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            // Navigate to the Privacy Policy screen
                             Get.to(() => const KebijakanPrivasi());
                           },
                       ),
@@ -148,14 +135,11 @@ class _DSignupBodyState extends State<DSignupBody> {
                         text: DTexts.termsOfUse,
                         style: Theme.of(context).textTheme.bodySmall!.apply(
                               color: DColors.primary,
-                              // dark ? DColors.white : DColors.primary,
                               decoration: TextDecoration.underline,
                               decorationColor: DColors.primary,
-                              // dark ? DColors.white : DColors.primary,
                             ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            // Navigate to the Privacy Policy screen
                             Get.to(() => const KetentuanPenggunaan());
                           },
                       ),

@@ -22,10 +22,8 @@ class _FilterButtonPetaLahanState extends State<FilterButtonPetaLahan> {
   List<int> selectedStatusValidasi = [];
 
   final Map<int, String> statusValidasiMap = {
-    // 0: 'Belum Tervalidasi',
     1: 'Dalam Progress',
     2: 'Sudah Tervalidasi',
-    // 3: 'Ditolak'
   };
 
   @override
@@ -148,7 +146,6 @@ class _FilterButtonPetaLahanState extends State<FilterButtonPetaLahan> {
               ),
               actions: [
                 SizedBox(
-                  // width: DSizes.buttonWidth,
                   child: OutlinedButton(
                     onPressed: () {
                       setState(() {

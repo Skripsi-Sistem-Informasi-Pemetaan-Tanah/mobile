@@ -1,7 +1,5 @@
-// import 'package:dipetakan/features/lahansaya/screens/widgets/search_bar.dart';
 import 'package:dipetakan/features/petalahan/controllers/petalahan_controller.dart';
 import 'package:dipetakan/features/petalahan/screens/widgets/filter_button_petalahan.dart';
-// import 'package:dipetakan/features/petalahan/screens/widgets/infolahan_bottomsheet.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -20,22 +18,11 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
   @override
   void initState() {
     controller.setFilters([], []);
-    // setFilters([], []);
-    // controller.buildPolygons();
-    // Initialize filters when the screen initializes
-    // controller.setFilters([], []); // Replace with default filters as needed
     super.initState();
   }
 
   List<String> selectedJenisLahan = [];
   List<int> selectedStatusValidasi = [];
-
-  // void setFilters(List<String> jenisLahan, List<int> statusValidasi) {
-  //   setState(() {
-  //     selectedJenisLahan = jenisLahan;
-  //     selectedStatusValidasi = statusValidasi;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -67,33 +54,7 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
                   controller.mapController.complete(mapController);
                 }
               },
-              // onTap: (LatLng position) {
-              //   // Handle tap event to add marker
-              //   controller.addPatokan(context, position);
-              // },
-              // ignore: unnecessary_null_comparison
               markers: controller.markers.toSet(),
-              // markers: controller.markerbitmap.value != null
-              //     ? {
-              //         Marker(
-              //           markerId: const MarkerId("1"),
-              //           position: LatLng(
-              //               controller.currentLocation.value!.latitude!,
-              //               controller.currentLocation.value!.longitude!),
-              //         )
-              //       }
-              //     : <Marker>{},
-              // circles: {
-              //   Circle(
-              //       circleId: const CircleId("1"),
-              //       center: LatLng(
-              //           controller.currentLocation.value!.latitude!,
-              //           controller.currentLocation.value!.longitude!),
-              //       radius: 25,
-              //       strokeWidth: 2,
-              //       strokeColor: Colors.yellow,
-              //       fillColor: Colors.yellow.withOpacity(0.2)),
-              // },
               polygons: controller.buildPolygons(),
               zoomControlsEnabled: true,
               myLocationEnabled: true,
@@ -105,21 +66,12 @@ class _PetaLahanScreenState extends State<PetaLahanScreen> {
               right: 50,
               child: FilterButtonPetaLahan(
                 size: 38,
-                onFilterChanged:
-                    // setFilters,
-                    controller.setFilters,
-                //   (jenisLahan, statusValidasi) {
-                // controller.setFilters(jenisLahan, statusValidasi);
-                // },
+                onFilterChanged: controller.setFilters,
               ),
             ),
           ]);
         }
       }),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () => controller.addPatokan(context, null),
-      //   child: Icon(Icons.add_location),
-      // ),
     );
   }
 }

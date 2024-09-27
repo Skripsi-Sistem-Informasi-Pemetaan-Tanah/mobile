@@ -1,6 +1,4 @@
-// import 'package:dipetakan/features/navigation/screens/profilesaya/edit_profil.dart';
 import 'package:dipetakan/features/navigation/controllers/user_controller.dart';
-// import 'package:dipetakan/features/navigation/controllers/user_controller_postgres.dart';
 import 'package:dipetakan/features/navigation/screens/navigation.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/edit_email.dart';
 import 'package:dipetakan/features/navigation/screens/profilesaya/editprofil/edit_nama.dart';
@@ -25,7 +23,6 @@ class ProfilSayaScreen extends StatefulWidget {
 class _ProfilSayaScreenState extends State<ProfilSayaScreen> {
   @override
   Widget build(BuildContext context) {
-    // final controller = UserController.instance;
     final controller = Get.put(UserController());
 
     return Scaffold(
@@ -107,19 +104,6 @@ class _ProfilSayaScreenState extends State<ProfilSayaScreen> {
           ]),
         ),
       ),
-      // floatingActionButton: Padding(
-      //     padding: const EdgeInsets.all(DSizes.defaultSpace),
-      //     child: TextButton(
-      //         onPressed: () =>
-      //             controller.deleteAccountWarningPopup(controller.user.value),
-      //         child: const Text('Hapus Akun',
-      //             style: TextStyle(
-      //                 fontSize: 15,
-      //                 color: Colors.red,
-      //                 fontWeight: FontWeight.w600))
-      //                 )
-      //     ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

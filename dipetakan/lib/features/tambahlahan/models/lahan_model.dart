@@ -9,8 +9,6 @@ class LahanModel {
   String deskripsiLahan;
   List<PatokanModel> patokan;
   List<VerifikasiModel> verifikasi;
-  // String statusverifikasi;
-  // int progress;
   Timestamp createdAt;
   Timestamp updatedAt;
 
@@ -23,8 +21,6 @@ class LahanModel {
     required this.deskripsiLahan,
     required this.patokan,
     required this.verifikasi,
-    // this.statusverifikasi = 'Pending', // Default value
-    // this.progress = 0, // Default value
     Timestamp? createdAt,
     Timestamp? updatedAt,
   })  : createdAt = createdAt ?? Timestamp.now(),
@@ -49,7 +45,6 @@ class LahanModel {
       patokan: [],
       verifikasi: []);
 
-  ///Convert model to JSON structure for storing data in Firestore
   Map<String, dynamic> toJson() {
     return {
       'map_id': id,
@@ -61,15 +56,12 @@ class LahanModel {
       'koordinat': patokan.map((patokan) => patokan.toJson()).toList(),
       'verifikasi':
           verifikasi.map((verifikasi) => verifikasi.toJson()).toList(),
-      // 'StatusVerifikasi': statusverifikasi,
-      // 'Progress': progress,
       'created_at': createdAt,
       'updated_at': updatedAt,
     };
   }
 
   Map<String, dynamic> toJsonPostgres() {
-    // Convert Firestore Timestamps to ISO 8601 strings
     String createdAtIso8601 = formatTimestamp(createdAt);
     String updatedAtIso8601 = formatTimestamp(updatedAt);
     return {
@@ -82,8 +74,6 @@ class LahanModel {
       'koordinat': patokan.map((patokan) => patokan.toJson()).toList(),
       'verifikasi':
           verifikasi.map((verifikasi) => verifikasi.toJsonPostgres()).toList(),
-      // 'StatusVerifikasi': statusverifikasi,
-      // 'Progress': progress,
       'created_at': createdAtIso8601,
       'updated_at': updatedAtIso8601,
     };
@@ -180,7 +170,6 @@ class PatokanModel {
       required this.coordCommentUser,
       this.isAgreed = false});
 
-  ///Convert model to JSON structure for storing data in Firestore
   Map<String, dynamic> toJson() {
     return {
       'local_path': localPath,
@@ -216,13 +205,11 @@ class VerifikasiModel {
 
   VerifikasiModel({
     this.comentar = '',
-    this.statusverifikasi = 0, // Default value
-    this.progress = 0, // Default value
-    // required this.verifiedAt
+    this.statusverifikasi = 0,
+    this.progress = 0,
     Timestamp? verifiedAt,
   }) : verifiedAt = verifiedAt ?? Timestamp.now();
 
-  ///Convert model to JSON structure for storing data in Firestore
   Map<String, dynamic> toJson() {
     return {
       'komentar': comentar,
@@ -233,19 +220,14 @@ class VerifikasiModel {
   }
 
   String formatTimestamp(Timestamp timestamp) {
-    // Convert the Firestore Timestamp to DateTime
     DateTime dateTime = timestamp.toDate();
-    // Convert DateTime to UTC time
     DateTime utcDateTime = dateTime.toUtc();
-    // Format the UTC DateTime as an ISO 8601 string
     return utcDateTime.toIso8601String();
   }
 
   Map<String, dynamic> toJsonPostgres() {
-    // Convert Firestore Timestamp to ISO 8601 string
     String verifiedAtIso8601 = formatTimestamp(verifiedAt);
 
-    // Create a map with the appropriate data types and formats
     return {
       'komentar': comentar,
       'new_status': statusverifikasi,

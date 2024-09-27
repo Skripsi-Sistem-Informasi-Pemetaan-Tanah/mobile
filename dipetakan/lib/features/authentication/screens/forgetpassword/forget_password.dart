@@ -1,9 +1,7 @@
 import 'package:dipetakan/features/authentication/screens/forgetpassword/widgets/forgetpass_body.dart';
 import 'package:dipetakan/features/authentication/screens/forgetpassword/widgets/forgetpass_header.dart';
 import 'package:dipetakan/features/authentication/screens/login/login.dart';
-// import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
-// import 'package:dipetakan/util/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class ForgetPassScreen extends StatefulWidget {
@@ -16,8 +14,6 @@ class ForgetPassScreen extends StatefulWidget {
 class _ForgetPassScreenState extends State<ForgetPassScreen> {
   @override
   Widget build(BuildContext context) {
-    // final dark = DHelperFunctions.isDarkMode(context);
-
     return Scaffold(
       appBar: AppBar(
           leading: IconButton(

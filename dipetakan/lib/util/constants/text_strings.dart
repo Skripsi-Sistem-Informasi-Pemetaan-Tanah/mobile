@@ -1,10 +1,9 @@
-/// This class contains all the App Text in String formats.
 class DTexts {
   // // -- GLOBAL Texts
   static const String and = "Dan";
   static const String done = "Selesai";
   static const String submit = "Kirim";
-  static const String appName = "T-Store";
+  static const String appName = "DIPETAKAN";
   static const String tContinue = "Lanjutkan";
   static const String close = "Tutup";
   static const String save = "Simpan";
@@ -60,7 +59,7 @@ class DTexts {
   static const String yourAccountCreatedSubTitle =
       "Kamu dapat masuk dengan akun yang telah terdaftar";
 
-  // Drawer
+  // Menu
   static const String accountName = "Asri Aziziyah";
   static const String accountEmail = "asriaziziyah123@gmail.com";
   static const String ubahPassword = "Ubah Kata Sandi";
@@ -68,14 +67,13 @@ class DTexts {
   static const String bantuan = "Bantuan";
   static const String profile = "Profil Saya";
 
-  //List Tile
+  // Informasi Lahan
   static const String namaLahan = "Nama Lahan";
   static const String namaPemilikLahan = "Nama Pemilik Lahan";
   static const String deskripsiLahan = "Deskripsi Lahan";
   static const String statusverifikasi = "Status Verifikasi : ";
 
   //Tambah Lahan
-  // static const String usiaTanam = "Usia tanam";
   static const String jenisLahan = "Jenis Lahan";
   static const String tambahPatokan = "Tambah Patokan";
   static const String hapusPatokan = "Hapus Patokan";

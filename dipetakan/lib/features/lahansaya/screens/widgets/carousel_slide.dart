@@ -27,24 +27,6 @@ class CarouselSlide extends StatelessWidget {
                   viewportFraction: 1,
                   onPageChanged: (index, _) =>
                       controller.updatePageIndicator(index)),
-              // items: photos.map((url) {
-              //   if (url.isEmpty) {
-              //     return DRoundedImage(imageUrl: url, isNetworkimage: true);
-              //   } else {
-              //     return Container(
-              //       color: DColors.secondary,
-              //       child: const Center(
-              //         child: Text(
-              //           'Tidak Ada Foto Patokan',
-              //           style: TextStyle(
-              //             color: Colors.grey,
-              //             fontSize: 16,
-              //           ),
-              //         ),
-              //       ),
-              //     );
-              //   }
-              // }).toList(),
               items: photos
                   .map((url) =>
                       DRoundedImage(imageUrl: url, isNetworkimage: true))
@@ -104,27 +86,6 @@ class DRoundedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // if (!isNetworkimage) {
-    //   return Container(
-    //     width: width,
-    //     height: height,
-    //     decoration: BoxDecoration(
-    //       border: border,
-    //       color: backgroundColor,
-    //       borderRadius: BorderRadius.circular(borderRadius),
-    //     ),
-    //     child: const Center(
-    //       child: Text(
-    //         'Tidak Ada Foto Patokan',
-    //         style: TextStyle(
-    //           color: Colors.grey,
-    //           fontSize: 16,
-    //         ),
-    //       ),
-    //     ),
-    //   );
-    // }
-
     return GestureDetector(
       onTap: onPressed,
       child: Container(
@@ -162,31 +123,4 @@ class DRoundedImage extends StatelessWidget {
       ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return GestureDetector(
-  //     onTap: onPressed,
-  //     child: Container(
-  //       width: width,
-  //       height: height,
-  //       padding: padding,
-  //       decoration: BoxDecoration(
-  //         border: border,
-  //         color: backgroundColor,
-  //         borderRadius: BorderRadius.circular(borderRadius),
-  //       ),
-  //       child: ClipRRect(
-  //           borderRadius: applyImageRadius
-  //               ? BorderRadius.circular(borderRadius)
-  //               : BorderRadius.zero,
-  //           child: Image(
-  //             fit: fit,
-  //             image: isNetworkimage
-  //                 ? NetworkImage(imageUrl)
-  //                 : AssetImage(imageUrl) as ImageProvider,
-  //           )),
-  //     ),
-  //   );
-  // }
 }

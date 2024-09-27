@@ -1,12 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-// import 'dart:io';
-// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dipetakan/data/repositories/tambahlahan/lahan_repository.dart';
-// import 'package:dipetakan/features/lahansaya/screens/lacak_status.dart';
 import 'package:dipetakan/features/navigation/screens/navigation.dart';
-// import 'package:dipetakan/features/navigation/screens/navigation.dart';
-// import 'package:dipetakan/features/petalahan/screens/widgets/infolahan_bottomsheet.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
 import 'package:dipetakan/util/constants/api_constants.dart';
 import 'package:dipetakan/util/constants/image_strings.dart';
@@ -29,7 +24,6 @@ class PetaValidasiController extends GetxController {
   final lahanRepository = Get.put(LahanRepository());
   var currentLocation = Rxn<LocationData>();
   var initialPosition = Rx<LatLng?>(null);
-  // LatLng? initialPosition;
   final RxList<String> selectedJenisLahan = RxList([]);
   final RxList<int> selectedStatusValidasi = RxList([]);
   final RxList<LahanModel> lahanData = RxList([]);
@@ -38,21 +32,15 @@ class PetaValidasiController extends GetxController {
   var loading = false.obs;
   var strLatLong = ''.obs;
   var markers = <Marker>{}.obs;
-  // var markers = <Marker>[].obs; // Manage markers as a se
   var filterTrigger = 0.obs;
   final imagePicker = ImagePicker();
   bool isAgreed = false;
-  // final bool _isAgreed = true;
 
   @override
   void onInit() {
     super.onInit();
     getCurrentLocation();
     fetchDataFromPostgresql();
-    // buildMarkers();
-    // .then((_) {
-    //   setInitialCameraPosition(Get.arguments['map_id']);
-    // });
     addCustomMarker();
   }
 
@@ -130,17 +118,12 @@ class PetaValidasiController extends GetxController {
     // Iterate through lahanData
     for (var lahan in lahanData) {
       if (lahan.id != mapId) {
-        // Skip lahan that does not match the mapId
         continue;
       }
       // Check if verifikasi list is not empty
       if (lahan.verifikasi.isNotEmpty) {
         // Sort the verifikasi list by verifiedAt in descending order
         lahan.verifikasi.sort((a, b) => b.verifiedAt.compareTo(a.verifiedAt));
-
-        // // Get the newest statusverifikasi
-        // String newestStatusVerifikasi =
-        //     lahan.verifikasi.first.statusverifikasi.trim(); // Trim whitespace
 
         // Get the newest statusverifikasi
         int newestStatusVerifikasi = lahan.verifikasi.first.statusverifikasi;
@@ -168,29 +151,16 @@ class PetaValidasiController extends GetxController {
               .toList();
           LatLng point = LatLng(coordinates[0], coordinates[1]);
           polygonPoints.add(point);
-
-          // Add marker for each coordinate
-          // markers.add(
-          //   Marker(
-          //     markerId: MarkerId('${point.latitude},${point.longitude}'),
-          //     position: point,
-          //     icon: markerbitmap.value,
-          //     infoWindow: InfoWindow(
-          //       title: lahan.namaLahan,
-          //       snippet: 'Coordinate: ${point.latitude}, ${point.longitude}',
-          //     ),
-          //   ),
-          // );
         }
 
-        Color fillColor = Colors.red; // Default color for "belum tervalidasi"
+        Color fillColor = Colors.red;
         if (newestStatusVerifikasi == 0 & 1) {
-          fillColor = Colors.yellow; // Change color for "sudah tervalidasi"
+          fillColor = Colors.yellow;
         }
 
-        Color strokeColor = Colors.red; // Default color for "belum tervalidasi"
+        Color strokeColor = Colors.red;
         if (newestStatusVerifikasi == 2) {
-          strokeColor = Colors.yellow; // Change color for "sudah tervalidasi"
+          strokeColor = Colors.green;
         }
 
         polygons.add(Polygon(
@@ -200,22 +170,7 @@ class PetaValidasiController extends GetxController {
           strokeWidth: 2,
           fillColor: fillColor.withOpacity(0.2),
           consumeTapEvents: true,
-          // onTap: () async {
-          //   addMarkersForPolygon(lahan, polygonPoints);
-          //   await showModalBottomSheet<dynamic>(
-          //       backgroundColor: Colors.white,
-          //       context: Get.context!,
-          //       builder: (context) => SizedBox(
-          //           height: MediaQuery.of(context).size.height * 0.28,
-          //           child: InfoLahanBottomSheet(lahan: lahan)));
-          // },
         ));
-        // Set the initial position to the first point in the polygon
-        // if (initialPosition.value == null && polygonPoints.isNotEmpty) {
-
-        // }
-        // initialPosition = polygonPoints.first;
-        // update();
         _setMapFitToPolygon(polygonPoints);
       }
     }
@@ -245,7 +200,7 @@ class PetaValidasiController extends GetxController {
     );
 
     // Define the padding factor
-    double paddingFactor = 0.2; // Adjust this value as needed
+    double paddingFactor = 0.2;
 
     LatLngBounds paddedBounds = LatLngBounds(
       southwest: LatLng(
@@ -299,24 +254,12 @@ class PetaValidasiController extends GetxController {
               position: point,
               icon: markerIcon,
               infoWindow: InfoWindow(
-                title:
-                    "Tap untuk validasi", // Use coordComment if available, else "Tidak Ada Komentar"
-                // patokan.coordComment, // Use coordComment for the title
+                title: "Tap untuk validasi",
                 snippet: 'Coordinate: ${point.latitude}, ${point.longitude}',
                 onTap: () => _onMarkerTapped(patokan),
               ),
             ),
           );
-
-          // return patokanList.map((patokan) {
-          //   return Marker(
-          //     markerId: MarkerId(patokan.coordVerif.toString()),
-          //     position: point,
-          //     icon: markerIcon,
-          //     onTap: () => _onMarkerTapped(patokan),
-          //   );
-          // }).toSet();
-          // markers.refresh();
         }
       }
     }
@@ -369,8 +312,6 @@ class PetaValidasiController extends GetxController {
                         onChanged: (bool? value) {
                           setState(() {
                             patokan.isAgreed = value ?? false;
-                            // patokan.coordStatus = 0;
-                            // patokan.coordStatus = patokan.isAgreed ? 1 : 0;
                           });
                         },
                       ),
@@ -408,8 +349,6 @@ class PetaValidasiController extends GetxController {
                     }
 
                     markers.refresh();
-                    // patokanList.assign(patokan);
-                    // patokanList.refresh();
 
                     update();
                     Get.back();
@@ -443,21 +382,6 @@ class PetaValidasiController extends GetxController {
         DFullScreenLoader.stopLoading();
         return;
       }
-
-      // existingLahan.patokan = PatokanModel(
-      //   localPath: patokan.localPath,
-      //   fotoPatokan: patokan.fotoPatokan,
-      //   coordinates: patokan.coordinates,
-      //   coordVerif: patokan.coordVerif,
-      //   coordStatus: patokan.coordStatus,
-      //   coordPercent: patokan.coordComment,
-      //   coordComment: commentController,
-      // );
-
-      // if (kDebugMode) {
-      //   print(existingLahan);
-      // }
-
       // Check server and database connection
       final serverurl = Uri.parse('$baseUrl/checkConnectionDatabase');
       final http.Response serverresponse = await http.get(serverurl);
@@ -493,12 +417,6 @@ class PetaValidasiController extends GetxController {
           'Content-Type': 'application/json',
         },
         body: json.encode(updatedLahan),
-        // jsonEncode({
-        //   'map_id': existingLahan.id,
-        //   'koordinat':
-        //       // existingLahan.patokan
-        //       patokanList.map((patokan) => patokan.toJson()).toList(),
-        // }),
       );
 
       if (response.statusCode != 200) {
@@ -518,35 +436,12 @@ class PetaValidasiController extends GetxController {
       // Clear patokan list
       patokanList.clear();
 
-      // Navigate to PetaTitikValidasi
-      // DFullScreenLoader.stopLoading();
       Get.offAll(() => const NavigationMenu());
-      // Get.off(() => LacakStatusScreen(lahan: existingLahan));
     } catch (e) {
       DFullScreenLoader.stopLoading();
       DLoaders.errorSnackBar(title: 'Oh Tidak!', message: e.toString());
     }
   }
-
-  // void addMarkersForPolygon(LahanModel lahan, List<LatLng> polygonPoints) {
-  //   markers.clear(); // Clear existing markers
-
-  //   for (var point in polygonPoints) {
-  //     markers.add(
-  //       Marker(
-  //         markerId: MarkerId('${point.latitude},${point.longitude}'),
-  //         position: point,
-  //         icon: markerbitmap.value,
-  //         infoWindow: InfoWindow(
-  //           title: lahan.namaLahan,
-  //           snippet: 'Coordinate: ${point.latitude}, ${point.longitude}',
-  //         ),
-  //       ),
-  //     );
-  //   }
-  // }
-
-  // void updatePolygons(List<LatLng> polygonCoords) {}
 
   LatLng? getInitialCameraPosition(String mapId) {
     for (var lahan in lahanData) {

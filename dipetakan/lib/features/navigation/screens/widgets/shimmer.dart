@@ -14,22 +14,14 @@ class DShimmerEfffect extends StatelessWidget {
   final Color? color;
   @override
   Widget build(BuildContext context) {
-    // final dark = DHelperFunctions.isDarkMode(context);
     return Shimmer.fromColors(
-        baseColor:
-            // dark ? Colors.grey[850]! :
-            Colors.grey[300]!,
-        highlightColor:
-            // dark ? Colors.grey[700]! :
-            Colors.grey[100]!,
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
         child: Container(
           width: width,
           height: height,
           decoration: BoxDecoration(
-            color: color ??
-                (
-                    // dark ? DColors.darkGrey :
-                    DColors.white),
+            color: color ?? (DColors.white),
             borderRadius: BorderRadius.circular(radius),
           ),
         ));

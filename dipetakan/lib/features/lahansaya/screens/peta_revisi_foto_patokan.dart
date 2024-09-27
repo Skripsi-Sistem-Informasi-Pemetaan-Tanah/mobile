@@ -1,9 +1,6 @@
 import 'package:dipetakan/features/lahansaya/controllers/petafotopatokan_controller.dart';
-// import 'package:dipetakan/features/petalahan/controllers/petalahan_controller.dart';
 import 'package:dipetakan/features/lahansaya/screens/widgets/filter_button.dart';
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:get/get.dart';
 
@@ -20,30 +17,9 @@ class _PetaRevisiFotoPatokanState extends State<PetaRevisiFotoPatokan> {
   final PetaFotoPatokanController controller =
       Get.put(PetaFotoPatokanController());
 
-  // LatLng? _initialPosition;
-
-  // late CameraPosition _initialCameraPosition;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // controller.setInitialCameraPosition(widget.mapId);
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   iconTheme: const IconThemeData(color: Colors.white),
-      //   backgroundColor: DColors.primary,
-      //   title: const Text(
-      //     'Peta Lahan',
-      //     style: TextStyle(
-      //         color: Colors.white,
-      //         fontFamily: 'Inter',
-      //         fontStyle: FontStyle.normal),
-      //   ),
-      // ),
       body: Obx(() {
         if (controller.currentLocation.value == null) {
           return const Center(child: Text("Loading"));

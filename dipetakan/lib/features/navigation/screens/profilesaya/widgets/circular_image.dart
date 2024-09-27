@@ -28,15 +28,8 @@ class DCircularImages extends StatelessWidget {
     return Container(
       width: width,
       height: height,
-      // padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
-        color:
-            //  backgroundColor ??
-            //     (DHelperFunctions.isDarkMode(context)
-            //         ? DColors.black
-            //         :
-            DColors.white,
-        // ),
+        color: DColors.white,
         borderRadius: BorderRadius.circular(100),
       ),
       child: ClipRRect(

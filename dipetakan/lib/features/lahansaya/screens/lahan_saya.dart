@@ -45,13 +45,7 @@ class _LahanSayaScreenState extends State<LahanSayaScreen> {
               fontStyle: FontStyle.normal),
         ),
       ),
-      body:
-          // SingleChildScrollView(
-          //   child: SizedBox(
-          //     height: MediaQuery.of(context).size.height,
-          // child:
-
-          LayoutBuilder(
+      body: LayoutBuilder(
         builder: (context, constraints) {
           return OrientationBuilder(builder: (context, orientation) {
             double buttonSize = orientation == Orientation.portrait
@@ -79,12 +73,9 @@ class _LahanSayaScreenState extends State<LahanSayaScreen> {
                         searchQuery: searchQuery)),
               ],
             );
-            // -----------------------------------------------------------
           });
         },
       ),
-      //   ),
-      // ),
     );
   }
 }

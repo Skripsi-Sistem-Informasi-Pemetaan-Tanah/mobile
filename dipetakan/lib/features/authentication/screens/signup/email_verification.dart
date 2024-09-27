@@ -1,12 +1,8 @@
-// import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/features/authentication/controllers/signup/verify_email_controller.dart';
-// import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
-// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:get/get.dart';
 
 class VerifyEmailScreen extends StatelessWidget {
   const VerifyEmailScreen({super.key, this.email});
@@ -18,14 +14,6 @@ class VerifyEmailScreen extends StatelessWidget {
     final controller = Get.put(VerifyEmailController());
 
     return Scaffold(
-      // appBar: AppBar(
-      //   automaticallyImplyLeading: false,
-      //   actions: [
-      //     IconButton(
-      //         onPressed: () => AuthenticationRepository.instance.logout(),
-      //         icon: const Icon(CupertinoIcons.clear))
-      //   ],
-      // ),
       body: SingleChildScrollView(
         child: Padding(
             padding: const EdgeInsets.all(DSizes.defaultSpace),

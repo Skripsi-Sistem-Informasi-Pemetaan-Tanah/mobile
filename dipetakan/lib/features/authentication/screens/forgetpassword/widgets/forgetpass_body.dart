@@ -2,7 +2,6 @@ import 'package:dipetakan/features/authentication/controllers/forget_password/fo
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:dipetakan/util/validators/validation.dart';
-// import 'package:dipetakan/util/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -20,7 +19,6 @@ class _DForgetPassBodyState extends State<DForgetPassBody> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ForgetPasswordController());
-    // final dark = DHelperFunctions.isDarkMode(context);
     return Form(
       key: controller.forgetPasswordFormKey,
       child: Padding(

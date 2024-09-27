@@ -1,15 +1,11 @@
 import 'package:dipetakan/features/authentication/controllers/login/login_controller.dart';
-// import 'package:dipetakan/features/authentication/controllers/login/login_controller_postgres.dart';
 import 'package:dipetakan/features/authentication/screens/forgetpassword/forget_password.dart';
 import 'package:dipetakan/features/authentication/screens/signup/signup.dart';
-// import 'package:dipetakan/features/navigation/screens/navigation.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:dipetakan/util/constants/text_strings.dart';
 import 'package:dipetakan/util/validators/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// ignore: unnecessary_import
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:iconsax/iconsax.dart';
 
 class DLoginBody extends StatefulWidget {
@@ -26,8 +22,6 @@ class _DLoginBodyState extends State<DLoginBody> {
 
   @override
   Widget build(BuildContext context) {
-    // final controller = Get.put(LoginController());
-
     return Form(
       key: controller.loginFormKey,
       child: Padding(

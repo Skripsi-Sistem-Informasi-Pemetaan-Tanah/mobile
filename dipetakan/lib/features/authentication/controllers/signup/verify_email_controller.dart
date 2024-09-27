@@ -1,9 +1,6 @@
 import 'dart:async';
-
 import 'package:dipetakan/data/repositories/authentication/authentication_repository.dart';
 import 'package:dipetakan/features/authentication/screens/login/login.dart';
-// import 'package:dipetakan/features/authentication/screens/login/login.dart';
-// import 'package:dipetakan/features/authentication/screens/login/login.dart';
 import 'package:dipetakan/features/authentication/screens/signup/account_created.dart';
 import 'package:dipetakan/util/popups/loaders.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -46,7 +43,7 @@ class VerifyEmailController extends GetxController {
       {int retries = 3, int delaySeconds = 2}) async {
     final currentUser = FirebaseAuth.instance.currentUser;
     for (int i = 0; i < retries; i++) {
-      await currentUser?.reload(); // Ensure the user object is reloaded
+      await currentUser?.reload();
       if (currentUser != null && currentUser.emailVerified) {
         return true;
       }
@@ -75,7 +72,7 @@ class VerifyEmailController extends GetxController {
 
   @override
   void onClose() {
-    _timer?.cancel(); // Cancel the timer if the controller is disposed
+    _timer?.cancel();
     super.onClose();
   }
 }

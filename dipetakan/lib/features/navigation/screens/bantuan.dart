@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -197,17 +195,6 @@ class _BantuanScreenState extends State<BantuanScreen> {
               return ExpansionTile(
                 title: Text(faq['question']!,
                     style: Theme.of(context).textTheme.headlineSmall),
-                // children: (faq['answer']! as List<String>).map((answer) {
-                //   return Padding(
-                //     padding: const EdgeInsets.symmetric(
-                //       vertical: DSizes.spaceBtwInputFields,
-                //       horizontal: DSizes.defaultSpace,
-                //     ),
-                //     child: Text(answer,
-                //         style: Theme.of(context).textTheme.bodyMedium,
-                //         textAlign: TextAlign.left),
-                //   );
-                // }).toList(),
                 children: (faq['answer']! as List<String>).map((answer) {
                   return ListTile(
                     title: Text(answer,

@@ -1,4 +1,3 @@
-// import 'package:dipetakan/features/tambahlahan/screens/widgets/submit_lahan.dart';
 import 'package:dipetakan/features/tambahlahan/screens/widgets/tambah_lahan_body.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
@@ -36,7 +35,6 @@ class _TambahLahanState extends State<TambahLahan> {
           ),
           child: Column(children: <Widget>[
             TambahLahanBody(),
-            // SubmitLahan(),
           ]),
         ),
       ),

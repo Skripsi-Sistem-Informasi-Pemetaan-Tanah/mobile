@@ -2,14 +2,13 @@ import 'package:dipetakan/features/lahansaya/screens/edit_lahan.dart';
 import 'package:dipetakan/features/lahansaya/screens/peta_titik_validasi.dart';
 import 'package:dipetakan/features/petalahan/controllers/infolahan_controller.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
-// import 'package:dipetakan/features/tambahlahan/screens/editpatokan.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart'; // Import for GetX controller
+import 'package:get/get.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class LacakStatusScreen extends StatefulWidget {
@@ -25,8 +24,7 @@ class _LacakStatusScreenState extends State<LacakStatusScreen> {
   @override
   void initState() {
     super.initState();
-    initializeDateFormatting(
-        'id_ID'); // Initialize date formatting for the locale
+    initializeDateFormatting('id_ID');
   }
 
   String formatTimestamp(Timestamp timestamp) {
@@ -165,28 +163,6 @@ class _LacakStatusScreenState extends State<LacakStatusScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Text(
-                    //   'Kontak Admin',
-                    //   style: Theme.of(context).textTheme.headlineSmall,
-                    // ),
-                    // const SizedBox(height: DSizes.md),
-                    // Text(
-                    //   'Nama Admin',
-                    //   style: Theme.of(context).textTheme.bodySmall,
-                    // ),
-                    // const SizedBox(height: DSizes.md),
-                    // Text(
-                    //   'No Telepon Admin',
-                    //   style: Theme.of(context).textTheme.bodySmall,
-                    // ),
-                    // const SizedBox(height: DSizes.md),
-                    // Text(
-                    //   'Email Admin',
-                    //   style: Theme.of(context).textTheme.bodySmall,
-                    // ),
-                    // const SizedBox(height: DSizes.md),
-                    // const Divider(),
-                    // const SizedBox(height: DSizes.md),
                     Text(
                       'Status Ajuan',
                       style: Theme.of(context).textTheme.headlineSmall,
@@ -197,15 +173,12 @@ class _LacakStatusScreenState extends State<LacakStatusScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: lahan.verifikasi.length,
                       itemBuilder: (context, index) {
-                        // final reversedIndex =
-                        // lahan.verifikasi.length - 1 - index;
                         final verifikasi = lahan.verifikasi[index];
                         final isFirst = index == 0;
                         final isLast = index == lahan.verifikasi.length - 1;
                         final color = getStatusColor(
                             verifikasi.statusverifikasi, isFirst);
 
-                        // Skip the tile if the comment contains "masih dalam progress"
                         if (verifikasi.comentar
                             .contains("Data masih dalam progress")) {
                           return const SizedBox.shrink();
@@ -263,13 +236,6 @@ class _LacakStatusScreenState extends State<LacakStatusScreen> {
                                   const SizedBox(height: DSizes.spaceBtwItems),
                                   ...getActionButtons(
                                       verifikasi.comentar, isFirst),
-                                  // SizedBox(
-                                  //   width: double.infinity,
-                                  //   child: ElevatedButton(
-                                  //       onPressed: () => Get.to(
-                                  //           () => const PetaTitikValidasi()),
-                                  //       child: const Text('Cek Koordinat')),
-                                  // ),
                                 ],
                               ),
                             ),

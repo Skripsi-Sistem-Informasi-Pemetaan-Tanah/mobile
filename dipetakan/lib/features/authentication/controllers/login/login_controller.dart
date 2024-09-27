@@ -8,8 +8,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class LoginController extends GetxController {
-  // static LoginController get instance => Get.find();
-
   ///variables
   final rememberMe = false.obs;
   final hidePassword = true.obs;
@@ -17,13 +15,6 @@ class LoginController extends GetxController {
   final email = TextEditingController();
   final password = TextEditingController();
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
-
-  // @override
-  // void onInit() {
-  //   email.text = localStorage.read('REMEMBER_ME_EMAIL');
-  //   password.text = localStorage.read('REMEMBER_ME_PASSWORD');
-  //   super.onInit();
-  // }
 
   @override
   void onInit() {

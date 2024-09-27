@@ -1,5 +1,4 @@
 import 'package:dipetakan/features/lahansaya/screens/widgets/edit_lahan_body.dart';
-// import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
 import 'package:dipetakan/features/tambahlahan/models/lahan_model.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:dipetakan/util/constants/sizes.dart';
@@ -33,8 +32,7 @@ class _EditLahanState extends State<EditLahan> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // Get.delete<TambahLahanControllerOld>(); // Dispose the controller
-            Get.back(); // Navigate back
+            Get.back();
           },
         ),
       ),
@@ -47,7 +45,6 @@ class _EditLahanState extends State<EditLahan> {
           ),
           child: Column(children: <Widget>[
             EditLahanBody(lahan: widget.lahan),
-            // SubmitLahan()
           ]),
         ),
       ),

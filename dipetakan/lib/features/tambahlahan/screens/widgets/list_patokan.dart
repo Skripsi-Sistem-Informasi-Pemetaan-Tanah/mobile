@@ -1,6 +1,4 @@
 import 'dart:io';
-
-// import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
 import 'package:dipetakan/features/tambahlahan/controllers/tambahlahan_controller.dart';
 import 'package:dipetakan/util/constants/colors.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +15,6 @@ class ListPatokan extends StatefulWidget {
 
 class _ListPatokanState extends State<ListPatokan> {
   final TambahLahanController controller = Get.put(TambahLahanController());
-  // final TambahLahanController controller = Get.put(TambahLahanController());
   final ImagePicker imagePicker = ImagePicker();
   String strLatLong = 'Belum mendapatkan Lat dan Long';
   bool loading = false;
@@ -36,9 +33,7 @@ class _ListPatokanState extends State<ListPatokan> {
               return SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                    onPressed: () =>
-                        // controller.addMarker,
-                        controller.addPatokan(context),
+                    onPressed: () => controller.addPatokan(context),
                     child: const Text('Tambah Patokan')),
               );
             } else {
